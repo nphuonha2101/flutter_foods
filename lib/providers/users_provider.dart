@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_foods/data/dtos/user_dto.dart';
 import 'package:flutter_foods/data/models/user.dart';
-import 'package:flutter_foods/services/user_service.dart';
+import 'package:flutter_foods/repositories/user_repositories.dart';
 
 class UsersProvider with ChangeNotifier {
-  final UserService _userService;
+  final UserRepository _userService;
   List<User> _users = [];
   bool _isLoading = false;
   bool _hasError = false;
