@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_foods/core/constants/api.dart';
 import 'package:flutter_foods/providers/users_provider.dart';
 import 'package:provider/provider.dart';
 

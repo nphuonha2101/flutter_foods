@@ -4,7 +4,7 @@ import 'package:flutter_foods/data/models/i_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-mixin ApiService<M extends IModel, D extends IDto> {
+mixin AbstractApiRepositories<M extends IModel, D extends IDto> {
   final String baseUrl = ApiConstants.baseUrl;
   final String version = ApiConstants.version.toString();
   final String port = ApiConstants.port.toString();
