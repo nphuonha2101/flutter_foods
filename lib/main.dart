@@ -48,20 +48,31 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setSystemUIOverlayStyle(
-    //   const SystemUiOverlayStyle(
-    //     statusBarColor: Colors.transparent,
-    //     statusBarIconBrightness: Brightness.light,
-    //     systemNavigationBarColor: Colors.white,
-    //     systemNavigationBarIconBrightness: Brightness.dark,
-    //   ),
-    // );
-
     final brightness = View.of(context).platformDispatcher.platformBrightness;
 
     TextTheme textTheme = createTextTheme(context, "IBM Plex Sans", "Aleo");
 
     MaterialTheme theme = MaterialTheme(textTheme);
+
+    SystemUiOverlayStyle overlayStyle;
+
+    if (brightness == Brightness.light) {
+      overlayStyle = const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      );
+    } else {
+      overlayStyle = const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        systemNavigationBarIconBrightness: Brightness.light,
+      );
+    }
+
+    SystemChrome.setSystemUIOverlayStyle(overlayStyle);
 
     return SafeArea(
       child: MaterialApp(
