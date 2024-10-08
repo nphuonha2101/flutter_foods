@@ -22,16 +22,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UsersProvider>(context);
+    // final userProvider = Provider.of<UsersProvider>(context);
 
     return Scaffold(
       body: Center(
-        child: userProvider.isLoading
-            ? const CircularProgressIndicator()
-            : userProvider.hasError
-                ? Text('Error: ${userProvider.errorMessage}')
-                : Text('Total Users: ${userProvider.users.length}'),
-      ),
+          child: OutlinedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, "/login");
+              },
+              child: const Text("Login"))),
     );
   }
 }
