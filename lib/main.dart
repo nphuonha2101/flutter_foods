@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_foods/core/constants/app.dart';
 import 'package:flutter_foods/core/routes/app_routes.dart';
 import 'package:flutter_foods/core/themes/theme.dart';
+import 'package:flutter_foods/core/themes/theme_pastel_material_scheme.dart';
 import 'package:flutter_foods/core/utils/util.dart';
 import 'package:flutter_foods/presentation/screens/login_screen.dart';
 import 'package:flutter_foods/providers/auth_provider.dart';
@@ -50,7 +51,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final brightness = View.of(context).platformDispatcher.platformBrightness;
 
-    TextTheme textTheme = createTextTheme(context, "IBM Plex Sans", "Aleo");
+    TextTheme textTheme = createTextTheme(context, "IBM Plex Sans", "Inter");
 
     MaterialTheme theme = MaterialTheme(textTheme);
 
