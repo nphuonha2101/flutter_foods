@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 
@@ -19,7 +21,9 @@ class _AppbarNormalState extends State<AppbarNormal> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.transparent,
           title: Text(title),
+          elevation: 0,
           leading: IconButton(
             icon: const Icon(Icons.menu),
             onPressed: () {
