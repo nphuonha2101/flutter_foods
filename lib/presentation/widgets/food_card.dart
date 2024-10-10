@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class FoodCard extends StatefulWidget {
@@ -29,7 +30,7 @@ class _FoodCardState extends State<FoodCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(9),
       child: InkWell(
         onTap: _handleCardTapped,
         child: Card(
@@ -44,7 +45,7 @@ class _FoodCardState extends State<FoodCard> {
                       "Food Name",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontFamily: GoogleFonts.inter().fontFamily,
+                        fontFamily: GoogleFonts.ibmPlexSans().fontFamily,
                         fontSize: 20,
                       ),
                     ),
@@ -52,7 +53,7 @@ class _FoodCardState extends State<FoodCard> {
                     Text("Food Price",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontFamily: GoogleFonts.ibmPlexSans().fontFamily,
+                          fontFamily: GoogleFonts.inter().fontFamily,
                           fontSize: 16,
                         )),
                     const SizedBox(height: 10),
@@ -61,12 +62,12 @@ class _FoodCardState extends State<FoodCard> {
                       children: [
                         IconButton.filled(
                           onPressed: _handleAddToCart,
-                          icon: const Icon(Icons.shopping_cart_rounded),
+                          icon: const Icon(TablerIcons.shopping_cart),
                         ),
                         const SizedBox(width: 10),
                         IconButton.outlined(
                           onPressed: _handleAddToFavorite,
-                          icon: const Icon(Icons.favorite_border_rounded),
+                          icon: const Icon(TablerIcons.heart),
                         )
                       ],
                     ),
