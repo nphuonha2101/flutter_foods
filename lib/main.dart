@@ -3,9 +3,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_foods/core/constants/app.dart';
 import 'package:flutter_foods/core/routes/app_routes.dart';
 import 'package:flutter_foods/core/themes/theme.dart';
-import 'package:flutter_foods/core/themes/theme_pastel_material_scheme.dart';
 import 'package:flutter_foods/core/utils/util.dart';
 import 'package:flutter_foods/presentation/screens/login_screen.dart';
+import 'package:flutter_foods/presentation/screens/splash_screen.dart';
 import 'package:flutter_foods/providers/auth_provider.dart';
 import 'package:flutter_foods/providers/users_provider.dart';
 import 'package:flutter_foods/repositories/auth_repository.dart';
@@ -79,7 +79,7 @@ class MainApp extends StatelessWidget {
       child: MaterialApp(
         theme: brightness == Brightness.light ? theme.light() : theme.dark(),
         title: AppConstants.appName,
-        home: const LoginScreen(),
+        home: const SplashScreen(),
         onGenerateRoute: AppRoutes.generateRoute,
       ),
     );
