@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_foods/presentation/screens/home_screen.dart';
+import 'package:flutter_foods/presentation/screens/main_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (mounted) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
+        MaterialPageRoute(builder: (context) => const MainScreen()),
       );
     }
   }

@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 
 class AppbarNormal extends StatefulWidget implements PreferredSizeWidget {
@@ -30,7 +29,7 @@ class _AppbarNormalState extends State<AppbarNormal> {
               color: Theme.of(context).colorScheme.surfaceContainerLow,
               borderRadius: const BorderRadius.all(Radius.circular(10)),
               child: IconButton(
-                icon: const Icon(Icons.menu),
+                icon: const Icon(TablerIcons.menu),
                 onPressed: () {
                   ZoomDrawer.of(context)!.toggle();
                 },
@@ -44,7 +43,7 @@ class _AppbarNormalState extends State<AppbarNormal> {
                   color: Theme.of(context).colorScheme.surfaceContainerLow,
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                   child: IconButton(
-                    icon: const Icon(Icons.search),
+                    icon: const Icon(TablerIcons.search),
                     onPressed: () {},
                   ),
                 )),

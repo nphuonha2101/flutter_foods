@@ -4,7 +4,6 @@ import 'package:flutter_foods/core/constants/app.dart';
 import 'package:flutter_foods/core/routes/app_routes.dart';
 import 'package:flutter_foods/core/themes/theme.dart';
 import 'package:flutter_foods/core/utils/util.dart';
-import 'package:flutter_foods/presentation/screens/login_screen.dart';
 import 'package:flutter_foods/presentation/screens/splash_screen.dart';
 import 'package:flutter_foods/providers/auth_provider.dart';
 import 'package:flutter_foods/providers/users_provider.dart';
