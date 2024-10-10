@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
-              expandedHeight: MediaQuery.of(context).size.height / 3,
+              expandedHeight: MediaQuery.of(context).size.height * 1 / 2,
               floating: true,
               pinned: false,
               snap: true,

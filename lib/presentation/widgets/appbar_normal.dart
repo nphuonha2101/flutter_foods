@@ -24,29 +24,41 @@ class _AppbarNormalState extends State<AppbarNormal> {
           backgroundColor: Colors.transparent,
           title: Text(title),
           elevation: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () {
-              ZoomDrawer.of(context)!.toggle();
-            },
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 10.0, top: 5, bottom: 5),
+            child: Material(
+              color: Theme.of(context).colorScheme.surfaceContainerLow,
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              child: IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () {
+                  ZoomDrawer.of(context)!.toggle();
+                },
+              ),
+            ),
           ),
           actions: [
             Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: IconButton(
-                icon: const Icon(Icons.search),
-                onPressed: () {},
-              ),
-            ),
+                padding: const EdgeInsets.only(right: 20.0, top: 5, bottom: 5),
+                child: Material(
+                  color: Theme.of(context).colorScheme.surfaceContainerLow,
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  child: IconButton(
+                    icon: const Icon(Icons.search),
+                    onPressed: () {},
+                  ),
+                )),
             Padding(
-              padding: const EdgeInsets.only(right: 10.0),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(5)),
-                child: Image.asset(
-                  "assets/images/food_delivery.png",
-                  width: 40,
-                  height: 40,
-                  fit: BoxFit.cover,
+              padding: const EdgeInsets.only(right: 10.0, top: 5, bottom: 5),
+              child: Material(
+                color: Theme.of(context).colorScheme.surfaceContainerLow,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Image.asset(
+                    "assets/images/food_delivery.png",
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
