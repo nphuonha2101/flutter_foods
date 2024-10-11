@@ -27,7 +27,7 @@ class _AppbarNormalState extends State<AppbarNormal> {
             padding: const EdgeInsets.only(left: 10.0, top: 5, bottom: 5),
             child: Material(
               color: Theme.of(context).colorScheme.surfaceContainerLow,
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              borderRadius: const BorderRadius.all(Radius.circular(100)),
               child: IconButton(
                 icon: const Icon(TablerIcons.menu),
                 onPressed: () {
@@ -41,7 +41,7 @@ class _AppbarNormalState extends State<AppbarNormal> {
                 padding: const EdgeInsets.only(right: 20.0, top: 5, bottom: 5),
                 child: Material(
                   color: Theme.of(context).colorScheme.surfaceContainerLow,
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  borderRadius: const BorderRadius.all(Radius.circular(100)),
                   child: IconButton(
                     icon: const Icon(TablerIcons.search),
                     onPressed: () {},
@@ -51,7 +51,7 @@ class _AppbarNormalState extends State<AppbarNormal> {
               padding: const EdgeInsets.only(right: 10.0, top: 5, bottom: 5),
               child: Material(
                 color: Theme.of(context).colorScheme.surfaceContainerLow,
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                borderRadius: const BorderRadius.all(Radius.circular(100)),
                 child: AspectRatio(
                   aspectRatio: 1,
                   child: Image.asset(

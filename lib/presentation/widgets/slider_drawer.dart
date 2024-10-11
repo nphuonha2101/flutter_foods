@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SliderDrawer extends StatefulWidget {
@@ -50,7 +51,7 @@ class _SliderDrawerState extends State<SliderDrawer> {
                   ),
           ),
           ListTile(
-            leading: const Icon(Icons.login_rounded),
+            leading: const Icon(TablerIcons.login),
             title: const Text('Đăng nhập'),
             onTap: () {
               Navigator.pop(context);
