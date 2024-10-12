@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.all(16.0),
             itemCount: 10,
             itemBuilder: (context, index) {
-              return const FoodCard();
+              return const FoodCardWidget();
             },
           ),
         ),

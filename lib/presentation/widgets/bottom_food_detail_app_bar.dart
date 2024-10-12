@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
-class BottomFoodDetailAppBar extends StatefulWidget
+class BottomFoodDetailAppBarWidget extends StatefulWidget
     implements PreferredSizeWidget {
-  const BottomFoodDetailAppBar({super.key});
+  const BottomFoodDetailAppBarWidget({super.key});
 
   @override
-  State<StatefulWidget> createState() => _BottomFoodDetailAppBarState();
+  State<StatefulWidget> createState() => _BottomFoodDetailAppBarWidgetState();
 
   @override
   Size get preferredSize => const Size.fromHeight(130);
 }
 
-class _BottomFoodDetailAppBarState extends State<BottomFoodDetailAppBar> {
+class _BottomFoodDetailAppBarWidgetState
+    extends State<BottomFoodDetailAppBarWidget> {
   bool _isFavorite = false;
   num _quantity = 0;
 

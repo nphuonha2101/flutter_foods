@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SliderDrawer extends StatefulWidget {
-  const SliderDrawer({super.key});
+class SliderDrawerWidget extends StatefulWidget {
+  const SliderDrawerWidget({super.key});
 
   @override
-  State<StatefulWidget> createState() => _SliderDrawerState();
+  State<StatefulWidget> createState() => _SliderDrawerWidgetState();
 }
 
-class _SliderDrawerState extends State<SliderDrawer> {
+class _SliderDrawerWidgetState extends State<SliderDrawerWidget> {
   bool isLogged = false;
   bool isAgency = false;
 
@@ -55,6 +55,7 @@ class _SliderDrawerState extends State<SliderDrawer> {
             title: const Text('Đăng nhập'),
             onTap: () {
               Navigator.pop(context);
+              Navigator.pushNamed(context, '/login');
             },
           ),
           ListTile(
