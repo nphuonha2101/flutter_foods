@@ -60,15 +60,17 @@ class _LoginScreenState extends State<LoginScreen>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Center(
-                      child: Text(
-                    'Food Delivery',
-                    style: TextStyle(
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: GoogleFonts.alexBrush().fontFamily,
-                        color: Theme.of(context).colorScheme.primary,
-                        letterSpacing: 1.2),
-                  )),
+                    child: Text(
+                      'Food Delivery',
+                      style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: GoogleFonts.alexBrush().fontFamily,
+                          color: Theme.of(context).colorScheme.primary,
+                          letterSpacing: 1.2),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
                 ],
               ),
             ),

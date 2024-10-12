@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/presentation/screens/food_detail_screen.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class FoodCard extends StatefulWidget {
+class FoodCardWidget extends StatefulWidget {
   // final Food food;
 
   // const FoodCard({super.key, this.food});
-  const FoodCard({super.key});
+  const FoodCardWidget({super.key});
 
   @override
   // State<StatefulWidget> createState() => _FoodCardState({super.key, this.food});
-  State<StatefulWidget> createState() => _FoodCardState();
+  State<StatefulWidget> createState() => _FoodCardWidgetState();
 }
 
-class _FoodCardState extends State<FoodCard> {
+class _FoodCardWidgetState extends State<FoodCardWidget> {
   // late final Food food;
 
   @override
@@ -22,7 +23,19 @@ class _FoodCardState extends State<FoodCard> {
     // food = widget.food;
   }
 
-  _handleCardTapped() {}
+  _handleCardTapped() {
+    // Navigator.of(context).push(
+    //   MaterialPageRoute(
+    //     builder: (context) => FoodDetailScreen(food: food),
+    //   ),
+    // );
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const FoodDetailScreen(),
+      ),
+    );
+  }
 
   _handleAddToCart() {}
   _handleAddToFavorite() {}
@@ -30,10 +43,11 @@ class _FoodCardState extends State<FoodCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(9),
+      margin: const EdgeInsets.only(top: 9),
       child: InkWell(
         onTap: _handleCardTapped,
         child: Card(
+          elevation: 0.5,
           color: Theme.of(context).colorScheme.surface,
           child: Row(
             children: [

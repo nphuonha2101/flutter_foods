@@ -27,10 +27,10 @@ class _MainScreenState extends State<MainScreen> {
     return ZoomDrawer(
       style: DrawerStyle.style2,
       menuBackgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
-      menuScreen: const SliderDrawer(),
+      menuScreen: const SliderDrawerWidget(),
       mainScreen: Scaffold(
-        appBar: const AppbarNormal(),
-        bottomNavigationBar: custom.BtmNavigationBar(
+        appBar: const AppbarNormalWidget(),
+        bottomNavigationBar: custom.BtmNavigationBarWidget(
           currentIndex: _currentIndex,
           onTap: _changePage,
         ),

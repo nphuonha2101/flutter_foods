@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
-class BtmNavigationBar extends StatelessWidget {
+class BtmNavigationBarWidget extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int?>? onTap;
 
-  const BtmNavigationBar({
+  const BtmNavigationBarWidget({
     super.key,
     required this.currentIndex,
     this.onTap,

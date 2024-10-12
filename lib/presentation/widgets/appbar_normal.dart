@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 
-class AppbarNormal extends StatefulWidget implements PreferredSizeWidget {
-  const AppbarNormal({super.key});
+class AppbarNormalWidget extends StatefulWidget implements PreferredSizeWidget {
+  const AppbarNormalWidget({super.key});
 
   @override
-  State<StatefulWidget> createState() => _AppbarNormalState();
+  State<StatefulWidget> createState() => _AppbarNormalWidgetState();
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-class _AppbarNormalState extends State<AppbarNormal> {
+class _AppbarNormalWidgetState extends State<AppbarNormalWidget> {
   String title = "";
 
   @override
@@ -27,7 +27,7 @@ class _AppbarNormalState extends State<AppbarNormal> {
             padding: const EdgeInsets.only(left: 10.0, top: 5, bottom: 5),
             child: Material(
               color: Theme.of(context).colorScheme.surfaceContainerLow,
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              borderRadius: const BorderRadius.all(Radius.circular(100)),
               child: IconButton(
                 icon: const Icon(TablerIcons.menu),
                 onPressed: () {
@@ -41,7 +41,7 @@ class _AppbarNormalState extends State<AppbarNormal> {
                 padding: const EdgeInsets.only(right: 20.0, top: 5, bottom: 5),
                 child: Material(
                   color: Theme.of(context).colorScheme.surfaceContainerLow,
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  borderRadius: const BorderRadius.all(Radius.circular(100)),
                   child: IconButton(
                     icon: const Icon(TablerIcons.search),
                     onPressed: () {},
@@ -51,7 +51,7 @@ class _AppbarNormalState extends State<AppbarNormal> {
               padding: const EdgeInsets.only(right: 10.0, top: 5, bottom: 5),
               child: Material(
                 color: Theme.of(context).colorScheme.surfaceContainerLow,
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                borderRadius: const BorderRadius.all(Radius.circular(100)),
                 child: AspectRatio(
                   aspectRatio: 1,
                   child: Image.asset(
