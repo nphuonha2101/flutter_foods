@@ -10,26 +10,24 @@ mixin AbstractApiRepositories<M extends IModel, D extends IDto> {
   final String port = ApiConstants.port.toString();
   final String endpoint = '${M.toString().toLowerCase()}s';
 
+  String get _baseApiUrl => '$baseUrl:$port/api/$version/$endpoint';
+
   Future<List<M>> fetchAll() async {
-    final response =
-        await http.get(Uri.parse('$baseUrl:$port/api/$version/$endpoint'));
+    final response = await http.get(Uri.parse(_baseApiUrl));
     if (response.statusCode == 200) {
-      List<dynamic> body = json.decode(response.body);
-      return body
-          .map((dynamic item) => createModel().fromJson(item) as M)
-          .toList();
+      final List<dynamic> body = json.decode(response.body);
+      return body.map((item) => createModel().fromJson(item) as M).toList();
     } else {
-      throw Exception('Failed to load ${M.toString().toLowerCase()}');
+      throw _handleError('fetch all', response.statusCode);
     }
   }
 
   Future<M> fetch(num id) async {
-    final response =
-        await http.get(Uri.parse('$baseUrl:$port/api/$version/$endpoint/$id'));
+    final response = await http.get(Uri.parse('$_baseApiUrl/$id'));
     if (response.statusCode == 200) {
       return createModel().fromJson(json.decode(response.body)) as M;
     } else {
-      throw Exception('Failed to load ${M.toString().toLowerCase()}');
+      throw _handleError('fetch', response.statusCode);
     }
   }
 
@@ -80,4 +78,9 @@ mixin AbstractApiRepositories<M extends IModel, D extends IDto> {
   }
 
   M createModel();
+
+  Exception _handleError(String operation, int statusCode) {
+    return Exception(
+        'Failed to $operation ${M.toString().toLowerCase()}: HTTP $statusCode');
+  }
 }
