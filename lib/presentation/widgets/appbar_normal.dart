@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/presentation/widgets/appbar_search_deligate.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppbarNormalWidget extends StatefulWidget implements PreferredSizeWidget {
   const AppbarNormalWidget({super.key});
@@ -13,15 +15,12 @@ class AppbarNormalWidget extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _AppbarNormalWidgetState extends State<AppbarNormalWidget> {
-  String title = "";
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: Text(title),
           elevation: 0,
           leading: Padding(
             padding: const EdgeInsets.only(left: 10.0, top: 5, bottom: 5),
@@ -44,7 +43,10 @@ class _AppbarNormalWidgetState extends State<AppbarNormalWidget> {
                   borderRadius: const BorderRadius.all(Radius.circular(100)),
                   child: IconButton(
                     icon: const Icon(TablerIcons.search),
-                    onPressed: () {},
+                    onPressed: () {
+                      showSearch(
+                          context: context, delegate: AppbarSearchDeligate());
+                    },
                   ),
                 )),
             Padding(
