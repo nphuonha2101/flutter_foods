@@ -20,6 +20,7 @@ class _RegisterScreenState extends State<RegisterScreen>
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  final FocusNode nameFocusNode = FocusNode();
   AnimationController? _animationController;
   late Animation<double> _animation;
 
@@ -29,7 +30,7 @@ class _RegisterScreenState extends State<RegisterScreen>
 
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 1),
+      duration: const Duration(milliseconds: 50),
     );
 
     _animation = CurvedAnimation(
@@ -38,11 +39,16 @@ class _RegisterScreenState extends State<RegisterScreen>
     );
 
     _animationController!.forward();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).requestFocus(nameFocusNode);
+    });
   }
 
   @override
   void dispose() {
     _animationController!.dispose();
+    nameFocusNode.dispose();
     super.dispose();
   }
 
@@ -117,6 +123,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                             const SizedBox(height: 30),
                             TextField(
                               controller: nameController,
+                              focusNode: nameFocusNode,
                               decoration: const InputDecoration(
                                   labelText: 'Họ tên',
                                   filled: true,
