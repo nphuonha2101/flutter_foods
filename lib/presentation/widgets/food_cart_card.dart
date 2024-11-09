@@ -160,7 +160,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
                               ),
                                const SizedBox(height: 4),
                               Text(
-                                '\$${food.price.toStringAsFixed(2)}',
+                                '\đ${food.price.toStringAsFixed(2)}',
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,

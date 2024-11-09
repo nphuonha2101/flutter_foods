@@ -213,7 +213,7 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                         ),
                         Text(
-                          '\$${getCartTotal().toStringAsFixed(2)}',
+                          '\đ${getCartTotal().toStringAsFixed(2)}',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
