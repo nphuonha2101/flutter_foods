@@ -23,11 +23,11 @@ class BtmNavigationBarWidget extends StatelessWidget {
       items: const [
         BottomNavigationBarItem(
           icon: Icon(TablerIcons.home_2),
-          label: 'Home',
+          label: 'Trang chủ',
         ),
         BottomNavigationBarItem(
           icon: Icon(TablerIcons.coffee),
-          label: 'Drinks',
+          label: 'Đơn hàng của tôi',
         ),
         BottomNavigationBarItem(
           icon: Icon(TablerIcons.burger),

@@ -5,6 +5,7 @@ import 'package:flutter_foods/core/routes/app_routes.dart';
 import 'package:flutter_foods/core/themes/theme.dart';
 import 'package:flutter_foods/core/utils/util.dart';
 import 'package:flutter_foods/presentation/screens/cart_screen.dart';
+import 'package:flutter_foods/presentation/screens/my_order_screen.dart';
 import 'package:flutter_foods/presentation/screens/splash_screen.dart';
 import 'package:flutter_foods/providers/auth_provider.dart';
 import 'package:flutter_foods/providers/users_provider.dart';
@@ -13,7 +14,6 @@ import 'package:flutter_foods/repositories/user_repository.dart';
 import 'package:flutter_foods/services/auth_service.dart';
 import 'package:flutter_foods/services/user_service.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -55,31 +55,12 @@ class MainApp extends StatelessWidget {
 
     MaterialTheme theme = MaterialTheme(textTheme);
 
-    SystemUiOverlayStyle overlayStyle;
-
-    if (brightness == Brightness.light) {
-      overlayStyle = const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        systemNavigationBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.dark,
-        systemNavigationBarIconBrightness: Brightness.dark,
-      );
-    } else {
-      overlayStyle = const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        systemNavigationBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.light,
-        systemNavigationBarIconBrightness: Brightness.light,
-      );
-    }
-
-    SystemChrome.setSystemUIOverlayStyle(overlayStyle);
-
     return SafeArea(
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: brightness == Brightness.light ? theme.light() : theme.dark(),
         title: AppConstants.appName,
-        home: const CartScreen(),
+        home: const SplashScreen(),
         onGenerateRoute: AppRoutes.generateRoute,
       ),
     );
