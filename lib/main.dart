@@ -4,6 +4,7 @@ import 'package:flutter_foods/core/constants/app.dart';
 import 'package:flutter_foods/core/routes/app_routes.dart';
 import 'package:flutter_foods/core/themes/theme.dart';
 import 'package:flutter_foods/core/utils/util.dart';
+import 'package:flutter_foods/presentation/screens/cart_screen.dart';
 import 'package:flutter_foods/presentation/screens/splash_screen.dart';
 import 'package:flutter_foods/providers/auth_provider.dart';
 import 'package:flutter_foods/providers/users_provider.dart';
@@ -78,7 +79,7 @@ class MainApp extends StatelessWidget {
       child: MaterialApp(
         theme: brightness == Brightness.light ? theme.light() : theme.dark(),
         title: AppConstants.appName,
-        home: const SplashScreen(),
+        home: const CartScreen(),
         onGenerateRoute: AppRoutes.generateRoute,
       ),
     );

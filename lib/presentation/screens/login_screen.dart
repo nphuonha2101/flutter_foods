@@ -16,6 +16,7 @@ class _LoginScreenState extends State<LoginScreen>
     with SingleTickerProviderStateMixin {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final FocusNode usernameFocusNode = FocusNode();
   AnimationController? _animationController;
   late Animation<double> _animation;
 
@@ -25,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen>
 
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 1),
+      duration: const Duration(milliseconds: 50),
     );
 
     _animation = CurvedAnimation(
@@ -34,11 +35,16 @@ class _LoginScreenState extends State<LoginScreen>
     );
 
     _animationController!.forward();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).requestFocus(usernameFocusNode);
+    });
   }
 
   @override
   void dispose() {
     _animationController!.dispose();
+    usernameFocusNode.dispose();
     super.dispose();
   }
 
@@ -112,6 +118,7 @@ class _LoginScreenState extends State<LoginScreen>
                           const SizedBox(height: 30),
                           TextField(
                             controller: usernameController,
+                            focusNode: usernameFocusNode,
                             decoration: const InputDecoration(
                                 labelText: 'Tên người dùng',
                                 filled: true,
