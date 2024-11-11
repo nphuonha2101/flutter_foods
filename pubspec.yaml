@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.0.2
+  flutter_rating_bar: ^4.0.1
   flutter_tabler_icons: ^1.43.0
   flutter_zoom_drawer: ^3.2.0
   google_fonts: ^6.2.1

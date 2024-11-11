@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_foods/presentation/widgets/bottom_food_detail_app_bar.dart';
 import 'package:flutter_foods/presentation/widgets/user_review.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -8,10 +9,80 @@ class FoodDetailScreen extends StatefulWidget {
   const FoodDetailScreen({super.key});
 
   @override
-  _FoodDetailScreenState createState() => _FoodDetailScreenState();
+  State<FoodDetailScreen> createState() => _FoodDetailScreenState();
 }
 
 class _FoodDetailScreenState extends State<FoodDetailScreen> {
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _contentController = TextEditingController();
+  double _rating = 0.0;
+
+  void _showCommentDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            "Viết đánh giá",
+            style: TextStyle(fontSize: 16),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RatingBar.builder(
+                initialRating: 0,
+                minRating: 1,
+                direction: Axis.horizontal,
+                allowHalfRating: true,
+                itemCount: 5,
+                itemBuilder: (context, _) => const Icon(
+                  Icons.star,
+                  color: Colors.amber,
+                ),
+                onRatingUpdate: (rating) {
+                  setState(() {
+                    _rating = rating;
+                  });
+                },
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: _titleController,
+                decoration: const InputDecoration(
+                    hintText: "Tiêu đề đánh giá", filled: true),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: _contentController,
+                decoration:
+                    const InputDecoration(hintText: "Nội dung", filled: true),
+                maxLines: 3,
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Hủy'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FilledButton(
+              child: const Text('Gửi'),
+              onPressed: () {
+                // Handle submit action
+                print('Rating: $_rating');
+                print('Title: ${_titleController.text}');
+                print('Content: ${_contentController.text}');
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -157,6 +228,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                       ),
                       const SizedBox(height: 20),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             'Đánh giá',
@@ -166,6 +238,9 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                               fontSize: 18,
                             ),
                           ),
+                          TextButton(
+                              onPressed: _showCommentDialog,
+                              child: const Text("Đánh giá ngay"))
                         ],
                       ),
                     ],
