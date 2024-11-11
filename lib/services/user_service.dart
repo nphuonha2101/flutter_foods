@@ -1,6 +1,6 @@
 import 'package:flutter_foods/data/dtos/user_dto.dart';
 import 'package:flutter_foods/data/models/user.dart';
-import 'package:flutter_foods/repositories/user_repositories.dart';
+import 'package:flutter_foods/repositories/user_repository.dart';
 
 class UserService {
   final UserRepository _userRepository;
