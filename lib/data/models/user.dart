@@ -3,9 +3,11 @@ import 'package:flutter_foods/data/models/i_model.dart';
 
 class User extends IModel {
   final num id;
-  final String name;
-  final String email;
-  final String password;
+  late  String name;
+  late  String email;
+  late String phone;
+  late String address;
+  late String password;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -13,6 +15,8 @@ class User extends IModel {
       {required this.id,
       required this.name,
       required this.email,
+      required this.phone,
+      required this.address,
       required this.password,
       required this.createdAt,
       required this.updatedAt});
@@ -23,6 +27,8 @@ class User extends IModel {
       id: json['id'] as num,
       name: json['name'],
       email: json['email'],
+      phone: json['phone'],
+      address: json['address'],
       password: json['password'],
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
