@@ -11,11 +11,12 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   late User user = User(
     id: 1,
-    name: 'John Doe',
-    email: 'john.doe@example.com',
+    name: 'Arya',
+    email: 'arya@example.com',
     phone: '0987654321',
     address: 'abc street, xyz city',
     password: '',
+    avatarUrl: 'https://embargenting.org.vn/wp-content/uploads/anh-gai-anime-1.jpg',
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),
   );
@@ -62,7 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required void Function(String) onSave,
   }) {
     return Container(
-      color: Colors.white, // White background for editable rows
+      color: Theme.of(context).colorScheme.onPrimary, // White background for editable rows
       margin: const EdgeInsets.only(bottom: 4.0), // Bottom margin only for line effect
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0), // Optional padding inside row
       child: Row(
@@ -94,13 +95,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade200, // Light gray background for the page
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: const Text('Trang cá nhân'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const SizedBox(height: 20),
+          Center(
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 50,
+                  backgroundImage: NetworkImage(user.avatarUrl),
+                ),
+                const SizedBox(height: 10),
+              ],
+            ),
+          ),
           _buildEditableRow(
             label: 'Tên:',
             field: 'name',
