@@ -88,8 +88,8 @@ class _CartScreenState extends State<CartScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Row(children: [
-          Text('Giỏ hàng '),
-          Text('('+items.length.toString() +")",style: TextStyle(fontSize: 18,))
+          const Text('Giỏ hàng '),
+          Text('('+items.length.toString() +")",style: const TextStyle(fontSize: 18,))
         ],),
          leading: IconButton(
           icon: Icon(Icons.arrow_back,color: Colors.amber[700],),
@@ -140,7 +140,7 @@ class _CartScreenState extends State<CartScreen> {
                 color: Colors.black.withOpacity(0.1), 
                 spreadRadius: 2,
                 blurRadius: 10,
-                offset: Offset(0, -2), 
+                offset: const Offset(0, -2), 
               ),
             ],
           ),
@@ -152,7 +152,7 @@ class _CartScreenState extends State<CartScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     'Chọn voucher:',
                     style: TextStyle(
                       fontSize: 14,
@@ -163,7 +163,7 @@ class _CartScreenState extends State<CartScreen> {
                     onPressed: () {
                       // Xử lý khi chọn voucher
                     },
-                     child: Row(
+                     child: const Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
@@ -196,7 +196,7 @@ class _CartScreenState extends State<CartScreen> {
                       // Xử lý khi chọn "Chọn tất cả"
                     },
                   ),
-                  Text(
+                  const Text(
                     'Tất cả',
                     style: TextStyle(fontSize: 14),
                   )
@@ -205,7 +205,7 @@ class _CartScreenState extends State<CartScreen> {
                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'Tổng tiền:',
                           style: TextStyle(
                             fontSize: 14,
@@ -213,7 +213,7 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                         ),
                         Text(
-                          '\đ${getCartTotal().toStringAsFixed(2)}',
+                          'đ${getCartTotal().toStringAsFixed(2)}',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -228,15 +228,15 @@ class _CartScreenState extends State<CartScreen> {
                         onPressed: () {
                           // Xử lý sự kiện khi nhấn nút Mua hàng
                         },
-                        child: Text('Mua hàng'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green, // Màu nền của nút
-                          padding: EdgeInsets.symmetric(vertical: 14),
-                          textStyle: TextStyle(
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          textStyle: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        child: Text('Mua hàng'),
                       ),
                     ),
                 ],
