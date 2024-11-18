@@ -26,12 +26,20 @@ class BtmNavigationBarWidget extends StatelessWidget {
           label: 'Trang chủ',
         ),
         BottomNavigationBarItem(
+          icon: Icon(Icons.store),
+         label: 'Gần đây'
+         ),
+        BottomNavigationBarItem(
           icon: Icon(TablerIcons.coffee),
           label: 'Đơn hàng của tôi',
         ),
         BottomNavigationBarItem(
           icon: Icon(TablerIcons.burger),
           label: 'Food',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+           label: 'Trang cá nhân'
         ),
       ],
     );

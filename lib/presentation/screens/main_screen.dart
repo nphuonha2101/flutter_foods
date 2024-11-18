@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_foods/presentation/screens/home_screen.dart';
+import 'package:flutter_foods/presentation/screens/near_shop_screen.dart';
 import 'package:flutter_foods/presentation/screens/profile_screen.dart';
 import 'package:flutter_foods/presentation/screens/my_order_screen.dart';
 import 'package:flutter_foods/presentation/widgets/appbar_normal.dart';
@@ -40,6 +41,7 @@ class _MainScreenState extends State<MainScreen> {
           index: _currentIndex,
           children: const [
             HomeScreen(),
+            NearShopScreen(),
             MyOrderScreen(),
             Center(child: Text("Desserts Tab")),
             ProfileScreen(),
