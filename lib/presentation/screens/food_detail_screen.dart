@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/data/models/food.dart';
 import 'package:flutter_foods/presentation/widgets/bottom_food_detail_app_bar.dart';
 import 'package:flutter_foods/presentation/widgets/user_review.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -6,7 +7,8 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class FoodDetailScreen extends StatefulWidget {
-  const FoodDetailScreen({super.key});
+  final Food food;
+  const FoodDetailScreen({super.key, required this.food});
 
   @override
   State<FoodDetailScreen> createState() => _FoodDetailScreenState();
