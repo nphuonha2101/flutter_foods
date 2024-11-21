@@ -74,11 +74,6 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.search),
                   onPressed: () async {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) => const HandleAddressScreen()),
-                    // );
                     final pickedData = await Navigator.push(
                       context,
                       MaterialPageRoute(

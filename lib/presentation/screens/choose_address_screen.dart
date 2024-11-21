@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/core/routes/app_routes.dart';
 import 'package:flutter_foods/data/models/address.dart';
 import 'package:flutter_foods/presentation/screens/address_details_screen.dart';
 import 'package:flutter_foods/presentation/screens/handle_address_screen.dart';
@@ -107,16 +108,14 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
                     ),
                     trailing: TextButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddressDetailsScreen(
-                                  type: "edit",
-                                  name: address.name,
-                                  phone: address.phone,
-                                  address: address.address,
-                                  isDefault: address.isDefault)),
-                        );
+                        Navigator.of(context)
+                            .pushNamed(AppRoutes.addressDetail, arguments: {
+                          'type': 'edit',
+                          'name': address.name,
+                          'phone': address.phone,
+                          'address': address.address,
+                          'isDefault': address.isDefault,
+                        });
                       },
                       child: const Text(
                         "Sửa",
@@ -136,17 +135,14 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const AddressDetailsScreen(
-                          type: "add",
-                          name: "",
-                          phone: "",
-                          address: "",
-                          isDefault: false,
-                        )),
-              );
+              Navigator.of(context)
+                  .pushNamed(AppRoutes.addressDetail, arguments: {
+                'type': 'add',
+                'name': '',
+                'phone': '',
+                'address': '',
+                'isDefault': false,
+              });
             },
           ),
         ],
