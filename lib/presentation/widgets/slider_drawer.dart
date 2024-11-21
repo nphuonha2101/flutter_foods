@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/presentation/screens/choose_address_screen.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -59,11 +60,33 @@ class _SliderDrawerWidgetState extends State<SliderDrawerWidget> {
             },
           ),
           ListTile(
-            title: const Text('Item 2'),
+            leading: const Icon(TablerIcons.address_book),
+            title: const Text('Địa chỉ'),
             onTap: () {
               Navigator.pop(context);
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const ChooseAddressScreen(),
+                ),
+              );
             },
           ),
+          ListTile(
+            leading: const Icon(TablerIcons.shopping_cart),
+            title: const Text('Giỏ hàng'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/cart');
+            },
+          ),
+          ListTile(
+            leading: const Icon(TablerIcons.credit_card),
+            title: const Text('Đặt hàng'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/checkout');
+            },
+          )
         ],
       ),
     );

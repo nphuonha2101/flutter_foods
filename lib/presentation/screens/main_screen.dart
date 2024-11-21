@@ -43,7 +43,6 @@ class _MainScreenState extends State<MainScreen> {
             HomeScreen(),
             NearShopScreen(),
             MyOrderScreen(),
-            Center(child: Text("Desserts Tab")),
             ProfileScreen(),
           ],
         ),

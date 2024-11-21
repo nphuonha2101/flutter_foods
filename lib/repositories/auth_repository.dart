@@ -21,13 +21,13 @@ class AuthRepository {
       if (response.statusCode == 200) {
         String body = response.body;
         String token = json.decode(body)['token'];
-        String usernamr = json.decode(body)['username'];
+        String username = json.decode(body)['username'];
         String userFullName = json.decode(body)['userFullName'];
         String userEmail = json.decode(body)['userEmail'];
 
         return AuthCredential(
           token: token,
-          username: usernamr,
+          username: username,
           userFullName: userFullName,
           userEmail: userEmail,
         );

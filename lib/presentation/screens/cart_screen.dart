@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart'; // Import collection package for groupBy
-import 'package:flutter_foods/data/models/CartItem.dart';
+import 'package:flutter_foods/data/models/cart_item.dart';
 import 'package:flutter_foods/data/models/food.dart';
 import 'package:flutter_foods/presentation/widgets/food_cart_card.dart';
 
@@ -76,7 +76,7 @@ class _CartScreenState extends State<CartScreen> {
   double getCartTotal() {
     double total = 0.0;
     for (var item in items) {
-      total += item.totalPrice; 
+      total += item.totalPrice;
     }
     return total;
   }
@@ -87,16 +87,24 @@ class _CartScreenState extends State<CartScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Row(children: [
-          const Text('Giỏ hàng '),
-          Text('('+items.length.toString() +")",style: const TextStyle(fontSize: 18,))
-        ],),
-         leading: IconButton(
-          icon: Icon(Icons.arrow_back,color: Colors.amber[700],),
+        title: Row(
+          children: [
+            const Text('Giỏ hàng '),
+            Text('(' + items.length.toString() + ")",
+                style: const TextStyle(
+                  fontSize: 18,
+                ))
+          ],
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.amber[700],
+          ),
           onPressed: () {
-            Navigator.pop(context); 
+            Navigator.pop(context);
           },
-  ),
+        ),
       ),
       body: Column(
         children: [
@@ -110,60 +118,57 @@ class _CartScreenState extends State<CartScreen> {
                   children: [
                     FoodCartCard(
                       cartItems: categoryItems,
-                       onIncrease: (CartItem item) {
-                          setState(() {
-                            item.quantity++;
-                          });
-                        },
-                        onDecrease: (CartItem item) {
-                          setState(() {
-                            if (item.quantity > 1) {
-                              item.quantity--;
-                            }
-                          });
-                        },
+                      onIncrease: (CartItem item) {
+                        setState(() {
+                          item.quantity++;
+                        });
+                      },
+                      onDecrease: (CartItem item) {
+                        setState(() {
+                          if (item.quantity > 1) {
+                            item.quantity--;
+                          }
+                        });
+                      },
                     ),
-                    
                   ],
                 );
               }).toList(),
             ),
           ),
 
-
           // footer
-         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1), 
-                spreadRadius: 2,
-                blurRadius: 10,
-                offset: const Offset(0, -2), 
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            
-            children: [
-              // Dòng 1: Chọn Voucher
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Chọn voucher:',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  spreadRadius: 2,
+                  blurRadius: 10,
+                  offset: const Offset(0, -2),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Dòng 1: Chọn Voucher
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Chọn voucher:',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      // Xử lý khi chọn voucher
-                    },
-                     child: const Row(
+                    TextButton(
+                      onPressed: () {
+                        // Xử lý khi chọn voucher
+                      },
+                      child: const Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
@@ -180,29 +185,30 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                         ],
                       ),
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
 
-              // Dòng 2: Checkbox chọn tất cả
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Checkbox(
-                    value: false, // Thay đổi trạng thái checkbox theo nhu cầu
-                    onChanged: (bool? value) {
-                      // Xử lý khi chọn "Chọn tất cả"
-                    },
-                  ),
-                  const Text(
-                    'Tất cả',
-                    style: TextStyle(fontSize: 14),
-                  )
-                    ],
-                  ),
-                   Column(
+                // Dòng 2: Checkbox chọn tất cả
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Checkbox(
+                          value:
+                              false, // Thay đổi trạng thái checkbox theo nhu cầu
+                          onChanged: (bool? value) {
+                            // Xử lý khi chọn "Chọn tất cả"
+                          },
+                        ),
+                        const Text(
+                          'Tất cả',
+                          style: TextStyle(fontSize: 14),
+                        )
+                      ],
+                    ),
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
@@ -236,12 +242,11 @@ class _CartScreenState extends State<CartScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        child: Text('Mua hàng'),
+                        child: const Text('Mua hàng'),
                       ),
                     ),
-                ],
-              ),
-
+                  ],
+                ),
               ],
             ),
           ),
