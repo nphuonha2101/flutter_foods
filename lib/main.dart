@@ -19,30 +19,30 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   runApp(
-    MultiProvider(providers: [
-      // Provider to provide the Repository classes
-      Provider<UserRepository>(create: (_) => UserRepository()),
-      Provider<AuthRepository>(create: (_) => AuthRepository()),
+    // MultiProvider(providers: [
+    //   // Provider to provide the Repository classes
+    //   Provider<UserRepository>(create: (_) => UserRepository()),
+    //   Provider<AuthRepository>(create: (_) => AuthRepository()),
       
 
-      // ProxyProvider to provide the Repository classes to the Service classes
-      ProxyProvider<UserRepository, UserService>(
-        update: (_, userRepository, __) => UserService(userRepository),
-      ),
-      ProxyProvider<AuthRepository, AuthService>(
-          update: (_, authRepository, __) => AuthService(authRepository)),
+    //   // ProxyProvider to provide the Repository classes to the Service classes
+    //   ProxyProvider<UserRepository, UserService>(
+    //     update: (_, userRepository, __) => UserService(userRepository),
+    //   ),
+    //   ProxyProvider<AuthRepository, AuthService>(
+    //       update: (_, authRepository, __) => AuthService(authRepository)),
 
-      // ChangeNotifierProvider to provide methods that will be used in the UI
-      // when the state changes it will notify the UI to rebuild
-      ChangeNotifierProvider(
-        create: (context) => UsersProvider(context.read<UserService>()),
-      ),
-      ChangeNotifierProvider(
-        create: (context) => AuthProvider(context.read<AuthService>()),
-      ),
-       ChangeNotifierProvider(create: (_) => CartProvider()),
-      // Add other providers here
-    ], child: const MainApp()),
+    //   // ChangeNotifierProvider to provide methods that will be used in the UI
+    //   // when the state changes it will notify the UI to rebuild
+    //   ChangeNotifierProvider(
+    //     create: (context) => UsersProvider(context.read<UserService>()),
+    //   ),
+    //   ChangeNotifierProvider(
+    //     create: (context) => AuthProvider(context.read<AuthService>()),
+    //   ),
+    //    ChangeNotifierProvider(create: (_) => CartProvider()),
+    //   // Add other providers here
+    // ], child: const MainApp()),
     MultiProvider(providers: AppProviders.providers, child: const MainApp()),
   );
 }

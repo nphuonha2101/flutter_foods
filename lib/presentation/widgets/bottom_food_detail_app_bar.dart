@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_foods/core/routes/app_routes.dart';
-import 'package:flutter_foods/data/models/CartItem.dart';
+import 'package:flutter_foods/data/models/cart_item.dart';
 import 'package:flutter_foods/data/models/food.dart';
 import 'package:flutter_foods/providers/cart_provider.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';

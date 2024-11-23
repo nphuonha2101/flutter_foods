@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_foods/data/models/CartItem.dart';
-import 'package:collection/collection.dart'; 
 import 'package:flutter_foods/data/models/cart_item.dart';
-import 'package:flutter_foods/data/models/food.dart';
 import 'package:flutter_foods/presentation/widgets/food_cart_card.dart';
 import 'package:flutter_foods/providers/cart_provider.dart';
 import 'package:provider/provider.dart';

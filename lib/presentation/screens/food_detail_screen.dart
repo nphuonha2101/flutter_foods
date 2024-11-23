@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_foods/data/models/CartItem.dart';
+import 'package:flutter_foods/data/models/cart_item.dart';
 import 'package:flutter_foods/data/models/food.dart';
 import 'package:flutter_foods/presentation/widgets/bottom_food_detail_app_bar.dart';
 import 'package:flutter_foods/presentation/widgets/user_review.dart';

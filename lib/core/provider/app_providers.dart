@@ -1,3 +1,4 @@
+import 'package:flutter_foods/providers/cart_provider.dart';
 import 'package:flutter_foods/providers/users_provider.dart';
 import 'package:flutter_foods/repositories/auth_repository.dart';
 import 'package:flutter_foods/repositories/user_repository.dart';
@@ -29,6 +30,8 @@ class AppProviders {
     ChangeNotifierProvider(
       create: (context) => AuthProvider(context.read<AuthService>()),
     ),
+    ChangeNotifierProvider(create: (_) => CartProvider()),
+    
     // Add other providers here
   ];
 }
