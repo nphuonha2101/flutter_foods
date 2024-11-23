@@ -20,7 +20,7 @@ class FoodCartCard extends StatefulWidget {
 
 class _FoodCartCardState extends State<FoodCartCard> {
   bool isCheckedShop = false;
-  bool isEditing = false; // Add a state variable to track editing mode
+  bool isEditing = false; 
 
   @override
   Widget build(BuildContext context) {
@@ -89,17 +89,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
                   children: [
                     Row(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Checkbox(
-                            value: isCheckedFood,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                cartItem.isChecked = value!;
-                              });
-                            },
-                          ),
-                        ),
+                       
                         ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: Container(
@@ -208,7 +198,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
                         ),
                         // Display total price for the item
                         Text(
-                          'Total: \$${(food.price * quantity).toStringAsFixed(2)}',
+                          'Total: \đ${(food.price * quantity).toStringAsFixed(0)}',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -251,7 +241,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
                 );
               }).toList(),
             ),
-            const Divider(),
+            // const Divider(),
             // Total price for this shop
             Column(
               // mainAxisAlignment: MainAxisAlignment.end,
@@ -264,63 +254,63 @@ class _FoodCartCardState extends State<FoodCartCard> {
                 //     color: Colors.green[700],
                 //   ),
                 // ),
-                Row(
-                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                 children: [
-                    Row(children: [
-                         IconButton(
-                      icon:  Icon(Icons.card_giftcard,color: Colors.amber[900] ,),
-                      onPressed: () {
-                        // Handle the button press action here
-                      },
-                    ),
-                    const Text(
-                      "Thêm shop voucher", 
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey
-                      ),
-                    ),
-                    ],),
-                     IconButton(
-                        alignment: Alignment.centerRight,
-                      icon: const Icon(Icons.arrow_forward_ios, size: 14,),
-                      onPressed: () {
-                        // Handle shipping action here
-                      },
-                     )
-                  ],
-                ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween, 
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.local_shipping, color: Colors.green),
-                        onPressed: () {
-                        },
-                      ),
-                      Flexible(
-                        flex: 1,
+                // Row(
+                //    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //  children: [
+                //     Row(children: [
+                //          IconButton(
+                //       icon:  Icon(Icons.card_giftcard,color: Colors.amber[900] ,),
+                //       onPressed: () {
+                //         // Handle the button press action here
+                //       },
+                //     ),
+                //     const Text(
+                //       "Thêm shop voucher", 
+                //       style: TextStyle(
+                //         fontSize: 12,
+                //         color: Colors.grey
+                //       ),
+                //     ),
+                //     ],),
+                //      IconButton(
+                //         alignment: Alignment.centerRight,
+                //       icon: const Icon(Icons.arrow_forward_ios, size: 14,),
+                //       onPressed: () {
+                //         // Handle shipping action here
+                //       },
+                //      )
+                //   ],
+                // ),
+                //   Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+                //     children: [
+                //       IconButton(
+                //         icon: const Icon(Icons.local_shipping, color: Colors.green),
+                //         onPressed: () {
+                //         },
+                //       ),
+                //       Flexible(
+                //         flex: 1,
                         
-                        child: Text(
-                          "Giảm ₫300.000 phí vận chuyển đơn tối thiểu ₫0; Giảm ₫500.000 phí vận chuyển đơn tối thiểu ₫500.000", 
-                          style: TextStyle(
-                            fontSize: 12, 
-                            color: Theme.of(context).colorScheme.onSurface, 
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis, 
-                          softWrap: true, 
-                        ),
-                      ),
-                      IconButton(
-                        alignment: Alignment.centerRight,
-                        icon: const Icon(Icons.arrow_forward_ios, size: 14),
-                        onPressed: () {
-                        },
-                      ),
-                    ],
-                  ),
+                //         child: Text(
+                //           "Giảm ₫300.000 phí vận chuyển đơn tối thiểu ₫0; Giảm ₫500.000 phí vận chuyển đơn tối thiểu ₫500.000", 
+                //           style: TextStyle(
+                //             fontSize: 12, 
+                //             color: Theme.of(context).colorScheme.onSurface, 
+                //           ),
+                //           maxLines: 2,
+                //           overflow: TextOverflow.ellipsis, 
+                //           softWrap: true, 
+                //         ),
+                //       ),
+                //       IconButton(
+                //         alignment: Alignment.centerRight,
+                //         icon: const Icon(Icons.arrow_forward_ios, size: 14),
+                //         onPressed: () {
+                //         },
+                //       ),
+                //     ],
+                //   ),
               ],
             ),
           ],

@@ -6,6 +6,7 @@ import 'package:flutter_foods/core/themes/theme.dart';
 import 'package:flutter_foods/core/utils/util.dart';
 import 'package:flutter_foods/presentation/screens/splash_screen.dart';
 import 'package:flutter_foods/providers/auth_provider.dart';
+import 'package:flutter_foods/providers/cart_provider.dart';
 import 'package:flutter_foods/providers/users_provider.dart';
 import 'package:flutter_foods/repositories/auth_repository.dart';
 import 'package:flutter_foods/repositories/user_repository.dart';
@@ -21,6 +22,7 @@ void main() async {
       // Provider to provide the Repository classes
       Provider<UserRepository>(create: (_) => UserRepository()),
       Provider<AuthRepository>(create: (_) => AuthRepository()),
+      
 
       // ProxyProvider to provide the Repository classes to the Service classes
       ProxyProvider<UserRepository, UserService>(
@@ -37,6 +39,7 @@ void main() async {
       ChangeNotifierProvider(
         create: (context) => AuthProvider(context.read<AuthService>()),
       ),
+       ChangeNotifierProvider(create: (_) => CartProvider()),
       // Add other providers here
     ], child: const MainApp()),
   );

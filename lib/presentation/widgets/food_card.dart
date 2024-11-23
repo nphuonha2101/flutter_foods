@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/data/models/food.dart';
 import 'package:flutter_foods/presentation/screens/food_detail_screen.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -32,7 +33,17 @@ class _FoodCardWidgetState extends State<FoodCardWidget> {
 
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => const FoodDetailScreen(),
+        builder: (context) => FoodDetailScreen(
+          food: Food(
+                id: 1,
+                name: 'Bánh mì',
+                category: 'Bánh mì',
+                price: 20000,
+                rating: 4.5,
+                reviewCount: 100,
+                imageUrl: 'assets/images/food_delivery.png',
+                angencyId: 1,
+              )),
       ),
     );
   }

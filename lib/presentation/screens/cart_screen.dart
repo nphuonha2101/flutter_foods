@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:collection/collection.dart'; // Import collection package for groupBy
 import 'package:flutter_foods/data/models/CartItem.dart';
-import 'package:flutter_foods/data/models/food.dart';
 import 'package:flutter_foods/presentation/widgets/food_cart_card.dart';
+import 'package:flutter_foods/providers/cart_provider.dart';
+import 'package:provider/provider.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -12,208 +12,130 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  // Sample cart data
-  List<CartItem> items = [
-    CartItem(
-      food: Food(
-        id: 1,
-        name: 'Pepperoni Pizza',
-        category: 'Pizza House',
-        price: 12.99,
-        rating: 4.7,
-        reviewCount: 150,
-        imageUrl: 'assets/images/food_delivery.png',
-        angencyId: 101,
-      ),
-      quantity: 2,
-    ),
-    CartItem(
-      food: Food(
-        id: 1,
-        name: 'Pepperoni Pizza 1',
-        category: 'Pizza House',
-        price: 12.99,
-        rating: 4.7,
-        reviewCount: 150,
-        imageUrl: 'assets/images/food_delivery.png',
-        angencyId: 101,
-      ),
-      quantity: 2,
-    ),
-    CartItem(
-      food: Food(
-        id: 2,
-        name: 'Cheeseburger',
-        category: 'Burger Town',
-        price: 9.49,
-        rating: 4.5,
-        reviewCount: 200,
-        imageUrl: 'assets/images/food_delivery.png',
-        angencyId: 102,
-      ),
-      quantity: 1,
-    ),
-    CartItem(
-      food: Food(
-        id: 3,
-        name: 'Veggie Salad',
-        category: 'Healthy Eatery',
-        price: 7.99,
-        rating: 4.3,
-        reviewCount: 80,
-        imageUrl: 'assets/images/food_delivery.png',
-        angencyId: 103,
-      ),
-      quantity: 3,
-    ),
-  ];
+  late CartProvider cart;
+  bool selectAll = false;
 
-  // Grouping the cart items by their category
-  Map<String, List<CartItem>> getGroupedItems() {
-    return groupBy(items, (CartItem item) => item.food.category);
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    cart = Provider.of<CartProvider>(context);
   }
 
+  // Calculate total cost of items in cart
   double getCartTotal() {
-    double total = 0.0;
-    for (var item in items) {
-      total += item.totalPrice; 
-    }
-    return total;
+    return cart.items.fold(0.0, (total, item) => total + item.totalPrice);
+  }
+
+  // Handle "Select All" checkbox
+  void _toggleSelectAll(bool? value) {
+    setState(() {
+      selectAll = value ?? false;
+    });
+    // You can modify the selection logic to update the individual items as well
   }
 
   @override
   Widget build(BuildContext context) {
-    final groupedItems = getGroupedItems();
-
     return Scaffold(
       appBar: AppBar(
         title: Row(children: [
           const Text('Giỏ hàng '),
-          Text('('+items.length.toString() +")",style: const TextStyle(fontSize: 18,))
-        ],),
-         leading: IconButton(
-          icon: Icon(Icons.arrow_back,color: Colors.amber[700],),
+          Text('(${cart.items.length})', style: const TextStyle(fontSize: 18)),
+        ]),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.amber[700]),
           onPressed: () {
-            Navigator.pop(context); 
+            Navigator.pop(context);
           },
-  ),
+        ),
       ),
       body: Column(
         children: [
+          // Cart Items List
           Expanded(
             child: ListView(
-              children: groupedItems.entries.map((entry) {
-                final categoryItems = entry.value;
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    FoodCartCard(
-                      cartItems: categoryItems,
-                       onIncrease: (CartItem item) {
-                          setState(() {
-                            item.quantity++;
-                          });
-                        },
-                        onDecrease: (CartItem item) {
-                          setState(() {
-                            if (item.quantity > 1) {
-                              item.quantity--;
-                            }
-                          });
-                        },
-                    ),
-                    
-                  ],
+              children: cart.items.map((item) {
+                return FoodCartCard(
+                  cartItems: [item],
+                  onIncrease: (CartItem item) {
+                    setState(() {
+                      cart.updateQuantity(item.food.id, item.quantity + 1);
+                    });
+                  },
+                  onDecrease: (CartItem item) {
+                    setState(() {
+                      if (item.quantity > 1) {
+                        cart.updateQuantity(item.food.id, item.quantity - 1);
+                      }
+                    });
+                  },
                 );
               }).toList(),
             ),
           ),
-
-
-          // footer
-         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1), 
-                spreadRadius: 2,
-                blurRadius: 10,
-                offset: const Offset(0, -2), 
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            
-            children: [
-              // Dòng 1: Chọn Voucher
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Chọn voucher:',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+          // Footer with Total and "Buy" button
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  spreadRadius: 2,
+                  blurRadius: 10,
+                  offset: const Offset(0, -2),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Voucher Row
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Chọn voucher:',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      // Xử lý khi chọn voucher
-                    },
-                     child: const Row(
+                    TextButton(
+                      onPressed: () {
+                        // Handle voucher selection
+                      },
+                      child: const Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
                             'Chọn hoặc nhập mã voucher',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                            ),
+                            style: TextStyle(fontSize: 14, color: Colors.grey),
                           ),
-                          Icon(
-                            Icons.arrow_forward_ios,
-                            color: Colors.grey,
-                            size: 14,
-                          ),
+                          Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 14),
                         ],
                       ),
-                  ),
-                ],
-              ),
-
-              // Dòng 2: Checkbox chọn tất cả
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Checkbox(
-                    value: false, // Thay đổi trạng thái checkbox theo nhu cầu
-                    onChanged: (bool? value) {
-                      // Xử lý khi chọn "Chọn tất cả"
-                    },
-                  ),
-                  const Text(
-                    'Tất cả',
-                    style: TextStyle(fontSize: 14),
-                  )
-                    ],
-                  ),
-                   Column(
+                    ),
+                  ],
+                ),
+                // "Select All" Checkbox Row
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: selectAll,
+                          onChanged: _toggleSelectAll,
+                        ),
+                        const Text('Tất cả', style: TextStyle(fontSize: 14)),
+                      ],
+                    ),
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
                           'Tổng tiền:',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          'đ${getCartTotal().toStringAsFixed(2)}',
+                          'đ${getCartTotal().toStringAsFixed(0)}',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -223,25 +145,21 @@ class _CartScreenState extends State<CartScreen> {
                       ],
                     ),
                     SizedBox(
-                      width: 150, // Chiều rộng của nút Mua hàng
+                      width: 150,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Xử lý sự kiện khi nhấn nút Mua hàng
+                          // Handle purchase button press
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green, // Màu nền của nút
+                          backgroundColor: Colors.green, // Button color
                           padding: const EdgeInsets.symmetric(vertical: 14),
-                          textStyle: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         child: Text('Mua hàng'),
                       ),
                     ),
-                ],
-              ),
-
+                  ],
+                ),
               ],
             ),
           ),
