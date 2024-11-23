@@ -12,6 +12,7 @@ import 'package:flutter_foods/repositories/auth_repository.dart';
 import 'package:flutter_foods/repositories/user_repository.dart';
 import 'package:flutter_foods/services/auth_service.dart';
 import 'package:flutter_foods/services/user_service.dart';
+import 'package:flutter_foods/core/provider/app_providers.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -42,6 +43,7 @@ void main() async {
        ChangeNotifierProvider(create: (_) => CartProvider()),
       // Add other providers here
     ], child: const MainApp()),
+    MultiProvider(providers: AppProviders.providers, child: const MainApp()),
   );
 }
 

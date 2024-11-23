@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/core/routes/app_routes.dart';
 import 'package:flutter_foods/data/models/food.dart';
 import 'package:flutter_foods/presentation/screens/food_detail_screen.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -16,7 +17,7 @@ class FoodCardWidget extends StatefulWidget {
 }
 
 class _FoodCardWidgetState extends State<FoodCardWidget> {
-  // late final Food food;
+  late final Food food;
 
   @override
   void initState() {
@@ -46,6 +47,9 @@ class _FoodCardWidgetState extends State<FoodCardWidget> {
               )),
       ),
     );
+    Navigator.of(context).pushNamed(AppRoutes.foodDetail, arguments: {
+      'food': food,
+    });
   }
 
   _handleAddToCart() {}

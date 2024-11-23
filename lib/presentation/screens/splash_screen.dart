@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/presentation/screens/choose_address_screen.dart';
 import 'package:flutter_foods/presentation/screens/main_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -23,7 +24,8 @@ class _SplashScreenState extends State<SplashScreen> {
     if (mounted) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const MainScreen()),
+        // MaterialPageRoute(builder: (context) => const MainScreen()),
+        MaterialPageRoute(builder: (context) => const ChooseAddressScreen()),
       );
     }
   }

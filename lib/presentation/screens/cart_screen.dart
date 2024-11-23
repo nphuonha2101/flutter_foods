@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_foods/data/models/CartItem.dart';
+import 'package:collection/collection.dart'; 
+import 'package:flutter_foods/data/models/cart_item.dart';
+import 'package:flutter_foods/data/models/food.dart';
 import 'package:flutter_foods/presentation/widgets/food_cart_card.dart';
 import 'package:flutter_foods/providers/cart_provider.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +35,7 @@ class _CartScreenState extends State<CartScreen> {
       selectAll = value ?? false;
     });
     // You can modify the selection logic to update the individual items as well
+
   }
 
   @override
@@ -44,6 +48,7 @@ class _CartScreenState extends State<CartScreen> {
         ]),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.amber[700]),
+
           onPressed: () {
             Navigator.pop(context);
           },
@@ -69,11 +74,13 @@ class _CartScreenState extends State<CartScreen> {
                       }
                     });
                   },
+
                 );
               }).toList(),
             ),
           ),
-          // Footer with Total and "Buy" button
+
+          // footer
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
@@ -89,7 +96,7 @@ class _CartScreenState extends State<CartScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Voucher Row
+                // Dòng 1: Chọn Voucher
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -100,6 +107,7 @@ class _CartScreenState extends State<CartScreen> {
                     TextButton(
                       onPressed: () {
                         // Handle voucher selection
+
                       },
                       child: const Row(
                         mainAxisSize: MainAxisSize.min,
@@ -114,7 +122,8 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                   ],
                 ),
-                // "Select All" Checkbox Row
+
+                // Dòng 2: Checkbox chọn tất cả
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -125,6 +134,7 @@ class _CartScreenState extends State<CartScreen> {
                           onChanged: _toggleSelectAll,
                         ),
                         const Text('Tất cả', style: TextStyle(fontSize: 14)),
+
                       ],
                     ),
                     Column(
@@ -155,7 +165,7 @@ class _CartScreenState extends State<CartScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 14),
                           textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
-                        child: Text('Mua hàng'),
+                        child: const Text('Mua hàng'),
                       ),
                     ),
                   ],

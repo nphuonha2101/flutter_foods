@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_foods/data/models/CartItem.dart';
+import 'package:flutter_foods/data/models/cart_item.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 class FoodCartCard extends StatefulWidget {
@@ -8,14 +8,14 @@ class FoodCartCard extends StatefulWidget {
   final ValueChanged<CartItem> onDecrease;
 
   const FoodCartCard({
-    Key? key,
+    super.key,
     required this.cartItems,
     required this.onIncrease,
     required this.onDecrease,
-  }) : super(key: key);
+  });
 
   @override
-  _FoodCartCardState createState() => _FoodCartCardState();
+  State<FoodCartCard> createState() => _FoodCartCardState();
 }
 
 class _FoodCartCardState extends State<FoodCartCard> {
@@ -70,7 +70,9 @@ class _FoodCartCardState extends State<FoodCartCard> {
                     });
                   },
                   child: Text(
-                    isEditing ? "Xong" : "Sửa", // Change text based on editing state
+                    isEditing
+                        ? "Xong"
+                        : "Sửa", // Change text based on editing state
                     style: const TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                 ),
@@ -118,7 +120,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
-                               const SizedBox(height: 4),
+                              const SizedBox(height: 4),
                               Text(
                                 food.category,
                                 style: TextStyle(
@@ -130,7 +132,8 @@ class _FoodCartCardState extends State<FoodCartCard> {
                               ),
                               const SizedBox(height: 4),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     color: Colors.amber[700]!,
@@ -148,7 +151,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
                                   maxLines: 1,
                                 ),
                               ),
-                               const SizedBox(height: 4),
+                              const SizedBox(height: 4),
                               Text(
                                 '\đ${food.price.toStringAsFixed(2)}',
                                 style: const TextStyle(
@@ -168,15 +171,17 @@ class _FoodCartCardState extends State<FoodCartCard> {
                       children: [
                         Row(
                           children: [
-                             Material(
-                              color: Theme.of(context).colorScheme.surfaceContainerLow,
+                            Material(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .surfaceContainerLow,
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(100)),
                               child: IconButton(
                                 padding: const EdgeInsets.all(2),
                                 icon: const Icon(TablerIcons.minus,
                                     color: Colors.redAccent),
-                              onPressed: () => widget.onDecrease(cartItem),
+                                onPressed: () => widget.onDecrease(cartItem),
                               ),
                             ),
                             Text(
@@ -184,14 +189,16 @@ class _FoodCartCardState extends State<FoodCartCard> {
                               style: const TextStyle(fontSize: 16),
                             ),
                             Material(
-                              color: Theme.of(context).colorScheme.surfaceContainerLow,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .surfaceContainerLow,
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(100)),
                               child: IconButton(
                                 padding: const EdgeInsets.all(2),
-                                icon: const Icon(TablerIcons.plus, color: Colors.green),
+                                icon: const Icon(TablerIcons.plus,
+                                    color: Colors.green),
                                 onPressed: () => widget.onIncrease(cartItem),
-
                               ),
                             ),
                           ],
@@ -207,7 +214,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
                         ),
                       ],
                     ),
-                    if (isEditing) 
+                    if (isEditing)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -215,24 +222,28 @@ class _FoodCartCardState extends State<FoodCartCard> {
                             onPressed: () {
                               print("Sản phẩm tương tự clicked");
                             },
-                             style: ElevatedButton.styleFrom(
-                              iconColor: Colors.red, 
-                              
-                              backgroundColor:Theme.of(context).colorScheme.surfaceTint
+                            style: ElevatedButton.styleFrom(
+                                iconColor: Colors.red,
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.surfaceTint),
+                            child: const Text(
+                              "Sản phẩm tương tự",
+                              style: TextStyle(color: Colors.white),
                             ),
-                            child: const Text("Sản phẩm tương tự", style: TextStyle(color: Colors.white),),
                           ),
                           ElevatedButton(
-                            
                             onPressed: () {
                               print("Xóa sản phẩm clicked");
                               // Add your delete logic here
                             },
                             style: ElevatedButton.styleFrom(
-                              iconColor: Colors.red, 
+                              iconColor: Colors.red,
                             ),
                             child: Text("Xóa sản phẩm",
-                            style: TextStyle(color:Theme.of(context).colorScheme.surfaceTint)),
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .surfaceTint)),
                           ),
                         ],
                       ),
@@ -311,6 +322,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
                 //       ),
                 //     ],
                 //   ),
+
               ],
             ),
           ],
