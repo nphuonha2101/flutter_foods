@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_foods/data/models/user.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -11,12 +14,12 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   late User user = User(
     id: 1,
-    name: 'Arya',
-    email: 'arya@example.com',
+    name: 'Nokotan',
+    email: 'Nokotan@example.com',
     phone: '0987654321',
     address: 'abc street, xyz city',
     password: '',
-    avatarUrl: 'https://embargenting.org.vn/wp-content/uploads/anh-gai-anime-1.jpg',
+    avatarUrl: 'https://images8.alphacoders.com/136/1368855.png',
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),
   );
@@ -26,6 +29,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   String? _editingField;
+  final ImagePicker _picker = ImagePicker();
+  XFile? _image;
+
 
   @override
   void initState() {
@@ -46,44 +52,73 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _toggleEditMode(String field, TextEditingController controller, void Function(String) onSave) {
-    setState(() {
+  setState(() {
+    if (field == 'address') {
+      Navigator.pushNamed(context, '/choose-address');
+    } else {
       if (_editingField == field) {
         onSave(controller.text);
-        _editingField = null; // Exit edit mode
+        _editingField = '';
       } else {
-        _editingField ??= field;
+        _editingField = field;
+      }
+    }
+  });
+}
+
+Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _image = pickedFile;
+      if (_image != null) {
+        user.avatarUrl = _image!.path;
       }
     });
   }
 
-  Widget _buildEditableRow({
+Widget _buildEditableRow({
     required String label,
     required String field,
     required TextEditingController controller,
     required void Function(String) onSave,
   }) {
     return Container(
-      color: Theme.of(context).colorScheme.onPrimary, // White background for editable rows
-      margin: const EdgeInsets.only(bottom: 4.0), // Bottom margin only for line effect
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0), // Optional padding inside row
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.onPrimary,
+        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label),
+          Text(
+            label,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          ),
           Expanded(
             child: TextField(
               controller: controller,
               textAlign: TextAlign.right,
-              enabled: _editingField == field,
+              enabled: _editingField == field && field != 'address',
               decoration: const InputDecoration(
                 border: InputBorder.none,
               ),
+              style: TextStyle(fontSize: 16),
             ),
           ),
           IconButton(
             icon: Icon(
-              _editingField == field ? Icons.check : Icons.edit,
-              color: _editingField == field ? Colors.green : Colors.blue,
+              field == 'address' ? Icons.arrow_forward : (_editingField == field ? Icons.check : Icons.edit),
+              color: field == 'address' ? Colors.blue : (_editingField == field ? Colors.green : Colors.blue),
             ),
             onPressed: () => _toggleEditMode(field, controller, onSave),
           ),
@@ -99,46 +134,58 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         title: const Text('Trang cá nhân'),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 20),
-          Center(
-            child: Column(
-              children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundImage: NetworkImage(user.avatarUrl),
-                ),
-                const SizedBox(height: 10),
-              ],
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20),
+            Center(
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: _pickImage,
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage: _image != null
+                          ? FileImage(File(_image!.path))
+                          : NetworkImage(user.avatarUrl) as ImageProvider,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    user.name,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
             ),
-          ),
-          _buildEditableRow(
-            label: 'Tên:',
-            field: 'name',
-            controller: _nameController,
-            onSave: (value) => user.name = value,
-          ),
-          _buildEditableRow(
-            label: 'Email:',
-            field: 'email',
-            controller: _emailController,
-            onSave: (value) => user.email = value,
-          ),
-          _buildEditableRow(
-            label: 'Phone:',
-            field: 'phone',
-            controller: _phoneController,
-            onSave: (value) => user.phone = value,
-          ),
-          _buildEditableRow(
-            label: 'Address:',
-            field: 'address',
-            controller: _addressController,
-            onSave: (value) => user.address = value,
-          ),
-        ],
+            const SizedBox(height: 20),
+            _buildEditableRow(
+              label: 'Tên:',
+              field: 'name',
+              controller: _nameController,
+              onSave: (value) => user.name = value,
+            ),
+            _buildEditableRow(
+              label: 'Email:',
+              field: 'email',
+              controller: _emailController,
+              onSave: (value) => user.email = value,
+            ),
+            _buildEditableRow(
+              label: 'Phone:',
+              field: 'phone',
+              controller: _phoneController,
+              onSave: (value) => user.phone = value,
+            ),
+            _buildEditableRow(
+              label: 'Address:',
+              field: 'address',
+              controller: _addressController,
+              onSave: (value) => user.address = value,
+            ),
+          ],
+        ),
       ),
     );
   }

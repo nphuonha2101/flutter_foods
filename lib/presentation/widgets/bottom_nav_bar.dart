@@ -37,10 +37,6 @@ class BtmNavigationBarWidget extends StatelessWidget {
           icon: Icon(TablerIcons.user),
           label: 'Tài khoản',
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-           label: 'Trang cá nhân'
-        ),
       ],
     );
   }
