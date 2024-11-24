@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/core/routes/app_routes.dart';
+import 'package:flutter_foods/data/models/cart_item.dart';
+import 'package:flutter_foods/providers/cart_provider.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:provider/provider.dart';
 
 class BottomFoodDetailAppBarWidget extends StatefulWidget
     implements PreferredSizeWidget {
-  const BottomFoodDetailAppBarWidget({super.key});
+  final CartItem cartItem;  
+  const BottomFoodDetailAppBarWidget({super.key, required this.cartItem});
 
   @override
   State<StatefulWidget> createState() => _BottomFoodDetailAppBarWidgetState();
@@ -15,11 +20,12 @@ class BottomFoodDetailAppBarWidget extends StatefulWidget
 class _BottomFoodDetailAppBarWidgetState
     extends State<BottomFoodDetailAppBarWidget> {
   bool _isFavorite = false;
-  num _quantity = 0;
+  int _quantity = 1;
 
   void _incrementQuantity() {
     setState(() {
       _quantity++;
+       widget.cartItem.quantity = _quantity;
     });
   }
 
@@ -27,6 +33,7 @@ class _BottomFoodDetailAppBarWidgetState
     setState(() {
       if (_quantity > 0) {
         _quantity--;
+         widget.cartItem.quantity = _quantity;
       }
     });
   }
@@ -111,12 +118,20 @@ class _BottomFoodDetailAppBarWidgetState
               children: [
                 IconButton.outlined(
                   icon: const Icon(TablerIcons.shopping_cart_plus),
-                  onPressed: () {},
+                   onPressed: () {
+                    setState(() {
+                      Provider.of<CartProvider>(context, listen: false).addToCart(widget.cartItem);
+                    });
+                  },
                 ),
                 const SizedBox(width: 20),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {},
+              
+                    onPressed: () {
+                      Provider.of<CartProvider>(context, listen: false).addToCart(widget.cartItem);
+                      Navigator.pushNamed(context, AppRoutes.cart);
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       shape: RoundedRectangleBorder(

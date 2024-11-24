@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/data/models/cart_item.dart';
 import 'package:flutter_foods/data/models/food.dart';
 import 'package:flutter_foods/presentation/widgets/bottom_food_detail_app_bar.dart';
 import 'package:flutter_foods/presentation/widgets/user_review.dart';
@@ -8,7 +9,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 class FoodDetailScreen extends StatefulWidget {
   final Food food;
-  const FoodDetailScreen({super.key, required this.food});
+
+  const FoodDetailScreen({super.key,required this.food});
 
   @override
   State<FoodDetailScreen> createState() => _FoodDetailScreenState();
@@ -88,7 +90,9 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: const BottomFoodDetailAppBarWidget(),
+      bottomNavigationBar: BottomFoodDetailAppBarWidget(
+         cartItem: CartItem (food: widget.food, quantity: 1)
+      ),
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_foods/presentation/screens/address_details_screen.dart';
 import 'package:flutter_foods/presentation/screens/cart_screen.dart';
+import 'package:flutter_foods/presentation/screens/address_details_screen.dart';
 import 'package:flutter_foods/presentation/screens/choose_address_screen.dart';
 import 'package:flutter_foods/presentation/screens/food_detail_screen.dart';
 import 'package:flutter_foods/presentation/screens/home_screen.dart';
@@ -13,10 +13,10 @@ class AppRoutes {
   static const String login = '/login';
   static const String register = '/register';
   static const String forgotPassword = '/forgot-password';
+  static const String cart = '/cart';
   static const String chooseAddress = '/choose-address';
   static const String addressDetail = '/address-detail';
   static const String foodDetail = '/food-detail';
-  static const String cart = '/cart';
   static const String checkout = '/checkout';
 
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
@@ -27,6 +27,7 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const LoginScreen());
       case register:
         return MaterialPageRoute(builder: (_) => const RegisterScreen());
+
       case chooseAddress:
         return MaterialPageRoute(builder: (_) => const ChooseAddressScreen());
       case addressDetail:
