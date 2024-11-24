@@ -21,27 +21,31 @@ class _CartScreenState extends State<CartScreen> {
     cart = Provider.of<CartProvider>(context);
   }
 
-  // Calculate total cost of items in cart
   double getCartTotal() {
-    return cart.items.fold(0.0, (total, item) => total + item.totalPrice);
+    return cart.cartItems.fold(0.0, (total, item) => total + item.totalPrice);
   }
 
-  // Handle "Select All" checkbox
-  void _toggleSelectAll(bool? value) {
+void _toggleSelectAll(bool? value) {
     setState(() {
-      selectAll = value ?? false;
+      selectAll = value!;
+      for (var item in cart.cartItems) {
+        item.isChecked = selectAll;
+      }
+    cart.toggleSelectAll(value);
     });
-    // You can modify the selection logic to update the individual items as well
-
   }
-
+   void onItemChecked(CartItem cartItem) {
+    setState(() {
+      cartItem.isChecked = !cartItem.isChecked;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Row(children: [
           const Text('Giỏ hàng '),
-          Text('(${cart.items.length})', style: const TextStyle(fontSize: 18)),
+          Text('(${cart.cartItems.length})', style: const TextStyle(fontSize: 18)),
         ]),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.amber[700]),
@@ -56,21 +60,31 @@ class _CartScreenState extends State<CartScreen> {
           // Cart Items List
           Expanded(
             child: ListView(
-              children: cart.items.map((item) {
+              children: cart.cartItems.map((item) {
                 return FoodCartCard(
-                  cartItems: [item],
+                  cartItem: item,
+                  onChecked: (CartItem item) {
+                    onItemChecked(item);
+                  },
                   onIncrease: (CartItem item) {
                     setState(() {
-                      cart.updateQuantity(item.food.id, item.quantity + 1);
+                      cart.increaseQuantity(item);
                     });
                   },
                   onDecrease: (CartItem item) {
                     setState(() {
                       if (item.quantity > 1) {
-                        cart.updateQuantity(item.food.id, item.quantity - 1);
+                          cart.decreaseQuantity(item);
                       }
                     });
                   },
+                  onDelete:(CartItem item) {
+                    setState(() {
+                      if (item.quantity >= 1) {
+                          cart.removeItem(item);
+                      }
+                    });
+                  } ,
 
                 );
               }).toList(),
@@ -156,6 +170,7 @@ class _CartScreenState extends State<CartScreen> {
                       child: ElevatedButton(
                         onPressed: () {
                           // Handle purchase button press
+                          print('Selected item: ${cart.selectedItems.length}'); 
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green, // Button color

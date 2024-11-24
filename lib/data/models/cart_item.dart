@@ -2,7 +2,7 @@ import 'package:flutter_foods/data/models/food.dart';
 
 class CartItem {
   final Food food;
-  int quantity;
+  int quantity =1;
   bool isChecked; 
 
   CartItem({
@@ -11,4 +11,9 @@ class CartItem {
     this.isChecked = false, 
   });
   double get totalPrice => food.price * quantity;
+CartItem.copy(CartItem other)
+      : food = other.food,
+        quantity = other.quantity,
+        isChecked = other.isChecked;
+
 }

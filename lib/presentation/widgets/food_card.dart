@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_foods/core/routes/app_routes.dart';
+import 'package:flutter_foods/data/models/cart_item.dart';
 import 'package:flutter_foods/data/models/food.dart';
 import 'package:flutter_foods/presentation/screens/food_detail_screen.dart';
+import 'package:flutter_foods/providers/cart_provider.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class FoodCardWidget extends StatefulWidget {
   // final Food food;
@@ -89,10 +92,14 @@ class _FoodCardWidgetState extends State<FoodCardWidget> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        IconButton.filled(
-                          onPressed: _handleAddToCart,
-                          icon: const Icon(TablerIcons.shopping_cart),
-                        ),
+                     IconButton.filled(
+                        onPressed: () {
+                          setState(() {
+                            Provider.of<CartProvider>(context, listen: false).addToCart(CartItem(food: food, quantity: 1));
+                          });
+                        },
+                        icon: const Icon(TablerIcons.shopping_cart),
+                      ),
                         const SizedBox(width: 10),
                         IconButton.outlined(
                           onPressed: _handleAddToFavorite,

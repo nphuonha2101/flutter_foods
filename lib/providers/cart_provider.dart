@@ -1,75 +1,78 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_foods/data/models/cart_item.dart';
-import 'package:flutter_foods/data/models/food.dart';
 
 class CartProvider extends ChangeNotifier {
-  final List<CartItem> _cartItems = [];
+  List<CartItem> _cartItems = [];
+  List<CartItem> _selectedItems = [];
 
-  List<CartItem> get items => _cartItems;
+  List<CartItem> get cartItems => _cartItems;
+  List<CartItem> get selectedItems => _selectedItems;
 
   void addToCart(CartItem foodItem) {
-
     bool itemExists = false;
+     CartItem newItem = CartItem.copy(foodItem); 
     for (var item in _cartItems) {
-      if (item.food.id == foodItem.food.id) {
+      if (item.food.id == newItem.food.id) {
         itemExists = true;
-        item.quantity += foodItem.quantity; 
+        item.quantity += newItem.quantity; 
+        
         break;
       }
     }
 
     if (!itemExists) {
-      _cartItems.add(foodItem); 
+      _cartItems.add(newItem); 
     }
 
     notifyListeners(); 
   }
-  double get totalCartPrice => _cartItems.fold(
-      0, (total, cartItem) => total + cartItem.totalPrice);
 
-  void addItem(CartItem item) {
-    final index =
-        _cartItems.indexWhere((cartItem) => cartItem.food.id == item.food.id);
-
-    if (index >= 0) {
-      _cartItems[index].quantity += item.quantity;
+  void toggleSelection(CartItem item) {
+    print(item.isChecked);
+    if (item.isChecked) {
+      _selectedItems.add(item); 
     } else {
-      _cartItems.add(item);
+      _selectedItems.remove(item); 
     }
+    notifyListeners();
+  }
+ void toggleSelectAll(bool value) {
+  if(value){
 
+    for (var item in cartItems) {
+     _selectedItems.add(item);
+    }
+  }else{
+     for (var item in cartItems) {
+     _selectedItems.remove(item);
+  }
+  notifyListeners();
+  }
+}
+
+  void increaseQuantity(CartItem item) {
+    item.quantity++;
     notifyListeners();
   }
 
-  void removeItem(String foodId) {
-    _cartItems.removeWhere((cartItem) => cartItem.food.id == foodId);
-    notifyListeners();
-  }
-
-  void updateQuantity(int foodId, int quantity) {
-    final index =
-        _cartItems.indexWhere((cartItem) => cartItem.food.id == foodId);
-
-    if (index >= 0) {
-      _cartItems[index].quantity = quantity;
-      if (_cartItems[index].quantity <= 0) {
-        _cartItems.removeAt(index);
-      }
+  void decreaseQuantity(CartItem item) {
+    if (item.quantity >= 1) {
+      item.quantity--;
       notifyListeners();
     }
   }
 
-  void toggleItemChecked(String foodId) {
-    final index =
-        _cartItems.indexWhere((cartItem) => cartItem.food.id == foodId);
-
-    if (index >= 0) {
-      _cartItems[index].isChecked = !_cartItems[index].isChecked;
-      notifyListeners();
-    }
+ void removeItem(CartItem item) {
+  if (item == null) {
+    print("Attempted to remove a null item.");
+    return;
   }
-
-  void clearCart() {
-    _cartItems.clear();
+  bool removedFromCart = _cartItems.remove(item);
+  bool removedFromSelected = _selectedItems.remove(item);
+  
+  if (removedFromCart || removedFromSelected) {
     notifyListeners();
   }
 }
+}
+

@@ -91,7 +91,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomFoodDetailAppBarWidget(
-         cartItem: CartItem (food: widget.food, quantity: 0)
+         cartItem: CartItem (food: widget.food, quantity: 1)
       ),
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
