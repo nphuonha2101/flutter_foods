@@ -18,7 +18,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     email: 'Nokotan@example.com',
     phone: '0987654321',
     address: 'abc street, xyz city',
-    password: '',
     avatarUrl: 'https://images8.alphacoders.com/136/1368855.png',
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),
@@ -50,6 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _addressController.dispose();
     super.dispose();
   }
+
 
   void _toggleEditMode(String field, TextEditingController controller, void Function(String) onSave) {
   setState(() {
