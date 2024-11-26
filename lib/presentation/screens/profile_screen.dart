@@ -15,8 +15,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     email: 'arya@example.com',
     phone: '0987654321',
     address: 'abc street, xyz city',
-    password: '',
-    avatarUrl: 'https://embargenting.org.vn/wp-content/uploads/anh-gai-anime-1.jpg',
+    avatarUrl:
+        'https://embargenting.org.vn/wp-content/uploads/anh-gai-anime-1.jpg',
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),
   );
@@ -45,7 +45,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.dispose();
   }
 
-  void _toggleEditMode(String field, TextEditingController controller, void Function(String) onSave) {
+  void _toggleEditMode(String field, TextEditingController controller,
+      void Function(String) onSave) {
     setState(() {
       if (_editingField == field) {
         onSave(controller.text);
@@ -63,9 +64,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required void Function(String) onSave,
   }) {
     return Container(
-      color: Theme.of(context).colorScheme.onPrimary, // White background for editable rows
-      margin: const EdgeInsets.only(bottom: 4.0), // Bottom margin only for line effect
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0), // Optional padding inside row
+      color: Theme.of(context)
+          .colorScheme
+          .onPrimary, // White background for editable rows
+      margin: const EdgeInsets.only(
+          bottom: 4.0), // Bottom margin only for line effect
+      padding: const EdgeInsets.symmetric(
+          horizontal: 16.0, vertical: 8.0), // Optional padding inside row
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

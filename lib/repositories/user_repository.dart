@@ -11,7 +11,6 @@ class UserRepository with AbstractApiRepositories<User, UserDto> {
       email: '',
       phone: '',
       address: '',
-      password: '',
       avatarUrl: '',
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),

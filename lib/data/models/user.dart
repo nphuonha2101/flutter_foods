@@ -3,11 +3,10 @@ import 'package:flutter_foods/data/models/i_model.dart';
 
 class User extends IModel {
   final num id;
-  late  String name;
-  late  String email;
+  late String name;
+  late String email;
   late String phone;
   late String address;
-  late String password;
   late String avatarUrl;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -18,7 +17,6 @@ class User extends IModel {
       required this.email,
       required this.phone,
       required this.address,
-      required this.password,
       required this.avatarUrl,
       required this.createdAt,
       required this.updatedAt});
@@ -31,7 +29,6 @@ class User extends IModel {
       email: json['email'],
       phone: json['phone'],
       address: json['address'],
-      password: json['password'],
       avatarUrl: json['avatarUrl'],
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
@@ -40,10 +37,6 @@ class User extends IModel {
 
   @override
   UserDto toDto() {
-    return UserDto(
-      name: name,
-      email: email,
-      password: password,
-    );
+    return UserDto(name: name, email: email);
   }
 }

@@ -12,19 +12,14 @@ class OrderScreenBottomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Tổng cộng: $totalPrices VNĐ',
-            ),
-            ElevatedButton(
-              onPressed: _placeOrder,
-              child: const Text('Đặt hàng'),
-            ),
-          ],
+      child: FilledButton(
+        onPressed: _placeOrder,
+        child: Padding(
+          padding: const EdgeInsets.all(5),
+          child: Text(
+            "Đặt hàng ${"($totalPricesđ)"}",
+            style: const TextStyle(fontSize: 16, color: Colors.white),
+          ),
         ),
       ),
     );

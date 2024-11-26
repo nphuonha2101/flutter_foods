@@ -3,12 +3,10 @@ import 'package:flutter_foods/data/dtos/i_dto.dart';
 class UserDto extends IDto {
   String name;
   String email;
-  String password;
 
   UserDto({
     required this.name,
     required this.email,
-    required this.password,
   });
 
   @override
@@ -16,7 +14,6 @@ class UserDto extends IDto {
     return {
       'name': name,
       'email': email,
-      'password': password,
     };
   }
 
@@ -24,7 +21,6 @@ class UserDto extends IDto {
     return UserDto(
       name: json['name'],
       email: json['email'],
-      password: json['password'],
     );
   }
 }
