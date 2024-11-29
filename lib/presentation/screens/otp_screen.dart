@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_foods/presentation/widgets/textField_otp.dart';
 
-class Otp extends StatefulWidget {
-  const Otp({super.key});
+class OtpScreen extends StatefulWidget {
+  const OtpScreen({super.key});
 
   @override
   _OtpState createState() => _OtpState();
 }
 
-class _OtpState extends State<Otp> {
+class _OtpState extends State<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

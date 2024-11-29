@@ -4,7 +4,7 @@ import 'package:flutter_foods/core/constants/app.dart';
 import 'package:flutter_foods/core/routes/app_routes.dart';
 import 'package:flutter_foods/core/themes/theme.dart';
 import 'package:flutter_foods/core/utils/util.dart';
-import 'package:flutter_foods/presentation/screens/otp_screen.dart';
+import 'package:flutter_foods/presentation/screens/forgot_password_screen.dart';
 import 'package:flutter_foods/presentation/screens/splash_screen.dart';
 import 'package:flutter_foods/core/provider/app_providers.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +33,7 @@ class MainApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: brightness == Brightness.light ? theme.light() : theme.dark(),
         title: AppConstants.appName,
-        home: const Otp(),
+        home: ForgotPasswordScreen(),
         onGenerateRoute: AppRoutes.generateRoute,
       ),
     );
