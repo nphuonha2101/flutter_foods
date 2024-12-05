@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
+  print('${dotenv.env['API_URL']}/api/user/auth/login');  
   runApp(
     MultiProvider(providers: AppProviders.providers, child: const MainApp()),
   );
@@ -33,7 +34,7 @@ class MainApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: brightness == Brightness.light ? theme.light() : theme.dark(),
         title: AppConstants.appName,
-        home: ForgotPasswordScreen(),
+        home: const SplashScreen(),
         onGenerateRoute: AppRoutes.generateRoute,
       ),
     );

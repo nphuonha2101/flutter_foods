@@ -1,40 +1,33 @@
-import 'package:flutter_foods/core/constants/api.dart';
+import 'dart:convert';
 import 'package:flutter_foods/data/models/auth_credential.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-
+import 'package:flutter_foods/core/constants/api.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 class AuthRepository {
   final String baseUrl = ApiConstants.baseUrl;
   final String version = ApiConstants.version.toString();
   final String port = ApiConstants.port.toString();
 
+  // Login function that communicates with the API
   Future<AuthCredential> login(String username, String password) async {
-    return http
-        .post(
-      Uri.parse('$baseUrl:$port/api/$version/auth/login'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode({'username': username, 'password': password}),
-    )
-        .then((response) {
-      if (response.statusCode == 200) {
-        String body = response.body;
-        String token = json.decode(body)['token'];
-        String username = json.decode(body)['username'];
-        String userFullName = json.decode(body)['userFullName'];
-        String userEmail = json.decode(body)['userEmail'];
+    try {
+      final response = await http.post(
+        Uri.parse('${dotenv.env['API_URL']}/api/user/auth/login'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({'email': username, 'password': password}),
+      );
+        var jsonResponse = json.decode(response.body);
 
-        return AuthCredential(
-          token: token,
-          username: username,
-          userFullName: userFullName,
-          userEmail: userEmail,
-        );
+      if (jsonResponse['statusCode'] == 200) {
+        return AuthCredential.fromJson(jsonResponse['data']);
       } else {
-        String error = json.decode(response.body);
+        String error = json.decode(response.body)['message'] ?? 'Unknown error';
         throw Exception(error);
       }
-    });
+    } catch (e) {
+      throw Exception('Failed to login: $e');
+    }
   }
 }

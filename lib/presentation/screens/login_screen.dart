@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/core/routes/app_routes.dart';
 import 'package:flutter_foods/providers/auth_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -12,8 +15,7 @@ class LoginScreen extends StatefulWidget {
   }
 }
 
-class _LoginScreenState extends State<LoginScreen>
-    with SingleTickerProviderStateMixin {
+class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStateMixin {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final FocusNode usernameFocusNode = FocusNode();
@@ -50,7 +52,8 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
-    final AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    // Access AuthProvider via Provider.of
+    final authProvider = Provider.of<AuthProvider>(context);
 
     return Scaffold(
       body: SizedBox(
@@ -138,10 +141,23 @@ class _LoginScreenState extends State<LoginScreen>
                             width: double.infinity,
                             child: FilledButton(
                               onPressed: () {
-                                authProvider.login(
+                                // Trigger login with credentials
+                               authProvider.login(
                                   usernameController.text,
                                   passwordController.text,
-                                );
+                                  ).then((_) {
+                                  // Check if the login is successful
+                                  if (authProvider.isAuthenticated) {
+                                  Navigator.pushNamed(context, AppRoutes.home);
+                                  } else {
+                                  Navigator.pushNamed(context, AppRoutes.register);
+                                  }
+                                  }).catchError((e) {
+                                  print("Login failed: $e");
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Login failed: $e')),
+                                  );
+                                  });
                               },
                               child: const Text('Đăng nhập'),
                             ),
