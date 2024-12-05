@@ -29,6 +29,7 @@ class AuthService {
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('credential');
+     await _authRepository.logout();
   }
 
   Future<bool> isLoggedIn() async {
