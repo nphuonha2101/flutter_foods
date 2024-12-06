@@ -48,4 +48,66 @@ class AuthRepository {
       throw Exception('Failed to logout: $e');
     }
   }
+    Future<Map<String, dynamic>> sendOtp(String email) async {
+  try {
+    final response = await http.post(
+      Uri.parse('${dotenv.env['API_URL']}/api/user/password/otp-mail'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: json.encode({'email': email}),
+    );
+
+    var jsonResponse = json.decode(response.body);
+
+    if (response.statusCode != 200) {
+      throw Exception(jsonResponse['message'] ?? 'Failed to send OTP');
+    }
+
+    return jsonResponse; // Trả về JSON nếu thành công
+  } catch (e) {
+    return {
+      'status': false,
+      'message': 'Failed to send OTP: $e',
+    };
+  }
+}
+
+
+  // Change password with OTP verification
+ Future<Map<String, dynamic>> changePassword(String newPassword, String otp) async {
+  try {
+    final requestBody = {
+      'password': newPassword,
+      'code': otp,
+    };
+    // Gửi yêu cầu POST
+    final response = await http.post(
+      Uri.parse('${dotenv.env['API_URL']}/api/user/password/verify'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: json.encode(requestBody),
+    );
+    final jsonResponse = json.decode(response.body);
+    if (response.statusCode == 200 && jsonResponse['statusCode'] == 200) {
+      return {
+        'status': true,
+        'message': jsonResponse['message'] ?? 'Password changed successfully',
+      };
+    } else {
+      return {
+        'status': false,
+        'message': jsonResponse['message'] ?? 'Failed to change password',
+      };
+    }
+  } catch (e) {
+    return {
+      'status': false,
+      'message': 'Failed to change password: $e',
+    };
+  }
+}
+
+  
 }

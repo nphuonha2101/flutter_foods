@@ -45,4 +45,16 @@ class AuthService {
     }
     return null;
   }
+Future<Map<String, dynamic>> sendOtp(String email) async {
+  return await _authRepository.sendOtp(email);
+}
+
+ Future<void> changePassword(String newPassword, String otp) async {
+    try {
+      await _authRepository.changePassword(newPassword, otp);
+    } catch (e) {
+      rethrow; 
+    }
+  }
+
 }

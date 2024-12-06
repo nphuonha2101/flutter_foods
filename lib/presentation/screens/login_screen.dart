@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_foods/core/routes/app_routes.dart';
 import 'package:flutter_foods/providers/auth_provider.dart';
@@ -49,7 +48,27 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     usernameFocusNode.dispose();
     super.dispose();
   }
-
+Future<void> _login(BuildContext context, AuthProvider authProvider) async {
+    try {
+      await authProvider.login(
+        usernameController.text,
+        passwordController.text,                                                    
+      );
+      await authProvider.initialize();
+      if (authProvider.isAuthenticated) {
+        Navigator.pushReplacementNamed(context, AppRoutes.home);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Thông tin đăng nhập sai, vui lòng kiểm tra lại tài khoản và mật khẩu.")),
+        );
+      }
+    } catch (e) {
+      print("Login failed: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login failed: $e')),
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     // Access AuthProvider via Provider.of
@@ -130,6 +149,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                           const SizedBox(height: 20),
                           TextField(
                             controller: passwordController,
+                            obscureText: true,
                             decoration: const InputDecoration(
                               labelText: 'Mật khẩu',
                               filled: true,
@@ -141,23 +161,8 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                             width: double.infinity,
                             child: FilledButton(
                               onPressed: () {
-                                // Trigger login with credentials
-                               authProvider.login(
-                                  usernameController.text,
-                                  passwordController.text,
-                                  ).then((_) {
-                                  // Check if the login is successful
-                                  if (authProvider.isAuthenticated) {
-                                  Navigator.pushNamed(context, AppRoutes.home);
-                                  } else {
-                                  Navigator.pushNamed(context, AppRoutes.register);
-                                  }
-                                  }).catchError((e) {
-                                  print("Login failed: $e");
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Login failed: $e')),
-                                  );
-                                  });
+                                // Perform login logic
+                                _login(context, authProvider);
                               },
                               child: const Text('Đăng nhập'),
                             ),
