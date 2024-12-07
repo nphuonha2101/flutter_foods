@@ -22,8 +22,12 @@ class AuthService {
     
   }
 
-  Future<bool> register(String username, String password) async {
-    return true;
+  Future<bool> register(String name, String email,String password, String username, String phone, String address) async {
+    try {
+      return await _authRepository.register(name, email, password, username, phone, address);
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 
   Future<void> logout() async {

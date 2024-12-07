@@ -39,7 +39,7 @@ class AuthProvider extends ChangeNotifier {
   // Initialize method to check if the user is already logged in
   Future<void> initialize() async {
     _isLoading = true;
-    notifyListeners();
+    // notifyListeners();
 
     try {
       _isAuthenticated = await _authService.isLoggedIn();
@@ -92,6 +92,15 @@ Future<Map<String, dynamic>> sendOtp(String email) async {
     } finally {
       _isLoading = false;
       notifyListeners();
+    }
+  }
+
+  Future<bool> register (String name, String email, String password, String username, String phone, String address) async {
+    try {
+      return await _authService.register(name, email, password, username, phone, address);;
+    } catch (e) {
+      _errorMessage = e.toString();
+      return false;
     }
   }
 }
