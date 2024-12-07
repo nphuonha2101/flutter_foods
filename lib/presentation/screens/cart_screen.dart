@@ -38,6 +38,7 @@ void _toggleSelectAll(bool? value) {
     setState(() {
       cartItem.isChecked = !cartItem.isChecked;
     });
+       cart.toggleSelection(cartItem);
   }
   @override
   Widget build(BuildContext context) {
