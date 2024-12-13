@@ -4,13 +4,17 @@ import 'package:flutter_foods/core/constants/app.dart';
 import 'package:flutter_foods/core/routes/app_routes.dart';
 import 'package:flutter_foods/core/themes/theme.dart';
 import 'package:flutter_foods/core/utils/util.dart';
+import 'package:flutter_foods/presentation/screens/forgot_password_screen.dart';
 import 'package:flutter_foods/presentation/screens/splash_screen.dart';
 import 'package:flutter_foods/core/provider/app_providers.dart';
+import 'package:flutter_foods/providers/auth_provider.dart';
+import 'package:flutter_foods/services/auth_service.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
+  print('${dotenv.env['API_URL']}/api/user/auth/login');  
   runApp(
     MultiProvider(providers: AppProviders.providers, child: const MainApp()),
   );

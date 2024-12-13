@@ -178,11 +178,35 @@ class _RegisterScreenState extends State<RegisterScreen>
                             SizedBox(
                               width: double.infinity,
                               child: FilledButton(
-                                onPressed: () {
-                                  authProvider.login(
-                                    usernameController.text,
-                                    passwordController.text,
-                                  );
+                                onPressed: () async {
+                                  try {
+                                    bool isRegistered =
+                                        await authProvider.register(
+                                      nameController.text,
+                                      emailController.text,
+                                      passwordController.text,
+                                      usernameController.text,
+                                      phoneController.text,
+                                      addressController.text,
+                                    );
+                                    if (isRegistered) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                            content:
+                                                Text('Đăng ký thành công')),
+                                      );
+                                      Navigator.pushNamed(context, '/login');
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                            content: Text('Đăng ký thất bại')),
+                                      );
+                                    }
+                                  } catch (e) {
+                                    print('Error: $e');
+                                  }
                                 },
                                 child: const Text('Đăng ký'),
                               ),

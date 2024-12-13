@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_foods/data/models/user_review.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 class UserReviewWidget extends StatelessWidget {
