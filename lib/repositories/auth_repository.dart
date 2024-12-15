@@ -3,14 +3,15 @@ import 'package:flutter_foods/data/models/auth_credential.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_foods/core/constants/api.dart';
 class AuthRepository {
-  final String baseUrl = ApiConstants.baseUrl;
-  final String version = ApiConstants.version.toString();
-  final String port = ApiConstants.port.toString();
+
+  final String apiUrl = ApiConstants.apiUrl.toString();
 
   Future<AuthCredential> login(String username, String password) async {
     try {
+      final url = Uri.parse('$apiUrl/user/auth/login');
       final response = await http.post(
-        Uri.parse('$baseUrl:$port/api/user/auth/login'),
+    
+        Uri.parse('$url'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -31,7 +32,7 @@ class AuthRepository {
 
   Future<bool> register(String name, String email, String password, String username, String phone, String address) async {
     try {
-      final url = Uri.parse('$baseUrl:$port/api/user/register');
+      final url = Uri.parse('$apiUrl/user/register');
       print('Sending request to: $url');
 
       final response = await http.post(
@@ -67,7 +68,7 @@ class AuthRepository {
     Future<void> logout() async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl:$port/api/user/auth/logout'),
+        Uri.parse('$apiUrl/user/auth/logout'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -85,7 +86,7 @@ class AuthRepository {
     Future<Map<String, dynamic>> sendOtp(String email) async {
   try {
     final response = await http.post(
-      Uri.parse('$baseUrl:$port/api/user/password/otp-mail'),
+      Uri.parse('$apiUrl/user/password/otp-mail'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -117,7 +118,7 @@ class AuthRepository {
     };
     // Gửi yêu cầu POST
     final response = await http.post(
-      Uri.parse('$baseUrl:$port/api/user/password/verify'),
+      Uri.parse('$apiUrl/user/password/verify'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

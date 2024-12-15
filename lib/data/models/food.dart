@@ -4,13 +4,13 @@ import 'package:flutter_foods/data/models/i_model.dart';
 
 class Food implements IModel {
   final int id;
-  final String name;
-  final String category;
+  final String? name;
+  final String? category;
   final double price;
   final double rating;
-  final int reviewCount;
+  final int? reviewCount;
   final int angencyId;
-  final String imageUrl;
+  final String? imageUrl;
 
   Food({
     required this.id,
@@ -36,9 +36,9 @@ class Food implements IModel {
       category: json['category'],
       price: json['price'],
       rating: json['rating'],
-      reviewCount: json['reviewCount'],
+      reviewCount: 0,
       imageUrl: json['imageUrl'],
-      angencyId: json['angencyId'],
+      angencyId: 0,
     );
   }
 

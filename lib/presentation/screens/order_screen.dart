@@ -191,13 +191,13 @@ class _OrderScreenState extends State<OrderScreen> {
                               leading: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 child: Image.network(
-                                  item.food.imageUrl,
+                                  item.food.imageUrl as String,
                                   width: 70,
                                   height: 70,
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                              title: Text(item.food.name),
+                              title: Text(item.food.name as String),
                               subtitle: Text('Số lượng: ${item.quantity}'),
                               trailing: Text('Tổng cộng: ${item.totalPrice}'),
                             );

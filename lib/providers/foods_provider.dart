@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_foods/data/dtos/user_dto.dart';
-import 'package:flutter_foods/data/models/user.dart';
-import 'package:flutter_foods/services/user_service.dart';
+import 'package:flutter_foods/data/dtos/food_dto.dart';
+import 'package:flutter_foods/data/models/Food.dart';
+import 'package:flutter_foods/services/Food_service.dart';
 
-class UsersProvider with ChangeNotifier {
-  final UserService _userService;
-  List<User> _users = [];
+class FoodsProvider with ChangeNotifier {
+  final FoodService _foodService;
+  List<Food> _foods = [];
   bool _isLoading = false;
   bool _hasError = false;
   String _errorMessage = '';
 
-  UsersProvider(this._userService);
+  FoodsProvider(this._foodService);
 
-  List<User> get users => _users;
+  List<Food> get foods => _foods;
   bool get isLoading => _isLoading;
   bool get hasError => _hasError;
   String get errorMessage => _errorMessage;
@@ -23,8 +23,8 @@ class UsersProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      _users = await _userService.fetchAll();
-      print(_users.length);
+      print("prodiver:" +foods.toString());
+      _foods = (await _foodService.fetchAll()).cast<Food>();
     } catch (e) {
       _hasError = true;
       _errorMessage = e.toString();
@@ -34,13 +34,13 @@ class UsersProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> create(UserDto dto) async {
+  Future<void> create(FoodDto dto) async {
     _isLoading = true;
     _hasError = false;
     notifyListeners();
 
     try {
-      await _userService.create(dto);
+      await _foodService.create(dto);
     } catch (e) {
       _hasError = true;
       _errorMessage = e.toString();
@@ -50,13 +50,13 @@ class UsersProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> update(UserDto dto, num id) async {
+  Future<void> update(FoodDto dto, num id) async {
     _isLoading = true;
     _hasError = false;
     notifyListeners();
 
     try {
-      await _userService.update(dto, id);
+      await _foodService.update(dto, id);
     } catch (e) {
       _hasError = true;
       _errorMessage = e.toString();
@@ -72,7 +72,7 @@ class UsersProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await _userService.delete(id);
+      await _foodService.delete(id);
     } catch (e) {
       _hasError = true;
       _errorMessage = e.toString();
@@ -83,7 +83,7 @@ class UsersProvider with ChangeNotifier {
   }
 
   void clear() {
-    _users = [];
+    _foods = [];
     _isLoading = false;
     _hasError = false;
     _errorMessage = '';

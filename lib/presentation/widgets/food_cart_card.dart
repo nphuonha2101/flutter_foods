@@ -52,7 +52,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
                       },
                     ),
                     Text(
-                      food.category,  // Use the food's category as the shop name
+                      food.category as String,  // Use the food's category as the shop name
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -89,7 +89,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
                     height: 120,
                     color: Colors.grey[300],
                     child: Image.asset(
-                      food.imageUrl,
+                      food.imageUrl as String,
                       height: 120,
                       width: 120,
                       fit: BoxFit.cover,
@@ -102,7 +102,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        food.name,
+                        food.name as String,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -112,7 +112,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        food.category,
+                        food.category as String,
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.grey[600],

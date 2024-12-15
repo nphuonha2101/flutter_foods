@@ -9,13 +9,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class FoodCardWidget extends StatefulWidget {
-  // final Food food;
+  final Food food;  // Food data passed to the widget
 
-  // const FoodCard({super.key, this.food});
-  const FoodCardWidget({super.key});
+  const FoodCardWidget({Key? key, required this.food}) : super(key: key); 
 
   @override
-  // State<StatefulWidget> createState() => _FoodCardState({super.key, this.food});
   State<StatefulWidget> createState() => _FoodCardWidgetState();
 }
 
@@ -25,7 +23,7 @@ class _FoodCardWidgetState extends State<FoodCardWidget> {
   @override
   void initState() {
     super.initState();
-    // food = widget.food;
+     food = widget.food;
   }
 
   _handleCardTapped() {
@@ -74,7 +72,7 @@ class _FoodCardWidgetState extends State<FoodCardWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Food Name",
+                      food.name as String,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontFamily: GoogleFonts.ibmPlexSans().fontFamily,
@@ -82,7 +80,7 @@ class _FoodCardWidgetState extends State<FoodCardWidget> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Text("Food Price",
+                    Text(food.price.toString(),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontFamily: GoogleFonts.inter().fontFamily,

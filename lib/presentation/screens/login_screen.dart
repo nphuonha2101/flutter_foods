@@ -54,7 +54,7 @@ Future<void> _login(BuildContext context, AuthProvider authProvider) async {
         usernameController.text,
         passwordController.text,                                                    
       );
-      // await authProvider.initialize();
+       await authProvider.initialize();
       if (authProvider.isAuthenticated) {
         Navigator.pushReplacementNamed(context, AppRoutes.home);
       } else {
