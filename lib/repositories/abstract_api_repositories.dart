@@ -10,20 +10,23 @@ mixin AbstractApiRepositories<M extends IModel, D extends IDto> {
   final String port = ApiConstants.port.toString();
   final String endpoint = '${M.toString().toLowerCase()}s';
 
-  String get _baseApiUrl => '$baseUrl:$port/api/$version/$endpoint';
+  String get baseApiUrl => '$baseUrl:$port/api/$version/$endpoint';
 
   Future<List<M>> fetchAll() async {
-    final response = await http.get(Uri.parse(_baseApiUrl));
-    if (response.statusCode == 200) {
-      final List<dynamic> body = json.decode(response.body);
-      return body.map((item) => createModel().fromJson(item) as M).toList();
-    } else {
-      throw _handleError('fetch all', response.statusCode);
-    }
+  final response = await http.get(Uri.parse(baseApiUrl));
+  if (response.statusCode == 200) {
+    final Map<String, dynamic> body = json.decode(response.body);
+    
+    final List<dynamic> items = body['data'];
+   
+    return items.map((item) => createModel().fromJson(item) as M).toList();
+  } else {
+    throw _handleError('fetch all', response.statusCode);
   }
+}
 
   Future<M> fetch(num id) async {
-    final response = await http.get(Uri.parse('$_baseApiUrl/$id'));
+    final response = await http.get(Uri.parse('$baseApiUrl/$id'));
     if (response.statusCode == 200) {
       return createModel().fromJson(json.decode(response.body)) as M;
     } else {

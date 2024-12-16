@@ -1,17 +1,17 @@
 import 'package:flutter_foods/data/dtos/i_dto.dart';
 
 class FoodDto implements IDto {
-  String name;
-  String category;
+  String? name;
+  String? category;
   double price;
-  final int angencyId;
-  final String imageUrl;
+  final int shopId;
+  final String? imageUrl;
 
   FoodDto({
     required this.name,
     required this.category,
     required this.price,
-    required this.angencyId,
+    required this.shopId,
     required this.imageUrl,
   });
 
@@ -21,8 +21,8 @@ class FoodDto implements IDto {
       'name': name,
       'category': category,
       'price': price,
-      'angencyId': angencyId,
-      'imageUrl': imageUrl,
+      'angencyId': shopId,
+      'image': imageUrl,
     };
   }
 }

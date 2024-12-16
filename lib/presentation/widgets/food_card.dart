@@ -1,21 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_foods/core/routes/app_routes.dart';
-import 'package:flutter_foods/data/models/cart_item.dart';
 import 'package:flutter_foods/data/models/food.dart';
-import 'package:flutter_foods/presentation/screens/food_detail_screen.dart';
-import 'package:flutter_foods/providers/cart_provider.dart';
-import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
 class FoodCardWidget extends StatefulWidget {
-  // final Food food;
+  final Food food;
 
-  // const FoodCard({super.key, this.food});
-  const FoodCardWidget({super.key});
+  const FoodCardWidget({Key? key, required this.food}) : super(key: key);
 
   @override
-  // State<StatefulWidget> createState() => _FoodCardState({super.key, this.food});
   State<StatefulWidget> createState() => _FoodCardWidgetState();
 }
 
@@ -25,38 +18,15 @@ class _FoodCardWidgetState extends State<FoodCardWidget> {
   @override
   void initState() {
     super.initState();
-    // food = widget.food;
+    food = widget.food;
   }
 
   _handleCardTapped() {
-    // Navigator.of(context).push(
-    //   MaterialPageRoute(
-    //     builder: (context) => FoodDetailScreen(food: food),
-    //   ),
-    // );
-
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => FoodDetailScreen(
-          food: Food(
-                id: 1,
-                name: 'Bánh mì',
-                category: 'Bánh mì',
-                price: 20000,
-                rating: 4.5,
-                reviewCount: 100,
-                imageUrl: 'assets/images/food_delivery.png',
-                angencyId: 1,
-              )),
-      ),
+    Navigator.of(context).pushNamed(
+      AppRoutes.foodDetail,
+      arguments: {'food': food},
     );
-    Navigator.of(context).pushNamed(AppRoutes.foodDetail, arguments: {
-      'food': food,
-    });
   }
-
-  _handleAddToCart() {}
-  _handleAddToFavorite() {}
 
   @override
   Widget build(BuildContext context) {
@@ -74,37 +44,37 @@ class _FoodCardWidgetState extends State<FoodCardWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Food Name",
+                      food.name as String,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontFamily: GoogleFonts.ibmPlexSans().fontFamily,
                         fontSize: 20,
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Text("Food Price",
+                    Text(food.price.toString(),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontFamily: GoogleFonts.inter().fontFamily,
                           fontSize: 16,
                         )),
                     const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                     IconButton.filled(
-                        onPressed: () {
-                          setState(() {
-                            Provider.of<CartProvider>(context, listen: false).addToCart(CartItem(food: food, quantity: 1));
-                          });
-                        },
-                        icon: const Icon(TablerIcons.shopping_cart),
-                      ),
+                        IconButton.filled(
+                          onPressed: () {
+                            setState(() {
+                              // Add to cart functionality here
+                            });
+                          },
+                          icon: const Icon(Icons.shopping_cart),
+                        ),
                         const SizedBox(width: 10),
                         IconButton.outlined(
-                          onPressed: _handleAddToFavorite,
-                          icon: const Icon(TablerIcons.heart),
-                        )
+                          onPressed: () {
+                            // Add to favorite functionality here
+                          },
+                          icon: const Icon(Icons.favorite),
+                        ),
                       ],
                     ),
                   ],
@@ -113,8 +83,10 @@ class _FoodCardWidgetState extends State<FoodCardWidget> {
               Flexible(
                 child: AspectRatio(
                   aspectRatio: 1,
-                  child: Image.asset(
-                    "assets/images/food_delivery.png",
+                  child: CachedNetworkImage(
+                    imageUrl: food.imageUrl as String,  
+                    placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                     fit: BoxFit.cover,
                   ),
                 ),
