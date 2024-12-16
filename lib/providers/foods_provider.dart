@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_foods/data/dtos/food_dto.dart';
-import 'package:flutter_foods/data/models/Food.dart';
+import 'package:flutter_foods/data/models/food.dart';
 import 'package:flutter_foods/services/Food_service.dart';
 
 class FoodsProvider with ChangeNotifier {
@@ -23,7 +23,6 @@ class FoodsProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      print("prodiver:" +foods.toString());
       _foods = (await _foodService.fetchAll()).cast<Food>();
     } catch (e) {
       _hasError = true;
@@ -32,6 +31,24 @@ class FoodsProvider with ChangeNotifier {
 
     _isLoading = false;
     notifyListeners();
+  }
+    Future<List<Food>> search(String query) async {
+    _isLoading = true;
+    _hasError = false;
+    notifyListeners();
+
+    try {
+      _foods = (await _foodService.search(query)).cast<Food>() ;
+      notifyListeners();
+      return _foods;  
+    } catch (e) {
+      _hasError = true;
+      _errorMessage = e.toString();
+      return [];  
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> create(FoodDto dto) async {

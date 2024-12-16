@@ -9,10 +9,7 @@ class UserService {
 
   Future<List<User>> fetchAll() async {
     try {
-      print(1);
-      List<User> userList = await _userRepository.fetchAll();
-      print("userList: "+userList.toString());
-      return userList;
+      return _userRepository.fetchAll();
     } catch (e) {
       throw Exception('Failed to load users. Error: $e');
     }

@@ -9,15 +9,13 @@ class FoodService {
 
   Future<List<Food>> fetchAll() async {
     try {
-      print(123);
       List<Food> items = await _foodRepository.fetchAll();
-      print(items);
       return items ;
     } catch (e) {
       throw Exception('Failed to load foods. Error: $e');
     }
   }
-
+  
   Future<Food> fetch(num id) async {
     try {
       return _foodRepository.fetch(id);
@@ -39,6 +37,8 @@ class FoodService {
       return _foodRepository.update(food, id);
     } catch (e) {
       throw Exception('Failed to update food. Error: $e');
+
+  search(String term) {}
     }
   }
 
@@ -49,4 +49,13 @@ class FoodService {
       throw Exception('Failed to delete food. Error: $e');
     }
   }
+   Future<List<Food>> search(String term) async {
+    try {
+      List<Food> items = await _foodRepository.search(term);
+      return items ;
+    } catch (e) {
+      throw Exception('Failed to search foods. Error: $e');
+    }
+  }
 }
+

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/core/routes/app_routes.dart';
+import 'package:flutter_foods/data/models/food.dart';
 import 'package:flutter_foods/data/models/food_category.dart';
+import 'package:flutter_foods/providers/foods_provider.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class AppbarSearchDeligate extends SearchDelegate {
   late Color textColor;
@@ -245,23 +249,72 @@ class AppbarSearchDeligate extends SearchDelegate {
       ),
     );
   }
-
-  Widget _buildSearchResults(BuildContext context) {
-    final suggestions = ['apple', 'banana', 'orange']
-        .where((word) => word.startsWith(query))
-        .toList();
-
-    return ListView.builder(
-      itemCount: suggestions.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(suggestions[index]),
-          onTap: () {
-            query = suggestions[index];
-            showResults(context);
+Widget _buildSearchResults(BuildContext context) {
+  return FutureBuilder<List<Food>>(
+    future: Provider.of<FoodsProvider>(context, listen: false).search(query),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return Center(child: CircularProgressIndicator());
+      } else if (snapshot.hasError) {
+        return Center(child: Text('Error: ${snapshot.error}'));
+      } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+        final foods = snapshot.data!;
+        return GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, 
+            crossAxisSpacing: 8.0, 
+            mainAxisSpacing: 8.0, 
+            childAspectRatio: 1, 
+          ),
+          itemCount: foods.length,
+          itemBuilder: (context, index) {
+            final food = foods[index];
+            return GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushNamed(
+                  AppRoutes.foodDetail,
+                  arguments: {'food': food},
+                );
+              },
+              child: Card(
+                color: Theme.of(context).colorScheme.surface,
+                elevation: 4,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          food.imageUrl as String,
+                          height: 120,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: Text(
+                        food.name as String,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
           },
         );
-      },
-    );
-  }
+      } else {
+        return Center(child: Text('No results found.'));
+      }
+    },
+  );
+}
+
 }

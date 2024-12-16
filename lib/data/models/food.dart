@@ -6,26 +6,28 @@ class Food implements IModel {
   final int id;
   final String? name;
   final String? category;
+  final String? description;
   final double price;
   final double rating;
   final int? reviewCount;
-  final int angencyId;
+  final int shopId;
   final String? imageUrl;
 
   Food({
     required this.id,
     required this.name,
+    required this.description,
     required this.category,
     required this.price,
     required this.rating,
     required this.reviewCount,
     required this.imageUrl,
-    required this.angencyId,
+    required this.shopId,
   });
 
   @override
   String toString() {
-    return 'Food{name: $name, category: $category, price: $price, rating: $rating, reviewCount: $reviewCount, imageUrl: $imageUrl, angencyId: $angencyId}';
+    return 'Food{name: $name, category: $category, price: $price, rating: $rating, reviewCount: $reviewCount, imageUrl: $imageUrl, shopId: $shopId}';
   }
 
   @override
@@ -35,10 +37,11 @@ class Food implements IModel {
       name: json['name'],
       category: json['category'],
       price: json['price'],
+      description: json['description'],
       rating: json['rating'],
       reviewCount: 0,
-      imageUrl: json['imageUrl'],
-      angencyId: 0,
+      imageUrl: json['image'],
+      shopId: json['shop_id'],
     );
   }
 
@@ -48,7 +51,7 @@ class Food implements IModel {
       name: name,
       category: category,
       price: price,
-      angencyId: angencyId,
+      shopId: shopId,
       imageUrl: imageUrl,
     );
   }

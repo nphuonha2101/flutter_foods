@@ -24,7 +24,7 @@ class UsersProvider with ChangeNotifier {
 
     try {
       _users = await _userService.fetchAll();
-      print(_users.length);
+    
     } catch (e) {
       _hasError = true;
       _errorMessage = e.toString();
