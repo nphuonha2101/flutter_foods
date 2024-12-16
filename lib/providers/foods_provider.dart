@@ -50,6 +50,24 @@ class FoodsProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+  Future<List<Food>> fetchAllByCategoryId(String categoryId) async {
+    _isLoading = true;
+    _hasError = false;
+    notifyListeners();
+
+    try {
+      _foods = (await _foodService.fetchAllByCategoryId(categoryId)).cast<Food>() ;
+      notifyListeners();
+      return _foods;  
+    } catch (e) {
+      _hasError = true;
+      _errorMessage = e.toString();
+      return [];  
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 
   Future<void> create(FoodDto dto) async {
     _isLoading = true;

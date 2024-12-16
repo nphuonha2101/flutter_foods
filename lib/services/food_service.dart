@@ -37,8 +37,6 @@ class FoodService {
       return _foodRepository.update(food, id);
     } catch (e) {
       throw Exception('Failed to update food. Error: $e');
-
-  search(String term) {}
     }
   }
 
@@ -52,6 +50,14 @@ class FoodService {
    Future<List<Food>> search(String term) async {
     try {
       List<Food> items = await _foodRepository.search(term);
+      return items ;
+    } catch (e) {
+      throw Exception('Failed to search foods. Error: $e');
+    }
+  }
+    Future<List<Food>> fetchAllByCategoryId(String categoryId) async {
+    try {
+      List<Food> items = await _foodRepository.fetchAllByCategoryId(categoryId);
       return items ;
     } catch (e) {
       throw Exception('Failed to search foods. Error: $e');
