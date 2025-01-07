@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_foods/providers/cart_provider.dart';
 import 'package:flutter_foods/providers/category_provider.dart';
 import 'package:flutter_foods/providers/foods_provider.dart';
+import 'package:flutter_foods/providers/location_provider.dart';
 import 'package:flutter_foods/providers/users_provider.dart';
 import 'package:flutter_foods/repositories/auth_repository.dart';
 import 'package:flutter_foods/repositories/category_repository.dart';
@@ -48,6 +49,7 @@ class AppProviders {
       create: (context) => CategoryProvider(context.read<CategoryService>()),
     ),
     ChangeNotifierProvider(create: (_) => CartProvider()),
+     ChangeNotifierProvider(create: (_) => LocationProvider()),
     
     // Add other providers here
   ];
