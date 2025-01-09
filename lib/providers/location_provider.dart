@@ -1,38 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:location/location.dart';
+import 'package:location/location.dart'; // location package
+import 'package:permission_handler/permission_handler.dart' as permission_handler; // alias permission_handler
 
 class LocationProvider with ChangeNotifier {
   Location location = Location();
   double? latitude;
   double? longitude;
 
-  Future<void> getLocation() async {
-    bool _serviceEnabled;
-    PermissionStatus _permissionGranted;
-
-    // Kiểm tra dịch vụ vị trí có đang bật không
-    _serviceEnabled = await location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
-      if (!_serviceEnabled) {
-        return;
+  // Request location permission
+  Future<bool> requestLocationPermission() async {
+    bool serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return false; 
       }
     }
 
-    // Kiểm tra quyền truy cập vị trí
-    _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
-        return;
+    var permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        return false;
       }
-    }
-
-    // Lấy vị trí
-    LocationData _locationData = await location.getLocation();
-    latitude = _locationData.latitude;
-    longitude = _locationData.longitude;
-
-    notifyListeners();
+    } 
+    return true; 
   }
+
+  // Fetch the current location
+  Future<void> fetchLocation() async {
+    try {
+      LocationData _locationData = await location.getLocation();
+      latitude = _locationData.latitude;
+      longitude = _locationData.longitude;
+      print("Current location: ${latitude}, ${longitude}");
+      notifyListeners();
+    } catch (e) {
+      print("Error while fetching location: $e");
+    }
+  }
+
+ 
 }

@@ -21,14 +21,8 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
-  void _changePage(int? index) {
-     if (index == 1) { 
-      final locationProvider = Provider.of<LocationProvider>(context, listen: false);
-      locationProvider.getLocation();
-      if(locationProvider.latitude ==null || locationProvider.longitude ==null){
-        return;
-      }
-    }
+  Future<void> _changePage(int? index) async {
+
     setState(() {
       _currentIndex = index ?? 0;
     });

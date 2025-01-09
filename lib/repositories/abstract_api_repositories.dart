@@ -13,8 +13,8 @@ mixin AbstractApiRepositories<M extends IModel, D extends IDto> {
   String get baseApiUrl => '$baseUrl:$port/api/$version/$endpoint';
 
   Future<List<M>> fetchAll() async {
-  print(baseApiUrl);
   final response = await http.get(Uri.parse(baseApiUrl));
+  print('Response: ${response.body}');
   if (response.statusCode == 200) {
     final Map<String, dynamic> body = json.decode(response.body);
     

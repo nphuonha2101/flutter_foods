@@ -17,7 +17,9 @@ class FoodRepository with AbstractApiRepositories<Food, FoodDto> {
       rating: 0,
       reviewCount: 0,
       imageUrl: '', 
-      shopId: 0
+      shopId: 0,
+      distance: 0,
+      shopName: '',
       );
   }
 Future<List<Food>> search(String term) async {
@@ -44,11 +46,29 @@ Future<List<Food>> fetchAllByCategoryId(String categoryId) async {
       'Content-Type': 'application/json; charset=UTF-8',
     },
   );
-   print(response);
   if (response.statusCode == 200) {
     final Map<String, dynamic> body = json.decode(response.body);
     
     final List<dynamic> items = body['data'];
+    return items.map((item) => createModel().fromJson(item) as Food).toList();
+  } else {
+    throw Exception('fetch all: ${response.statusCode}');
+  }
+}
+Future<List<Food>> fetchAllByDistance(double latitude, double longitude, double distance) async {
+  print('$baseApiUrl'+'/nearby?latitude=' + latitude.toString()+'&longitude=' + longitude.toString()+'&distance=' + distance.toString());
+  final response = await http.get(
+    Uri.parse('$baseApiUrl'+'/nearby?latitude=' + latitude.toString()+'&longitude=' + longitude.toString()+'&distance=' + distance.toString()), 
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+);  
+  print('Response body: ${response.body}');
+
+  if (response.statusCode == 200) {
+    final Map<String, dynamic> body = json.decode(response.body);
+    final List<dynamic> items = body['data'];
+
     return items.map((item) => createModel().fromJson(item) as Food).toList();
   } else {
     throw Exception('fetch all: ${response.statusCode}');
