@@ -14,11 +14,11 @@ mixin AbstractApiRepositories<M extends IModel, D extends IDto> {
 
   Future<List<M>> fetchAll() async {
   final response = await http.get(Uri.parse(baseApiUrl));
+  print('Response: ${response.body}');
   if (response.statusCode == 200) {
     final Map<String, dynamic> body = json.decode(response.body);
     
     final List<dynamic> items = body['data'];
-   
     return items.map((item) => createModel().fromJson(item) as M).toList();
   } else {
     throw _handleError('fetch all', response.statusCode);

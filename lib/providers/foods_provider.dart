@@ -5,25 +5,22 @@ import 'package:flutter_foods/services/Food_service.dart';
 
 class FoodsProvider with ChangeNotifier {
   final FoodService _foodService;
-  List<Food> _foods = [];
   bool _isLoading = false;
   bool _hasError = false;
   String _errorMessage = '';
 
   FoodsProvider(this._foodService);
 
-  List<Food> get foods => _foods;
   bool get isLoading => _isLoading;
   bool get hasError => _hasError;
   String get errorMessage => _errorMessage;
 
-  Future<void> fetchAll() async {
+  Future<List<Food>> fetchAllByDistance(double latitude, double longitude, double distance) async {
     _isLoading = true;
     _hasError = false;
     notifyListeners();
-
-    try {
-      _foods = (await _foodService.fetchAll()).cast<Food>();
+    try { 
+    return (await _foodService.fetchAllByDistance(latitude,longitude,distance)).cast<Food>();
     } catch (e) {
       _hasError = true;
       _errorMessage = e.toString();
@@ -31,6 +28,7 @@ class FoodsProvider with ChangeNotifier {
 
     _isLoading = false;
     notifyListeners();
+    return [];
   }
     Future<List<Food>> search(String query) async {
     _isLoading = true;
@@ -38,9 +36,7 @@ class FoodsProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      _foods = (await _foodService.search(query)).cast<Food>() ;
-      notifyListeners();
-      return _foods;  
+     return (await _foodService.search(query)).cast<Food>() ;
     } catch (e) {
       _hasError = true;
       _errorMessage = e.toString();
@@ -56,9 +52,7 @@ class FoodsProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      _foods = (await _foodService.fetchAllByCategoryId(categoryId)).cast<Food>() ;
-      notifyListeners();
-      return _foods;  
+     return (await _foodService.fetchAllByCategoryId(categoryId)).cast<Food>() ;
     } catch (e) {
       _hasError = true;
       _errorMessage = e.toString();
@@ -118,7 +112,6 @@ class FoodsProvider with ChangeNotifier {
   }
 
   void clear() {
-    _foods = [];
     _isLoading = false;
     _hasError = false;
     _errorMessage = '';

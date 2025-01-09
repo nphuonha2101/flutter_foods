@@ -7,10 +7,9 @@ class FoodService {
 
   FoodService(this._foodRepository);
 
-  Future<List<Food>> fetchAll() async {
+  Future<List<Food>> fetchAllByDistance(double latitude, double longitude, double distance) async {
     try {
-      List<Food> items = await _foodRepository.fetchAll();
-      return items ;
+     return await _foodRepository.fetchAllByDistance(latitude, longitude, distance);
     } catch (e) {
       throw Exception('Failed to load foods. Error: $e');
     }

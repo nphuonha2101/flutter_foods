@@ -7,7 +7,9 @@ import 'package:flutter_foods/presentation/widgets/appbar_normal.dart';
 import 'package:flutter_foods/presentation/widgets/bottom_nav_bar.dart'
     as custom;
 import 'package:flutter_foods/presentation/widgets/slider_drawer.dart';
+import 'package:flutter_foods/providers/location_provider.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -19,7 +21,8 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
-  void _changePage(int? index) {
+  Future<void> _changePage(int? index) async {
+
     setState(() {
       _currentIndex = index ?? 0;
     });
