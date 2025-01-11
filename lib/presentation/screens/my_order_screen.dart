@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_foods/presentation/widgets/order_item_card.dart';
+import 'package:flutter_foods/presentation/widgets/order_list.dart';
+import 'package:flutter_foods/providers/order_provider.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:provider/provider.dart';
 
 class MyOrderScreen extends StatefulWidget {
   const MyOrderScreen({super.key});
@@ -11,11 +13,38 @@ class MyOrderScreen extends StatefulWidget {
   }
 }
 
-class _MyOrderScreenState extends State<MyOrderScreen> {
+class _MyOrderScreenState extends State<MyOrderScreen>
+    with TickerProviderStateMixin {
+  late TabController _tabController;
+  final List<int> _statuses = [0, 1, 2, 3];
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 4, vsync: this);
+    _tabController.addListener(_onTabChange);
+  }
+
+  void _onTabChange() {
+    if (_tabController.indexIsChanging) {
+      _fetchOrders(_statuses[_tabController.index]);
+    }
+  }
+
+  void _fetchOrders(int status) {
+    Provider.of<OrderProvider>(context, listen: false).fetchByStatus(status);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4, // Số lượng tab
+      length: _statuses.length, // Số lượng tab
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Đơn hàng của tôi'),
@@ -32,17 +61,9 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
           ),
         ),
         body: TabBarView(
-          children: [
-            ListView.builder(
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return const OrderItemCard();
-              },
-            ),
-            Center(child: Text("Đang chuẩn bị ")),
-            Center(child: Text("Đã giao")),
-            Center(child: Text("Đã hủy")),
-          ],
+          controller: _tabController,
+          children:
+              _statuses.map((status) => OrderList(status: status)).toList(),
         ),
       ),
     );

@@ -15,12 +15,17 @@ class FoodsProvider with ChangeNotifier {
   bool get hasError => _hasError;
   String get errorMessage => _errorMessage;
 
-  Future<List<Food>> fetchAllByDistance(double latitude, double longitude, double distance) async {
+  Future<List<Food>> fetchAllByDistance(
+      double latitude, double longitude, double distance) async {
     _isLoading = true;
     _hasError = false;
-    notifyListeners();
-    try { 
-    return (await _foodService.fetchAllByDistance(latitude,longitude,distance)).cast<Food>();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
+    try {
+      return (await _foodService.fetchAllByDistance(
+              latitude, longitude, distance))
+          .cast<Food>();
     } catch (e) {
       _hasError = true;
       _errorMessage = e.toString();
@@ -30,33 +35,52 @@ class FoodsProvider with ChangeNotifier {
     notifyListeners();
     return [];
   }
-    Future<List<Food>> search(String query) async {
+
+  Future<List<Food>> search(String query) async {
     _isLoading = true;
     _hasError = false;
     notifyListeners();
 
     try {
-     return (await _foodService.search(query)).cast<Food>() ;
+      return (await _foodService.search(query)).cast<Food>();
     } catch (e) {
       _hasError = true;
       _errorMessage = e.toString();
-      return [];  
+      return [];
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
+
   Future<List<Food>> fetchAllByCategoryId(String categoryId) async {
     _isLoading = true;
     _hasError = false;
     notifyListeners();
 
     try {
-     return (await _foodService.fetchAllByCategoryId(categoryId)).cast<Food>() ;
+      return (await _foodService.fetchAllByCategoryId(categoryId)).cast<Food>();
     } catch (e) {
       _hasError = true;
       _errorMessage = e.toString();
-      return [];  
+      return [];
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<Food?> fetch(num id) async {
+    _isLoading = true;
+    _hasError = false;
+    notifyListeners();
+
+    try {
+      return await _foodService.fetch(id);
+    } catch (e) {
+      _hasError = true;
+      _errorMessage = e.toString();
+      return null;
     } finally {
       _isLoading = false;
       notifyListeners();
