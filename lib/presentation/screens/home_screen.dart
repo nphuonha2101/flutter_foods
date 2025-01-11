@@ -1,10 +1,12 @@
   import 'package:flutter/material.dart';
+import 'package:flutter_foods/core/constants/app.dart';
   import 'package:flutter_foods/data/models/food.dart';
   import 'package:flutter_foods/data/models/i_model.dart';
   import 'package:flutter_foods/presentation/widgets/food_card.dart';
   import 'package:flutter_foods/presentation/widgets/food_slider_item.dart';
   import 'package:flutter_foods/presentation/widgets/custom_slider.dart';
   import 'package:flutter_foods/providers/foods_provider.dart';
+import 'package:flutter_foods/providers/location_provider.dart';
   import 'package:provider/provider.dart';
 
   class HomeScreen extends StatefulWidget {
@@ -18,17 +20,26 @@
     late List<Food> foods = [];
 
  @override
-  void initState() {
+void initState() {
   super.initState();
 
   WidgetsBinding.instance.addPostFrameCallback((_) async {
     final foodProvider = Provider.of<FoodsProvider>(context, listen: false);
-    await foodProvider.fetchAll(); 
+    final locationProvider = Provider.of<LocationProvider>(context, listen: false);
+
+    List<Food> fetchedFoods = await foodProvider.fetchAllByDistance(
+      locationProvider.latitude ?? 0.0,
+      locationProvider.longitude ?? 0.0,
+      AppConstants.distanceHome,
+    );
+    print("foods: " + fetchedFoods.toString());
+
     setState(() {
-      foods = foodProvider.foods.cast<Food>();
+      foods = fetchedFoods; 
     });
   });
 }
+
 
     @override
     Widget build(BuildContext context) {

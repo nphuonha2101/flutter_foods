@@ -33,7 +33,7 @@ class MainApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: brightness == Brightness.light ? theme.light() : theme.dark(),
         title: AppConstants.appName,
-        home: const SplashScreen(),
+        home:  const SplashScreen(),
         onGenerateRoute: AppRoutes.generateRoute,
       ),
     );
