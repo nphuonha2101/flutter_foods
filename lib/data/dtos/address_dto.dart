@@ -4,12 +4,16 @@ class AddressDto implements IDto {
   final String name;
   final String phone;
   final String address;
+  final String longitude;
+  final String latitude;
   final bool isDefault;
 
   AddressDto({
     required this.name,
     required this.phone,
     required this.address,
+    this.longitude = "",
+    this.latitude = "",
     this.isDefault = false,
   });
 
@@ -19,6 +23,8 @@ class AddressDto implements IDto {
       'name': name,
       'phone': phone,
       'address': address,
+      'longitude': longitude,
+      'latitude': latitude,
       'isDefault': isDefault,
     };
   }

@@ -7,6 +7,8 @@ class Address implements IModel {
   final String name;
   final String phone;
   final String address;
+  final String longtitude;
+  final String latitude;
   final bool isDefault;
 
   Address({
@@ -14,12 +16,14 @@ class Address implements IModel {
     required this.name,
     required this.phone,
     required this.address,
+    this.longtitude = "",
+    this.latitude = "",
     this.isDefault = false,
   });
 
   @override
   String toString() {
-    return 'Address{name: $name, phone: $phone, address: $address, isDefault: $isDefault}';
+    return 'Address{name: $name, phone: $phone, address: $address, longtitude: $longtitude, latitude: $latitude, isDefault: $isDefault}';
   }
 
   @override
@@ -29,6 +33,8 @@ class Address implements IModel {
       name: json['name'],
       phone: json['phone'],
       address: json['address'],
+      longtitude: json['longtitude'] ?? "",
+      latitude: json['latitude'] ?? "",
       isDefault: json['isDefault'] ?? false,
     );
   }
@@ -39,6 +45,8 @@ class Address implements IModel {
       name: name,
       phone: phone,
       address: address,
+      longitude: longtitude,
+      latitude: latitude,
       isDefault: isDefault,
     );
   }

@@ -1,19 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/data/dtos/address_dto.dart';
 import 'package:flutter_foods/presentation/screens/handle_address_screen.dart';
+import 'package:flutter_foods/providers/address_provider.dart';
+import 'package:provider/provider.dart';
 
 class AddressDetailsScreen extends StatefulWidget {
+  final int id;
   final String type;
   final String name;
   final String phone;
   final String address;
+  final String longitude;
+  final String latitude;
   final bool isDefault;
 
   const AddressDetailsScreen({
     super.key,
+    required this.id,
     required this.type,
     required this.name,
     required this.phone,
     required this.address,
+    required this.longitude,
+    required this.latitude,
     required this.isDefault,
   });
 
@@ -22,20 +31,23 @@ class AddressDetailsScreen extends StatefulWidget {
 }
 
 class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
+  late int id;
   late TextEditingController nameController;
   late TextEditingController phoneController;
   late TextEditingController addressController;
+  late String longtitude;
+  late String latitude;
   late bool isDefault = false;
-
-  double? latitude;
-  double? longitude;
 
   @override
   void initState() {
     super.initState();
+    id = widget.id;
     nameController = TextEditingController(text: widget.name);
     phoneController = TextEditingController(text: widget.phone);
     addressController = TextEditingController(text: widget.address);
+    longtitude = widget.longitude;
+    latitude = widget.latitude;
     isDefault = widget.isDefault;
   }
 
@@ -86,7 +98,7 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
                       setState(() {
                         addressController.text = pickedData["address"];
                         latitude = pickedData["latitude"];
-                        longitude = pickedData["longitude"];
+                        longtitude = pickedData["longitude"];
                       });
                     }
                   },
@@ -115,8 +127,28 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
             const SizedBox(height: 16.0),
             Center(
               child: ElevatedButton(
-                onPressed: () {
-                  // xu ly them vao db
+                onPressed: () async {
+                  final addressProvider =
+                      Provider.of<AddressProvider>(context, listen: false);
+
+                  final addressData = AddressDto(
+                    name: nameController.text,
+                    phone: phoneController.text,
+                    address: addressController.text,
+                    longitude: longtitude.toString(),
+                    latitude: latitude.toString(),
+                    isDefault: isDefault,
+                  );
+
+                  if (widget.type == "add") {
+                    print(1);
+                    await addressProvider.create(addressData);
+                  } else {
+                    print(2);
+                    await addressProvider.update(addressData, id);
+                  }
+
+                  Navigator.pop(context, "success");
                 },
                 child: const Text("Lưu"),
               ),

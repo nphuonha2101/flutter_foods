@@ -141,6 +141,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                             const SizedBox(height: 20),
                             TextField(
                               controller: passwordController,
+                              obscureText: true,
                               decoration: const InputDecoration(
                                 labelText: 'Mật khẩu',
                                 filled: true,
