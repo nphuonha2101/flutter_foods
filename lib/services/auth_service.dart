@@ -11,7 +11,9 @@ class AuthService {
 
   Future<bool> login(String username, String password) async {
     try {
+         print(1);
       AuthCredential authCredential = await _authRepository.login(username, password);
+      print(2);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('credential', jsonEncode(authCredential.toJson()));
       return true;

@@ -39,7 +39,7 @@ class SliderDrawerWidget extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    authCredential?.userFullName ?? 'John Doe',
+                                    authCredential?.username ?? 'John Doe',
                                     style: const TextStyle(fontSize: 20),
                                   ),
                                   Text(
