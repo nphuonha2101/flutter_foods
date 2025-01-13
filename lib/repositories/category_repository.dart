@@ -18,6 +18,7 @@ class CategoryRepository
     );
   }
 
+  @override
   Future<List<FoodCategory>> fetchAll() async {
     print('$baseUrl:$port/api/$version/categories');
     final response =

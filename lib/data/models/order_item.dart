@@ -3,12 +3,14 @@ import 'package:flutter_foods/data/dtos/order_item_dto.dart';
 import 'package:flutter_foods/data/models/i_model.dart';
 
 class OrderItem implements IModel {
+  final int id;
   final int foodId;
   final int quantity;
   final double price;
   final int orderId;
 
   OrderItem({
+    required this.id,
     required this.foodId,
     required this.quantity,
     required this.price,
@@ -18,6 +20,7 @@ class OrderItem implements IModel {
   @override
   IModel fromJson(Map<String, dynamic> json) {
     return OrderItem(
+      id: json['id'],
       foodId: json['food_id'],
       quantity: json['quantity'],
       price: json['price'],
@@ -37,6 +40,7 @@ class OrderItem implements IModel {
 
   static IModel fromJsonStatic(Map<String, dynamic> json) {
     return OrderItem(
+      id: json['id'],
       foodId: json['food_id'],
       quantity: json['quantity'],
       price: json['price'],

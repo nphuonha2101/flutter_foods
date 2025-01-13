@@ -5,6 +5,7 @@ import 'package:flutter_foods/data/models/i_model.dart';
 import 'package:flutter_foods/data/models/order_item.dart';
 
 class Order implements IModel {
+  final int id;
   final int shopId;
   final double totalPrice;
   final int addressId;
@@ -14,6 +15,7 @@ class Order implements IModel {
   final List<OrderItem> items;
 
   Order({
+    required this.id,
     required this.shopId,
     required this.totalPrice,
     required this.addressId,
@@ -26,6 +28,7 @@ class Order implements IModel {
   @override
   IModel fromJson(Map<String, dynamic> json) {
     return Order(
+      id: json['id'],
       shopId: json['shop_id'],
       totalPrice: json['total_price'],
       addressId: json['address_id'],

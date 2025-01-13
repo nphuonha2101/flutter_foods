@@ -9,6 +9,7 @@ class OrderRepository with AbstractApiRepositories<Order, OrderDto> {
   @override
   Order createModel() {
     return Order(
+      id: 0,
       shopId: 0,
       totalPrice: 0,
       addressId: 0,
