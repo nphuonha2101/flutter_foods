@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_foods/providers/address_provider.dart';
 import 'package:flutter_foods/providers/cart_provider.dart';
 import 'package:flutter_foods/providers/category_provider.dart';
@@ -31,6 +30,7 @@ class AppProviders {
     Provider<FoodRepository>(create: (_) => FoodRepository()),
     Provider<CategoryRepository>(create: (_) => CategoryRepository()),
     Provider<OrderRepository>(create: (_) => OrderRepository()),
+    Provider<AddressRepository>(create: (_) => AddressRepository()),
     // ProxyProvider to provide the Repository classes to the Service classes
     ProxyProvider<UserRepository, UserService>(
       update: (_, userRepository, __) => UserService(userRepository),
@@ -44,6 +44,9 @@ class AppProviders {
             CategoryService(categoryRepository)),
     ProxyProvider<OrderRepository, OrderService>(
       update: (_, orderRepository, __) => OrderService(orderRepository),
+    ),
+    ProxyProvider<AddressRepository, AddressService>(
+      update: (_, addressRepository, __) => AddressService(addressRepository),
     ),
     // ChangeNotifierProvider to provide methods that will be used in the UI
     // when the state changes it will notify the UI to rebuild
@@ -61,6 +64,9 @@ class AppProviders {
     ),
     ChangeNotifierProvider(
       create: (context) => OrderProvider(context.read<OrderService>()),
+    ),
+    ChangeNotifierProvider(
+      create: (context) => AddressProvider(context.read<AddressService>()),
     ),
     ChangeNotifierProvider(create: (_) => CartProvider()),
     ChangeNotifierProvider(create: (_) => LocationProvider()),

@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_foods/core/routes/app_routes.dart';
 import 'package:flutter_foods/data/models/address.dart';
+import 'package:flutter_foods/data/models/auth_credential.dart';
 import 'package:flutter_foods/providers/address_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChooseAddressScreen extends StatefulWidget {
   const ChooseAddressScreen({super.key});
@@ -13,6 +17,7 @@ class ChooseAddressScreen extends StatefulWidget {
 
 class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
   late List<Address> addresses = [];
+  late int userId = 0;
 
   int selectedAddressIndex = 0;
 
@@ -25,9 +30,14 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
           Provider.of<AddressProvider>(context, listen: false);
 
       try {
-        List<Address> fetchedAddresses =
-            await addressProvider.fetchAllByUserId("3");
-        print("Fetched addresses: " + fetchedAddresses.toString());
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        String? credentialJson = prefs.getString('credential');
+        AuthCredential authCredential =
+            AuthCredential.fromJson(jsonDecode(credentialJson!));
+
+        userId = authCredential.id;
+
+        List<Address> fetchedAddresses = await addressProvider.fetchAllByUserId(userId.toString());
 
         setState(() {
           addresses = fetchedAddresses;
@@ -121,9 +131,10 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
                           'name': address.name,
                           'phone': address.phone,
                           'address': address.address,
-                          'longitude': address.longtitude,
+                          'longitude': address.longitude,
                           'latitude': address.latitude,
                           'isDefault': address.isDefault,
+                          'userId': userId,
                         });
                       },
                       child: const Text(
@@ -154,6 +165,7 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
                 'longitude': '',
                 'latitude': '',
                 'isDefault': false,
+                'userId': userId,
               });
             },
           ),

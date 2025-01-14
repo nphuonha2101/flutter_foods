@@ -6,15 +6,15 @@ class OtpTextField extends StatelessWidget {
   final TextEditingController controller; // Thêm controller vào
 
   const OtpTextField({
-    Key? key,
+    super.key,
     required this.first,
     required this.last,
     required this.controller, // Nhận controller trong constructor
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 80,
       child: AspectRatio(
         aspectRatio: 0.6,
@@ -35,11 +35,11 @@ class OtpTextField extends StatelessWidget {
           },
           showCursor: false,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           decoration: InputDecoration(
-            counter: Offstage(),
+            counter: const Offstage(),
             enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 2, color: Colors.black12),
+                borderSide: const BorderSide(width: 2, color: Colors.black12),
                 borderRadius: BorderRadius.circular(12)),
             focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(width: 2, color: Theme.of(context).primaryColor),

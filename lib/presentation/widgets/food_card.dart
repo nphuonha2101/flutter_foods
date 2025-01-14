@@ -5,7 +5,7 @@ import 'package:flutter_foods/data/models/food.dart';
 class FoodCardWidget extends StatelessWidget {
   final Food food;
 
-  const FoodCardWidget({Key? key, required this.food}) : super(key: key);
+  const FoodCardWidget({super.key, required this.food});
 
   @override
   Widget build(BuildContext context) {
@@ -53,16 +53,15 @@ class FoodCardWidget extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     // Tên shop
-                    if (food.shopName != null)
-                      Text(
-                        'Cửa hàng: ${food.shopName}',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey[600],
-                        ),
-                         maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    Text(
+                      'Cửa hàng: ${food.shopName}',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[600],
                       ),
+                       maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    ),
                     const SizedBox(height: 6),
                     // Đánh giá
                     Row(
@@ -74,7 +73,7 @@ class FoodCardWidget extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          food.rating?.toString() ?? 'N/A',
+                          food.rating.toString() ?? 'N/A',
                            style: TextStyle(
                           fontSize: 14,
                           color: Colors.grey[600],
@@ -103,8 +102,8 @@ class FoodCardWidget extends StatelessWidget {
                     // Khoảng cách
                     if (food.distance != null)
                       Text(
-                        'Đơn giá: ${food.price!.toStringAsFixed(0)} VND',
-                        style: TextStyle(
+                        'Đơn giá: ${food.price.toStringAsFixed(0)} VND',
+                        style: const TextStyle(
                           fontSize: 16,
                         ),
                       ),

@@ -79,7 +79,6 @@ class SliderDrawerWidget extends StatelessWidget {
                     leading: const Icon(TablerIcons.address_book),
                     title: const Text('Địa chỉ'),
                     onTap: () {
-                      Navigator.pop(context);
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => const ChooseAddressScreen(),

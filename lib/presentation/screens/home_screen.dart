@@ -33,7 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
         locationProvider.longitude ?? 0.0,
         AppConstants.distanceHome,
       );
-      print("foods: " + fetchedFoods.toString());
 
       setState(() {
         foods = fetchedFoods;

@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_foods/data/dtos/address_dto.dart';
 import 'package:flutter_foods/presentation/screens/handle_address_screen.dart';
@@ -13,6 +14,7 @@ class AddressDetailsScreen extends StatefulWidget {
   final String longitude;
   final String latitude;
   final bool isDefault;
+  final int userId;
 
   const AddressDetailsScreen({
     super.key,
@@ -24,6 +26,7 @@ class AddressDetailsScreen extends StatefulWidget {
     required this.longitude,
     required this.latitude,
     required this.isDefault,
+    required this.userId,
   });
 
   @override
@@ -35,20 +38,23 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
   late TextEditingController nameController;
   late TextEditingController phoneController;
   late TextEditingController addressController;
-  late String longtitude;
+  late String longitude;
   late String latitude;
   late bool isDefault = false;
+  late int userId;
 
   @override
   void initState() {
     super.initState();
+
     id = widget.id;
     nameController = TextEditingController(text: widget.name);
     phoneController = TextEditingController(text: widget.phone);
     addressController = TextEditingController(text: widget.address);
-    longtitude = widget.longitude;
+    longitude = widget.longitude;
     latitude = widget.latitude;
     isDefault = widget.isDefault;
+    userId = widget.userId;
   }
 
   @override
@@ -98,7 +104,7 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
                       setState(() {
                         addressController.text = pickedData["address"];
                         latitude = pickedData["latitude"];
-                        longtitude = pickedData["longitude"];
+                        longitude = pickedData["longitude"];
                       });
                     }
                   },
@@ -135,16 +141,16 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
                     name: nameController.text,
                     phone: phoneController.text,
                     address: addressController.text,
-                    longitude: longtitude.toString(),
-                    latitude: latitude.toString(),
-                    isDefault: isDefault,
+                    longitude: longitude.toString().isEmpty ? "0" : longitude.toString(),
+                    latitude: latitude.toString().isEmpty ? "0" : latitude.toString(),
+                    isDefault: isDefault ? 1 : 0,
+                    userId: userId,
                   );
 
                   if (widget.type == "add") {
-                    print(1);
                     await addressProvider.create(addressData);
                   } else {
-                    print(2);
+                    // print(addressData.toJson());
                     await addressProvider.update(addressData, id);
                   }
 

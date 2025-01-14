@@ -142,7 +142,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '\đ${food.price.toStringAsFixed(2)}',
+                        'đ${food.price.toStringAsFixed(2)}',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -186,7 +186,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
                   ],
                 ),
                 Text(
-                  'Total: \đ${(food.price * quantity).toStringAsFixed(0)}',
+                  'Total: đ${(food.price * quantity).toStringAsFixed(0)}',
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -215,7 +215,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      print("Xóa sản phẩm clicked: "+widget.cartItem.toString());
+                      print("Xóa sản phẩm clicked: ${widget.cartItem}");
                      
                         widget.onDelete(widget.cartItem); 
                     },

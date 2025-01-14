@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_foods/presentation/screens/choose_address_screen.dart';
-import 'package:flutter_foods/presentation/screens/location_screen.dart';
 import 'package:flutter_foods/presentation/screens/main_screen.dart';
 import 'package:flutter_foods/providers/location_provider.dart';
 import 'package:google_fonts/google_fonts.dart';

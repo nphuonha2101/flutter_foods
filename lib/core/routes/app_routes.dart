@@ -45,6 +45,7 @@ class AppRoutes {
             longitude: args?['longitude'],
             latitude: args?['latitude'],
             isDefault: args?['isDefault'],
+            userId: args?['userId'],
           ),
         );
       case foodDetail:

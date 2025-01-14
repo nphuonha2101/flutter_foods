@@ -170,7 +170,6 @@ void _toggleSelectAll(bool? value) {
                       width: 150,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Handle purchase button press
                           print('Selected item: ${cart.selectedItems.length}'); 
                         },
                         style: ElevatedButton.styleFrom(

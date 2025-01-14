@@ -6,7 +6,8 @@ class AddressDto implements IDto {
   final String address;
   final String longitude;
   final String latitude;
-  final bool isDefault;
+  final int isDefault;
+  final int userId;
 
   AddressDto({
     required this.name,
@@ -14,7 +15,8 @@ class AddressDto implements IDto {
     required this.address,
     this.longitude = "",
     this.latitude = "",
-    this.isDefault = false,
+    this.isDefault = 0,
+    required this.userId,
   });
 
   @override
@@ -25,7 +27,8 @@ class AddressDto implements IDto {
       'address': address,
       'longitude': longitude,
       'latitude': latitude,
-      'isDefault': isDefault,
+      'default': isDefault,
+      'user_id': userId,
     };
   }
 }
