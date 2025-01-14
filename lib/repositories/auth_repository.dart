@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:flutter_foods/core/log/app_logger.dart';
 import 'package:flutter_foods/data/models/auth_credential.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_foods/core/constants/api.dart';
+import 'package:logger/logger.dart';
 
 class AuthRepository {
   final String apiUrl = ApiConstants.apiUrl.toString();
@@ -10,17 +12,22 @@ class AuthRepository {
     try {
       final url = Uri.parse('$apiUrl/user/auth/login');
 
+      print('Sending request to: $url');
+
       final response = await http.post(
         Uri.parse('$url'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
         },
         body: jsonEncode({'email': username, 'password': password}),
       );
       var jsonResponse = json.decode(response.body);
 
       if (jsonResponse['statusCode'] == 200) {
-        return AuthCredential.fromJson(jsonResponse['data']);
+        var data = jsonResponse['data'];
+        AppLogger.debug(AuthCredential.fromJson(data).toJson().toString());
+        return AuthCredential.fromJson(data);
       } else {
         String error = json.decode(response.body)['message'] ?? 'Unknown error';
         throw Exception(error);
@@ -40,6 +47,7 @@ class AuthRepository {
         url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
         },
         body: jsonEncode(<String, String>{
           'name': name,
@@ -64,21 +72,24 @@ class AuthRepository {
     }
   }
 
-  Future<void> logout() async {
+  Future<void> logout(String token) async {
     try {
       final response = await http.post(
         Uri.parse('$apiUrl/user/auth/logout'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
         },
+        body: json.encode({'token': token}),
       );
-
       var jsonResponse = json.decode(response.body);
+      AppLogger.debug('Logout response: $jsonResponse');
 
       if (jsonResponse['statusCode'] != 200) {
         throw Exception('Failed to logout');
       }
     } catch (e) {
+      AppLogger.error('Failed to logout: $e');
       throw Exception('Failed to logout: $e');
     }
   }
@@ -89,6 +100,7 @@ class AuthRepository {
         Uri.parse('$apiUrl/user/password/otp-mail'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
         },
         body: json.encode({'email': email}),
       );
@@ -121,6 +133,7 @@ class AuthRepository {
         Uri.parse('$apiUrl/user/password/verify'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
         },
         body: json.encode(requestBody),
       );

@@ -11,7 +11,8 @@ class AuthService {
 
   Future<bool> login(String username, String password) async {
     try {
-      AuthCredential authCredential = await _authRepository.login(username, password);
+      AuthCredential authCredential =
+          await _authRepository.login(username, password);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('credential', jsonEncode(authCredential.toJson()));
       return true;
@@ -19,21 +20,22 @@ class AuthService {
       print('Error logging in: $e');
       return false;
     }
-    
   }
 
-  Future<bool> register(String name, String email,String password, String username, String phone, String address) async {
+  Future<bool> register(String name, String email, String password,
+      String username, String phone, String address) async {
     try {
-      return await _authRepository.register(name, email, password, username, phone, address);
+      return await _authRepository.register(
+          name, email, password, username, phone, address);
     } catch (e) {
       throw Exception(e);
     }
   }
 
-  Future<void> logout() async {
+  Future<void> logout(String token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('credential');
-     await _authRepository.logout();
+    await _authRepository.logout(token);
   }
 
   Future<bool> isLoggedIn() async {
@@ -49,16 +51,16 @@ class AuthService {
     }
     return null;
   }
-Future<Map<String, dynamic>> sendOtp(String email) async {
-  return await _authRepository.sendOtp(email);
-}
 
- Future<void> changePassword(String newPassword, String otp) async {
+  Future<Map<String, dynamic>> sendOtp(String email) async {
+    return await _authRepository.sendOtp(email);
+  }
+
+  Future<void> changePassword(String newPassword, String otp) async {
     try {
       await _authRepository.changePassword(newPassword, otp);
     } catch (e) {
-      rethrow; 
+      rethrow;
     }
   }
-
 }

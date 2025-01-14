@@ -1,11 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/core/log/app_logger.dart';
 import 'package:flutter_foods/data/models/auth_credential.dart';
 import 'package:flutter_foods/services/auth_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider extends ChangeNotifier {
   final AuthService _authService;
   bool _isAuthenticated = false;
-  bool _isLoading = false;  // For handling loading states.
+  bool _isLoading = false; // For handling loading states.
   String _errorMessage = '';
   AuthCredential? _authCredential;
 
@@ -52,33 +56,40 @@ class AuthProvider extends ChangeNotifier {
   }
 
   // Logout method
-  void logout() {
-    _authService.logout();
-    _isAuthenticated = false;
-    notifyListeners();
+  void logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    final credential = prefs.getString('credential');
+    if (credential != null) {
+      AppLogger.debug('Logging out with credential: $credential');
+      final token = AuthCredential.fromJson(jsonDecode(credential)).token;
+      await _authService.logout(token);
+      _isAuthenticated = false;
+      notifyListeners();
+    } else {
+      throw Exception('No credential found');
+    }
   }
 
-Future<Map<String, dynamic>> sendOtp(String email) async {
-  _isLoading = true;
-  notifyListeners();
-
-  try {
-    final response = await _authService.sendOtp(email);
-
-    return response;
-  } catch (e) {
-    _errorMessage = e.toString();
-
-    return {
-      'status': false,
-      'message': _errorMessage,
-    };
-  } finally {
-    _isLoading = false;
+  Future<Map<String, dynamic>> sendOtp(String email) async {
+    _isLoading = true;
     notifyListeners();
-  }
-}
 
+    try {
+      final response = await _authService.sendOtp(email);
+
+      return response;
+    } catch (e) {
+      _errorMessage = e.toString();
+
+      return {
+        'status': false,
+        'message': _errorMessage,
+      };
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 
   Future<void> changePassword(String newPassword, String otp) async {
     _isLoading = true;
@@ -86,7 +97,7 @@ Future<Map<String, dynamic>> sendOtp(String email) async {
 
     try {
       await _authService.changePassword(newPassword, otp);
-      _errorMessage = ''; 
+      _errorMessage = '';
     } catch (e) {
       _errorMessage = e.toString();
     } finally {
@@ -95,9 +106,11 @@ Future<Map<String, dynamic>> sendOtp(String email) async {
     }
   }
 
-  Future<bool> register (String name, String email, String password, String username, String phone, String address) async {
+  Future<bool> register(String name, String email, String password,
+      String username, String phone, String address) async {
     try {
-      return await _authService.register(name, email, password, username, phone, address);
+      return await _authService.register(
+          name, email, password, username, phone, address);
     } catch (e) {
       _errorMessage = e.toString();
       return false;

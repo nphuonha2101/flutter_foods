@@ -26,6 +26,7 @@ dependencies:
   latlong2: ^0.9.1
   open_street_map_search_and_pick: ^0.1.1
   cached_network_image: ^3.2.3 
+  logger: ^2.5.0
   
 
 dev_dependencies:
