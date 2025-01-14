@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 class ForgotPasswordScreen extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
 
+  ForgotPasswordScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,17 +18,17 @@ class ForgotPasswordScreen extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        title: Text('Quên Mật Khẩu'),
+        title: const Text('Quên Mật Khẩu'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Consumer<AuthProvider>(
           builder: (context, provider, child) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(height: 20),
-                Text(
+                const SizedBox(height: 20),
+                const Text(
                   'Bạn quên mật khẩu?',
                   style: TextStyle(
                     fontSize: 24,
@@ -34,8 +36,8 @@ class ForgotPasswordScreen extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 10),
-                Text(
+                const SizedBox(height: 10),
+                const Text(
                   'Nhập địa chỉ email của bạn vào ô bên dưới và chúng tôi sẽ gửi hướng dẫn đặt lại mật khẩu cho bạn.',
                   style: TextStyle(
                     fontSize: 16,
@@ -43,17 +45,17 @@ class ForgotPasswordScreen extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 TextField(
                   controller: _emailController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Địa chỉ Email',
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.email),
                   ),
                   keyboardType: TextInputType.emailAddress,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: provider.isLoading
                       ? null
@@ -68,19 +70,19 @@ class ForgotPasswordScreen extends StatelessWidget {
                         },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).primaryColor,
-                    padding: EdgeInsets.symmetric(vertical: 16),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                   child: provider.isLoading
-                      ? CircularProgressIndicator(color: Colors.white)
-                      : Text(
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : const Text(
                           'Gửi OTP',
                           style: TextStyle(fontSize: 16, color: Colors.white),
                         ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextButton(
                   onPressed: () {
                     Navigator.pop(context);

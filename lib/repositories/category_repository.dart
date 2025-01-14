@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter_foods/core/constants/api.dart';
 import 'package:flutter_foods/data/dtos/food_category_dto.dart';
 import 'package:flutter_foods/data/models/food_category.dart';
 import 'package:http/http.dart' as http;

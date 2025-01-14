@@ -37,21 +37,21 @@ class _ChangePasswordState extends State<ChangePasswordScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 24, horizontal: 32),
+          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 32),
           child: Column(
             children: [
               Align(
                 alignment: Alignment.topLeft,
                 child: GestureDetector(
                   onTap: () => Navigator.pop(context),
-                  child: Icon(
+                  child: const Icon(
                     Icons.arrow_back,
                     size: 32,
                     color: Colors.black54,
                   ),
                 ),
               ),
-              SizedBox(height: 18),
+              const SizedBox(height: 18),
               Container(
                 width: 200,
                 height: 200,
@@ -61,13 +61,13 @@ class _ChangePasswordState extends State<ChangePasswordScreen> {
                 ),
                 child: Image.asset('assets/images/food_delivery.png'),
               ),
-              SizedBox(height: 24),
-              Text(
+              const SizedBox(height: 24),
+              const Text(
                 'Đổi mật khẩu mới',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 10),
-              Text(
+              const SizedBox(height: 10),
+              const Text(
                 "Nhập mã OTP và mật khẩu mới của bạn",
                 style: TextStyle(
                   fontSize: 14,
@@ -76,9 +76,9 @@ class _ChangePasswordState extends State<ChangePasswordScreen> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 28),
+              const SizedBox(height: 28),
               Container(
-                padding: EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
@@ -95,7 +95,7 @@ class _ChangePasswordState extends State<ChangePasswordScreen> {
                         );
                       }),
                     ),
-                    SizedBox(height: 22),
+                    const SizedBox(height: 22),
                     TextField(
                       controller: passwordController,
                       obscureText: true,
@@ -106,14 +106,14 @@ class _ChangePasswordState extends State<ChangePasswordScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 22),
+                    const SizedBox(height: 22),
                     SizedBox(
                       width: double.infinity,
                       child: FilledButton(
                         onPressed: () {
                           handlePasswordChange(context);
                         },
-                        child: Padding(
+                        child: const Padding(
                           padding: EdgeInsets.all(14.0),
                           child: Text(
                             'Xác nhận',
@@ -125,8 +125,8 @@ class _ChangePasswordState extends State<ChangePasswordScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 18),
-              Text(
+              const SizedBox(height: 18),
+              const Text(
                 "Bạn chưa nhận được mã?",
                 style: TextStyle(
                   fontSize: 14,
@@ -135,7 +135,7 @@ class _ChangePasswordState extends State<ChangePasswordScreen> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 18),
+              const SizedBox(height: 18),
               InkWell(
                 onTap: () {
                   Navigator.pop(context);
@@ -164,7 +164,7 @@ class _ChangePasswordState extends State<ChangePasswordScreen> {
 
     if (password.isEmpty || otp.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Vui lòng điền đầy đủ thông tin")),
+        const SnackBar(content: Text("Vui lòng điền đầy đủ thông tin")),
       );
       return;
     }
@@ -174,7 +174,7 @@ class _ChangePasswordState extends State<ChangePasswordScreen> {
 
       if (context.read<AuthProvider>().errorMessage.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Thay đổi mật khẩu thành công")),
+          const SnackBar(content: Text("Thay đổi mật khẩu thành công")),
         );
         Navigator.pushNamed(context, AppRoutes.login);
       } else {  

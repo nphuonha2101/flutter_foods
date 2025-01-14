@@ -39,10 +39,14 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (_) => AddressDetailsScreen(
             type: args?['type'],
+            id: args?['id'],
             name: args?['name'],
             phone: args?['phone'],
             address: args?['address'],
+            longitude: args?['longitude'],
+            latitude: args?['latitude'],
             isDefault: args?['isDefault'],
+            userId: args?['userId'],
           ),
         );
       case foodDetail:

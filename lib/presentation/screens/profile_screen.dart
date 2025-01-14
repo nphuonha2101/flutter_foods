@@ -91,7 +91,7 @@ Widget _buildEditableRow({
             color: Colors.grey.withOpacity(0.2),
             spreadRadius: 2,
             blurRadius: 5,
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -102,7 +102,7 @@ Widget _buildEditableRow({
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
           Expanded(
             child: TextField(
@@ -112,7 +112,7 @@ Widget _buildEditableRow({
               decoration: const InputDecoration(
                 border: InputBorder.none,
               ),
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
           ),
           IconButton(
@@ -154,7 +154,7 @@ Widget _buildEditableRow({
                   const SizedBox(height: 10),
                   Text(
                     user.name,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),

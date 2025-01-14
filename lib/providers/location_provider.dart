@@ -30,10 +30,10 @@ class LocationProvider with ChangeNotifier {
   // Fetch the current location
   Future<void> fetchLocation() async {
     try {
-      LocationData _locationData = await location.getLocation();
-      latitude = _locationData.latitude;
-      longitude = _locationData.longitude;
-      print("Current location: ${latitude}, ${longitude}");
+      LocationData locationData = await location.getLocation();
+      latitude = locationData.latitude;
+      longitude = locationData.longitude;
+      print("Current location: $latitude, $longitude");
       notifyListeners();
     } catch (e) {
       print("Error while fetching location: $e");

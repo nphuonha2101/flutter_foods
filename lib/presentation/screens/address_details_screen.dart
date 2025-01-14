@@ -1,20 +1,32 @@
+
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/data/dtos/address_dto.dart';
 import 'package:flutter_foods/presentation/screens/handle_address_screen.dart';
+import 'package:flutter_foods/providers/address_provider.dart';
+import 'package:provider/provider.dart';
 
 class AddressDetailsScreen extends StatefulWidget {
+  final int id;
   final String type;
   final String name;
   final String phone;
   final String address;
+  final String longitude;
+  final String latitude;
   final bool isDefault;
+  final int userId;
 
   const AddressDetailsScreen({
     super.key,
+    required this.id,
     required this.type,
     required this.name,
     required this.phone,
     required this.address,
+    required this.longitude,
+    required this.latitude,
     required this.isDefault,
+    required this.userId,
   });
 
   @override
@@ -22,21 +34,27 @@ class AddressDetailsScreen extends StatefulWidget {
 }
 
 class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
+  late int id;
   late TextEditingController nameController;
   late TextEditingController phoneController;
   late TextEditingController addressController;
+  late String longitude;
+  late String latitude;
   late bool isDefault = false;
-
-  double? latitude;
-  double? longitude;
+  late int userId;
 
   @override
   void initState() {
     super.initState();
+
+    id = widget.id;
     nameController = TextEditingController(text: widget.name);
     phoneController = TextEditingController(text: widget.phone);
     addressController = TextEditingController(text: widget.address);
+    longitude = widget.longitude;
+    latitude = widget.latitude;
     isDefault = widget.isDefault;
+    userId = widget.userId;
   }
 
   @override
@@ -115,8 +133,28 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
             const SizedBox(height: 16.0),
             Center(
               child: ElevatedButton(
-                onPressed: () {
-                  // xu ly them vao db
+                onPressed: () async {
+                  final addressProvider =
+                      Provider.of<AddressProvider>(context, listen: false);
+
+                  final addressData = AddressDto(
+                    name: nameController.text,
+                    phone: phoneController.text,
+                    address: addressController.text,
+                    longitude: longitude.toString().isEmpty ? "0" : longitude.toString(),
+                    latitude: latitude.toString().isEmpty ? "0" : latitude.toString(),
+                    isDefault: isDefault ? 1 : 0,
+                    userId: userId,
+                  );
+
+                  if (widget.type == "add") {
+                    await addressProvider.create(addressData);
+                  } else {
+                    // print(addressData.toJson());
+                    await addressProvider.update(addressData, id);
+                  }
+
+                  Navigator.pop(context, "success");
                 },
                 child: const Text("Lưu"),
               ),

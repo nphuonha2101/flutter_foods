@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_foods/data/models/cart_item.dart';
 
 class CartProvider extends ChangeNotifier {
-  List<CartItem> _cartItems = [];
-  List<CartItem> _selectedItems = [];
+  final List<CartItem> _cartItems = [];
+  final List<CartItem> _selectedItems = [];
 
   List<CartItem> get cartItems => _cartItems;
   List<CartItem> get selectedItems => _selectedItems;
@@ -63,10 +63,6 @@ class CartProvider extends ChangeNotifier {
   }
 
  void removeItem(CartItem item) {
-  if (item == null) {
-    print("Attempted to remove a null item.");
-    return;
-  }
   bool removedFromCart = _cartItems.remove(item);
   bool removedFromSelected = _selectedItems.remove(item);
   

@@ -82,7 +82,8 @@ class _OrderScreenState extends State<OrderScreen> {
     name: 'Nguyễn Văn A',
     address: '123 Đường ABC, Quận XYZ, TP. HCM',
     phone: '0123456789',
-    isDefault: true,
+    isDefault: false,
+    userId: 1,
   );
 
   double calculateTotalPrices() {

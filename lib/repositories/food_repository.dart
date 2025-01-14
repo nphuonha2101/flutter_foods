@@ -24,7 +24,7 @@ class FoodRepository with AbstractApiRepositories<Food, FoodDto> {
 
   Future<List<Food>> search(String term) async {
     final response = await http.get(
-      Uri.parse('$baseApiUrl/search?term=' + term),
+      Uri.parse('$baseApiUrl/search?term=$term'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -42,7 +42,7 @@ class FoodRepository with AbstractApiRepositories<Food, FoodDto> {
 
   Future<List<Food>> fetchAllByCategoryId(String categoryId) async {
     final response = await http.get(
-      Uri.parse('$baseApiUrl?category_id=' + categoryId),
+      Uri.parse('$baseApiUrl?category_id=$categoryId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -59,26 +59,15 @@ class FoodRepository with AbstractApiRepositories<Food, FoodDto> {
 
   Future<List<Food>> fetchAllByDistance(
       double latitude, double longitude, double distance) async {
-    print('$baseApiUrl' +
-        '/nearby?latitude=' +
-        latitude.toString() +
-        '&longitude=' +
-        longitude.toString() +
-        '&distance=' +
-        distance.toString());
+    print(
+        '$baseApiUrl/nearby?latitude=$latitude&longitude=$longitude&distance=$distance');
     final response = await http.get(
-      Uri.parse('$baseApiUrl' +
-          '/nearby?latitude=' +
-          latitude.toString() +
-          '&longitude=' +
-          longitude.toString() +
-          '&distance=' +
-          distance.toString()),
+      Uri.parse(
+          '$baseApiUrl/nearby?latitude=$latitude&longitude=$longitude&distance=$distance'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-    print('Response body: ${response.body}');
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> body = json.decode(response.body);

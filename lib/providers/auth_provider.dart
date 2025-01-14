@@ -97,7 +97,7 @@ Future<Map<String, dynamic>> sendOtp(String email) async {
 
   Future<bool> register (String name, String email, String password, String username, String phone, String address) async {
     try {
-      return await _authService.register(name, email, password, username, phone, address);;
+      return await _authService.register(name, email, password, username, phone, address);
     } catch (e) {
       _errorMessage = e.toString();
       return false;

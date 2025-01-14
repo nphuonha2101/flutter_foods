@@ -187,7 +187,7 @@ class AppbarSearchDeligate extends SearchDelegate {
                   future: Provider.of<CategoryProvider>(context, listen: false).fetchAll(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     }
 
                     if (snapshot.hasError) {
@@ -195,7 +195,7 @@ class AppbarSearchDeligate extends SearchDelegate {
                     }
 
                     if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return Center(child: Text('No food categories found.'));
+                      return const Center(child: Text('No food categories found.'));
                     }
 
                     List<FoodCategory> foodCategories = snapshot.data!;
@@ -298,7 +298,7 @@ class AppbarSearchDeligate extends SearchDelegate {
                 padding: const EdgeInsets.all(4.0),
                 child: Text(
                   food.name as String,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -347,7 +347,7 @@ Widget _buildSearchByCategory(BuildContext context){
                   padding: const EdgeInsets.all(4.0),
                   child: Text(
                     food.name as String,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -365,13 +365,13 @@ Widget buildFutureResults<T>(BuildContext context, Future<List<T>> future, Widge
     future: future,
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
-        return Center(child: CircularProgressIndicator());
+        return const Center(child: CircularProgressIndicator());
       } else if (snapshot.hasError) {
         return Center(child: Text('Error: ${snapshot.error}'));
       } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
         final items = snapshot.data!;
         return GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 8.0,
             mainAxisSpacing: 8.0,
@@ -383,7 +383,7 @@ Widget buildFutureResults<T>(BuildContext context, Future<List<T>> future, Widge
           },
         );
       } else {
-        return Center(child: Text('No results found.'));
+        return const Center(child: Text('No results found.'));
       }
     },
   );
