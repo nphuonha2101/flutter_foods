@@ -9,8 +9,8 @@ class AuthRepository {
   Future<AuthCredential> login(String username, String password) async {
     try {
       final url = Uri.parse('$apiUrl/user/auth/login');
+      print('Sending request to: $url');
       final response = await http.post(
-    
         Uri.parse('$url'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',

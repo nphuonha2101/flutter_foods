@@ -18,7 +18,14 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _navigateBasedOnPermission();
+    // _navigateBasedOnPermission();
+
+       Future.delayed(Duration.zero, () {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const MainScreen()),
+    );
+  });
   }
 
   Future<void> _navigateBasedOnPermission() async {
