@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/data/models/food.dart';
 import 'package:flutter_foods/presentation/screens/cart_screen.dart';
 import 'package:flutter_foods/presentation/screens/address_details_screen.dart';
 import 'package:flutter_foods/presentation/screens/choose_address_screen.dart';
@@ -45,10 +46,10 @@ class AppRoutes {
           ),
         );
       case foodDetail:
-        final args = routeSettings.arguments as Map<String, dynamic>?;
+        final args = routeSettings.arguments as Food;
         return MaterialPageRoute(
           builder: (_) => FoodDetailScreen(
-            food: args?['food'],
+            food: args,
           ),
         );
       case checkout:
