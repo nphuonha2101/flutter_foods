@@ -112,8 +112,8 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                       child: Padding(
                         padding: const EdgeInsets.only(
                             top: 0, bottom: 10, left: 50, right: 50),
-                        child: Image.asset(
-                          'assets/images/food_delivery.png',
+                        child: Image.network(
+                          widget.food.imageUrl as String,
                           fit: BoxFit.cover,
                           width: double.infinity,
                         ),
@@ -147,7 +147,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Food Name',
+                            '${ widget.food.name as String}',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontFamily: GoogleFonts.ibmPlexSans().fontFamily,
@@ -155,7 +155,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                             ),
                           ),
                           Chip(
-                            label: const Text('Category'),
+                            label: Text('${ widget.food.shopName as String}'),
                             backgroundColor:
                                 Theme.of(context).colorScheme.primaryContainer,
                             shape: RoundedRectangleBorder(
@@ -173,7 +173,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                           ),
                           const SizedBox(width: 10),
                           Text(
-                            '4.5',
+                            '${widget.food.rating}',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
@@ -181,8 +181,8 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                             ),
                           ),
                           const SizedBox(width: 10),
-                          const Text(
-                            '(200 đánh giá)',
+                           Text(
+                            '(${widget.food.reviewCount} đánh giá)',
                             style: TextStyle(
                               fontSize: 18,
                             ),
@@ -194,7 +194,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '30.000 vnđ',
+                              '${widget.food.price} vnđ',
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
