@@ -15,12 +15,12 @@ class OtpTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 80,
+      height: 65,
       child: AspectRatio(
-        aspectRatio: 0.6,
+        aspectRatio: 0.65,
         child: TextField(
-          controller: controller, // Gắn controller vào TextField
-          autofocus: first, // Autofocus cho trường đầu tiên
+          controller: controller, 
+          autofocus: first, 
           keyboardType: TextInputType.number,
           maxLength: 1,
           onChanged: (value) {
