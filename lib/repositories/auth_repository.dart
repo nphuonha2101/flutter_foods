@@ -1,26 +1,33 @@
 import 'dart:convert';
+import 'package:flutter_foods/core/log/app_logger.dart';
 import 'package:flutter_foods/data/models/auth_credential.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_foods/core/constants/api.dart';
-class AuthRepository {
+import 'package:logger/logger.dart';
 
+class AuthRepository {
   final String apiUrl = ApiConstants.apiUrl.toString();
 
   Future<AuthCredential> login(String username, String password) async {
     try {
       final url = Uri.parse('$apiUrl/user/auth/login');
+
       print('Sending request to: $url');
+
       final response = await http.post(
         Uri.parse('$url'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
         },
         body: jsonEncode({'email': username, 'password': password}),
       );
-        var jsonResponse = json.decode(response.body);
+      var jsonResponse = json.decode(response.body);
 
       if (jsonResponse['statusCode'] == 200) {
-        return AuthCredential.fromJson(jsonResponse['data']);
+        var data = jsonResponse['data'];
+        AppLogger.debug(AuthCredential.fromJson(data).toJson().toString());
+        return AuthCredential.fromJson(data);
       } else {
         String error = json.decode(response.body)['message'] ?? 'Unknown error';
         throw Exception(error);
@@ -30,7 +37,8 @@ class AuthRepository {
     }
   }
 
-  Future<bool> register(String name, String email, String password, String username, String phone, String address) async {
+  Future<bool> register(String name, String email, String password,
+      String username, String phone, String address) async {
     try {
       final url = Uri.parse('$apiUrl/user/register');
       print('Sending request to: $url');
@@ -39,6 +47,7 @@ class AuthRepository {
         url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
         },
         body: jsonEncode(<String, String>{
           'name': name,
@@ -49,8 +58,6 @@ class AuthRepository {
           'address': address
         }),
       );
-
-      
 
       var jsonResponse = json.decode(response.body);
       if (jsonResponse['statusCode'] == 201) {
@@ -65,84 +72,88 @@ class AuthRepository {
     }
   }
 
-    Future<void> logout() async {
+  Future<void> logout(String token) async {
     try {
       final response = await http.post(
         Uri.parse('$apiUrl/user/auth/logout'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
         },
+        body: json.encode({'token': token}),
       );
-
       var jsonResponse = json.decode(response.body);
+      AppLogger.debug('Logout response: $jsonResponse');
 
       if (jsonResponse['statusCode'] != 200) {
         throw Exception('Failed to logout');
       }
     } catch (e) {
+      AppLogger.error('Failed to logout: $e');
       throw Exception('Failed to logout: $e');
     }
   }
-    Future<Map<String, dynamic>> sendOtp(String email) async {
-  try {
-    final response = await http.post(
-      Uri.parse('$apiUrl/user/password/otp-mail'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: json.encode({'email': email}),
-    );
 
-    var jsonResponse = json.decode(response.body);
+  Future<Map<String, dynamic>> sendOtp(String email) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$apiUrl/user/password/otp-mail'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
+        },
+        body: json.encode({'email': email}),
+      );
 
-    if (response.statusCode != 200) {
-      throw Exception(jsonResponse['message'] ?? 'Failed to send OTP');
-    }
+      var jsonResponse = json.decode(response.body);
 
-    return jsonResponse; // Trả về JSON nếu thành công
-  } catch (e) {
-    return {
-      'status': false,
-      'message': 'Failed to send OTP: $e',
-    };
-  }
-}
+      if (response.statusCode != 200) {
+        throw Exception(jsonResponse['message'] ?? 'Failed to send OTP');
+      }
 
-
-  // Change password with OTP verification
- Future<Map<String, dynamic>> changePassword(String newPassword, String otp) async {
-  try {
-    final requestBody = {
-      'password': newPassword,
-      'code': otp,
-    };
-    // Gửi yêu cầu POST
-    final response = await http.post(
-      Uri.parse('$apiUrl/user/password/verify'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: json.encode(requestBody),
-    );
-    final jsonResponse = json.decode(response.body);
-    if (response.statusCode == 200 && jsonResponse['statusCode'] == 200) {
-      return {
-        'status': true,
-        'message': jsonResponse['message'] ?? 'Password changed successfully',
-      };
-    } else {
+      return jsonResponse; // Trả về JSON nếu thành công
+    } catch (e) {
       return {
         'status': false,
-        'message': jsonResponse['message'] ?? 'Failed to change password',
+        'message': 'Failed to send OTP: $e',
       };
     }
-  } catch (e) {
-    return {
-      'status': false,
-      'message': 'Failed to change password: $e',
-    };
   }
-}
 
-  
+  // Change password with OTP verification
+  Future<Map<String, dynamic>> changePassword(
+      String newPassword, String otp) async {
+    try {
+      final requestBody = {
+        'password': newPassword,
+        'code': otp,
+      };
+      // Gửi yêu cầu POST
+      final response = await http.post(
+        Uri.parse('$apiUrl/user/password/verify'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
+        },
+        body: json.encode(requestBody),
+      );
+      final jsonResponse = json.decode(response.body);
+      if (response.statusCode == 200 && jsonResponse['statusCode'] == 200) {
+        return {
+          'status': true,
+          'message': jsonResponse['message'] ?? 'Password changed successfully',
+        };
+      } else {
+        return {
+          'status': false,
+          'message': jsonResponse['message'] ?? 'Failed to change password',
+        };
+      }
+    } catch (e) {
+      return {
+        'status': false,
+        'message': 'Failed to change password: $e',
+      };
+    }
+  }
 }

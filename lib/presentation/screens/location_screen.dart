@@ -4,6 +4,8 @@ import 'package:flutter_foods/providers/location_provider.dart';
 import 'package:provider/provider.dart';
 
 class LocationPermissionScreen extends StatelessWidget {
+  const LocationPermissionScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final locationProvider = Provider.of<LocationProvider>(context, listen: false);
@@ -16,7 +18,7 @@ class LocationPermissionScreen extends StatelessWidget {
         Navigator.pushNamed(context, AppRoutes.home);
       }
     });
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: CircularProgressIndicator(),
       ),

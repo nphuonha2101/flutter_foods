@@ -22,7 +22,7 @@ class OrderRepository with AbstractApiRepositories<Order, OrderDto> {
 
   Future<List<Order>> fetchByStatus(int status) async {
     final response = await http.get(
-      Uri.parse('$baseApiUrl?status=' + status.toString()),
+      Uri.parse('$baseApiUrl?status=$status'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

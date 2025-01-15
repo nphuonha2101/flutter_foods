@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_foods/core/routes/app_routes.dart';
 import 'package:flutter_foods/data/models/address.dart';
-import 'package:flutter_foods/presentation/screens/address_details_screen.dart';
-import 'package:flutter_foods/presentation/screens/handle_address_screen.dart';
+import 'package:flutter_foods/data/models/auth_credential.dart';
+import 'package:flutter_foods/providers/address_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChooseAddressScreen extends StatefulWidget {
   const ChooseAddressScreen({super.key});
@@ -12,25 +16,37 @@ class ChooseAddressScreen extends StatefulWidget {
 }
 
 class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
-  final List<Address> addresses = [
-    Address(
-      id: 1,
-      name: "Nguyễn Tấn Khoa",
-      phone: "(+84) 938 700 000",
-      address:
-          "99, đường 999, Phường Tăng Nhơn Phú A, Thành Phố Thủ Đức, TP. Hồ Chí Minh",
-      isDefault: true,
-    ),
-    Address(
-      id: 2,
-      name: "Phan Văn ABC",
-      phone: "(+84) 903 333 333",
-      address:
-          "33 đường 333, Phường Tăng Nhơn Phú A, Thành Phố Thủ Đức, TP. Hồ Chí Minh",
-    ),
-  ];
+  late List<Address> addresses = [];
+  late int userId = 0;
 
   int selectedAddressIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final addressProvider =
+          Provider.of<AddressProvider>(context, listen: false);
+
+      try {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        String? credentialJson = prefs.getString('credential');
+        AuthCredential authCredential =
+            AuthCredential.fromJson(jsonDecode(credentialJson!));
+
+        userId = authCredential.id;
+
+        List<Address> fetchedAddresses = await addressProvider.fetchAllByUserId(userId.toString());
+
+        setState(() {
+          addresses = fetchedAddresses;
+        });
+      } catch (error) {
+        print("Error fetching addresses: $error");
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,10 +127,14 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
                         Navigator.of(context)
                             .pushNamed(AppRoutes.addressDetail, arguments: {
                           'type': 'edit',
+                          'id': address.id,
                           'name': address.name,
                           'phone': address.phone,
                           'address': address.address,
+                          'longitude': address.longitude,
+                          'latitude': address.latitude,
                           'isDefault': address.isDefault,
+                          'userId': userId,
                         });
                       },
                       child: const Text(
@@ -138,10 +158,14 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
               Navigator.of(context)
                   .pushNamed(AppRoutes.addressDetail, arguments: {
                 'type': 'add',
+                'id': 0,
                 'name': '',
                 'phone': '',
                 'address': '',
+                'longitude': '',
+                'latitude': '',
                 'isDefault': false,
+                'userId': userId,
               });
             },
           ),

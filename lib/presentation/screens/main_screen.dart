@@ -7,9 +7,7 @@ import 'package:flutter_foods/presentation/widgets/appbar_normal.dart';
 import 'package:flutter_foods/presentation/widgets/bottom_nav_bar.dart'
     as custom;
 import 'package:flutter_foods/presentation/widgets/slider_drawer.dart';
-import 'package:flutter_foods/providers/location_provider.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
-import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});

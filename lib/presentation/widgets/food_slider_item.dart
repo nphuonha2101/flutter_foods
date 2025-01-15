@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_foods/data/models/food.dart';
 
 class FoodSliderItem extends StatelessWidget {

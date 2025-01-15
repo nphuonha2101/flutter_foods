@@ -6,7 +6,7 @@ import 'package:flutter_foods/data/models/food.dart';
 class FoodCardWidget extends StatelessWidget {
   final Food food;
 
-  const FoodCardWidget({Key? key, required this.food}) : super(key: key);
+  const FoodCardWidget({super.key, required this.food});
 
   @override
   Widget build(BuildContext context) {

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_foods/data/models/cart_item.dart';
 import 'package:flutter_foods/data/models/food_cart_item.dart';
 class CartProvider extends ChangeNotifier {
-  List<CartItem> _cartItems = [];
 
+  List<CartItem> _cartItems = [];
   List<CartItem> get cartItems => _cartItems;
 
   // Thêm món ăn vào giỏ hàng
@@ -114,7 +114,6 @@ void toggleFoodSelection(FoodCartItem foodItem) {
     _cartItems.remove(itemsShop);
     notifyListeners();
   }
-
   // Xóa món ăn khỏi giỏ hàng
   void removeItem(CartItem cartItem) {
     _cartItems.remove(cartItem);

@@ -1,5 +1,6 @@
 class AuthCredential {
   final String token;
+  final int id;
   final String username;
   final String userEmail;
   final String userPhone;
@@ -8,6 +9,7 @@ class AuthCredential {
 
   AuthCredential({
     required this.token,
+    required this.id,
     required this.username,
     required this.userEmail,
     required this.userPhone,
@@ -18,20 +20,22 @@ class AuthCredential {
   factory AuthCredential.fromJson(Map<String, dynamic> json) {
     return AuthCredential(
       token: json['token'],
-      username: json['user']['username'],
-      userEmail: json['user']['email'],
-      userPhone: json['user']['phone'],
-      userAddress: json['user']['address'],
-      avatar: json['user']['avatar'] ?? '',
+      id: json['id'],
+      username: json['username'],
+      userEmail: json['email'],
+      userPhone: json['phone'],
+      userAddress: json['address'],
+      avatar: json['avatar'] ?? '',
     );
   }
-   Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson() {
     return {
       'token': token,
+      'id': id,
       'username': username,
-      'userEmail': userEmail,
-      'userPhone': userPhone,
-      'userAddress': userAddress,
+      'email': userEmail,
+      'phone': userPhone,
+      'address': userAddress,
       'avatar': avatar,
     };
   }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:open_street_map_search_and_pick/open_street_map_search_and_pick.dart';
 
@@ -12,7 +11,7 @@ class HandleAddressScreen extends StatefulWidget {
 
 class _HandleAddressScreenState extends State<HandleAddressScreen> {
   final Location _location = Location();
-  LatLong _initialPosition = LatLong(10.762622, 106.660172);
+  LatLong _initialPosition = const LatLong(10.762622, 106.660172);
   bool _isLoading = true;
 
   @override

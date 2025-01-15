@@ -9,8 +9,8 @@ class FoodCartCard extends StatefulWidget {
   final ValueChanged<FoodCartItem> onIncrease;
   final ValueChanged<FoodCartItem> onDecrease;
   final ValueChanged<CartItem> onDeleteShop;
-  final VoidCallback onShopChecked; // thêm hàm cho việc kiểm tra checkbox cửa hàng
-  final ValueChanged<FoodCartItem> onFoodItemChecked; // thêm hàm cho việc kiểm tra checkbox món ăn
+  final VoidCallback onShopChecked;
+  final ValueChanged<FoodCartItem> onFoodItemChecked; 
 
   const FoodCartCard({
     Key? key,
@@ -234,6 +234,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
             Column(
               children: [
                 Text(
+
                   'Total: \$${widget.cartItem.totalPrice}',
                   style: TextStyle(
                     fontSize: 16,
@@ -243,6 +244,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
                 ),
               ],
             ),
+
           ],
         ),
       ),

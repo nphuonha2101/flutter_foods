@@ -26,12 +26,19 @@ dependencies:
   latlong2: ^0.9.1
   open_street_map_search_and_pick: ^0.1.1
   cached_network_image: ^3.2.3 
+  logger: ^2.5.0
   
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.13.1
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/icon.jpg"
 
 flutter:
   uses-material-design: true
