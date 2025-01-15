@@ -65,15 +65,16 @@ class _OrderItemCardState extends State<OrderItemCard> {
                       const SizedBox(width: 10),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(10),
-                        child: Image.asset(
-                          'assets/images/food_delivery.png',
+                        child: Image.network(
+                          widget.order.shop?.logo ??
+                              'https://marketplace.canva.com/EAFN6Q3nIfE/1/0/1600w/canva-beige-modern-food-logo-KnS0Ou7vY4M.jpg',
                           width: 40,
                           height: 40,
                           fit: BoxFit.cover,
                         ),
                       ),
                       const SizedBox(width: 10),
-                      const Text('Best Food Shop'),
+                      Text(widget.order.shop?.name ?? 'Không xác định'),
                     ],
                   ),
                   Text(

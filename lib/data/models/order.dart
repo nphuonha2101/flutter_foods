@@ -4,6 +4,7 @@ import 'package:flutter_foods/data/dtos/order_dto.dart';
 import 'package:flutter_foods/data/dtos/order_item_dto.dart';
 import 'package:flutter_foods/data/models/i_model.dart';
 import 'package:flutter_foods/data/models/order_item.dart';
+import 'package:flutter_foods/data/models/shop.dart';
 
 class Order implements IModel {
   final int id;
@@ -15,6 +16,7 @@ class Order implements IModel {
   final String paymentMethod;
   final List<OrderItem> items;
   final String token;
+  final Shop? shop;
 
   Order({
     required this.id,
@@ -26,6 +28,7 @@ class Order implements IModel {
     required this.paymentMethod,
     required this.items,
     required this.token,
+    this.shop,
   });
 
   @override
@@ -43,6 +46,9 @@ class Order implements IModel {
           .map((item) => OrderItem.fromJsonStatic(item) as OrderItem)
           .toList(),
       token: json['token'] ?? '',
+      shop: json['shop'] != null
+          ? Shop.fromJsonStatic(json['shop']) as Shop?
+          : null,
     );
   }
 

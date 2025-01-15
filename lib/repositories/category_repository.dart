@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_foods/core/log/app_logger.dart';
 import 'package:flutter_foods/data/dtos/food_category_dto.dart';
 import 'package:flutter_foods/data/models/food_category.dart';
 import 'package:http/http.dart' as http;
@@ -25,7 +26,7 @@ class CategoryRepository
       final Map<String, dynamic> body = json.decode(response.body);
 
       final List<dynamic> items = body['data'];
-
+      AppLogger.debug(items.toString());
       return items
           .map((item) => createModel().fromJson(item) as FoodCategory)
           .toList();

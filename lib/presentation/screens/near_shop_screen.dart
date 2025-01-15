@@ -17,12 +17,13 @@ class _NearShopScreenState extends State<NearShopScreen> {
   @override
   Widget build(BuildContext context) {
     final foodProvider = Provider.of<FoodsProvider>(context, listen: false);
-    final locationProvider = Provider.of<LocationProvider>(context, listen: false);
+    final locationProvider =
+        Provider.of<LocationProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cửa Hàng Gần Đây'),
-        centerTitle: true,
+        title: const Text('Món ăn gần bạn'),
+        centerTitle: false,
       ),
       body: FutureBuilder<List<Food>>(
         future: foodProvider.fetchAllByDistance(
@@ -39,18 +40,18 @@ class _NearShopScreenState extends State<NearShopScreen> {
             List<Food> foods = snapshot.data ?? [];
 
             if (foods.isEmpty) {
-              return const Center(child: Text('No foods found'));
+              return const Center(child: Text('Không tìm thấy món ăn'));
             }
 
             return ListView.builder(
               itemCount: foods.length,
               itemBuilder: (context, index) {
                 final food = foods[index];
-                return FoodCardWidget(food: food); 
+                return FoodCardWidget(food: food);
               },
             );
           } else {
-            return const Center(child: Text('No foods found'));
+            return const Center(child: Text('Không tìm thấy món ăn'));
           }
         },
       ),
