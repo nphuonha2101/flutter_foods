@@ -20,7 +20,7 @@ class OrderScreen extends StatefulWidget {
 }
 class _OrderScreenState extends State<OrderScreen> {
   int _paymentMethod = -1;
-  String note = '';
+  String note = 'null';
   late Map<int, List<OrderItem>> itemsByIdShops;
   int id_address = 1;
   late List<CartItem> cartItems = [];
@@ -40,9 +40,10 @@ class _OrderScreenState extends State<OrderScreen> {
     if (primaryAddressJson != null) {
       setState(() {
         primaryAddress = Address.fromJsonStatic(jsonDecode(primaryAddressJson)) as Address?;
+
       });
     }
-
+    id_address = primaryAddress!.id;
     List<int> id_shops = [];
     itemsByIdShops = {};
 
