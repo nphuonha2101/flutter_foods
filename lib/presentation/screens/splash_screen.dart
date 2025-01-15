@@ -16,24 +16,20 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // _navigateBasedOnPermission();
+    _navigateBasedOnPermission();
 
-       Future.delayed(Duration.zero, () {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const MainScreen()),
-    );
-  });
+    Future.delayed(Duration.zero, () {});
   }
 
   Future<void> _navigateBasedOnPermission() async {
-    final locationProvider = Provider.of<LocationProvider>(context, listen: false);
+    final locationProvider =
+        Provider.of<LocationProvider>(context, listen: false);
 
     await Future.delayed(const Duration(seconds: 3));
 
     // Kiểm tra quyền vị trí
     bool permissionGranted = await locationProvider.requestLocationPermission();
-    
+
     if (mounted) {
       if (permissionGranted) {
         await locationProvider.fetchLocation();
@@ -42,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
           MaterialPageRoute(builder: (context) => const MainScreen()),
         );
       } else {
-         SystemNavigator.pop();
+        SystemNavigator.pop();
       }
     }
   }
