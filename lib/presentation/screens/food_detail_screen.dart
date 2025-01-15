@@ -125,6 +125,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                 );
                 await provider.createReview(review);
 
+                 await _fetchFoodReviews();
                 Navigator.of(context).pop();
               },
             ),
@@ -301,16 +302,22 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                       ],
                     ),
                   ),
-                  ListView.builder(
-  shrinkWrap: true,
-  physics: const NeverScrollableScrollPhysics(),
-  padding: const EdgeInsets.all(16.0),
-  itemCount: reviews.length,
-  itemBuilder: (context, index) {
-    return UserReviewWidget(review: reviews[index]); // Truyền review vào widget
-  },
-)
-
+                  reviews.isEmpty
+                ? const Center(
+                    child: Text(
+                      'Món ăn chưa có đánh giá',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.all(16.0),
+                    itemCount: reviews.length,
+                    itemBuilder: (context, index) {
+                      return UserReviewWidget(review: reviews[index]); // Truyền review vào widget
+                    },
+                  ),
                 ],
               ),
             ),
