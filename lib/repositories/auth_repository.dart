@@ -90,7 +90,6 @@ class AuthRepository {
       }
     } catch (e) {
       AppLogger.error('Failed to logout: $e');
-      throw Exception('Failed to logout: $e');
     }
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_foods/data/models/food.dart';
 import 'package:flutter_foods/presentation/screens/cart_screen.dart';
 import 'package:flutter_foods/presentation/screens/address_details_screen.dart';
+import 'package:flutter_foods/presentation/screens/change_password_profile_screen.dart';
 import 'package:flutter_foods/presentation/screens/choose_address_screen.dart';
 import 'package:flutter_foods/presentation/screens/food_detail_screen.dart';
 import 'package:flutter_foods/presentation/screens/forgot_password_screen.dart';
@@ -22,6 +23,7 @@ class AppRoutes {
   static const String foodDetail = '/food-detail';
   static const String checkout = '/checkout';
   static const String changePassword = '/change-password';
+  static const String changePasswordProfile = '/change-password-profile';
 
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
@@ -70,6 +72,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => ForgotPasswordScreen());  
        case changePassword:
         return MaterialPageRoute(builder: (_) => const ChangePasswordScreen());
+      case changePasswordProfile:
+        return MaterialPageRoute(builder: (_) => ChangePasswordProfileScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

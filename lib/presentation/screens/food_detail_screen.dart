@@ -74,6 +74,8 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
             FilledButton(
               child: const Text('Gửi'),
               onPressed: () {
+
+
                 // Handle submit action
                 print('Rating: $_rating');
                 print('Title: ${_titleController.text}');
@@ -255,7 +257,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                 Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.all(16.0),
-                    itemCount: 10,
+                    itemCount: 1,
                     itemBuilder: (context, index) {
                       return const UserReviewWidget();
                     },

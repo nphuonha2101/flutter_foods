@@ -3,6 +3,7 @@ import 'package:flutter_foods/core/routes/app_routes.dart';
 import 'package:flutter_foods/providers/auth_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

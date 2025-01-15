@@ -19,8 +19,16 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
-  Future<void> _changePage(int? index) async {
+  // Danh sách các hàm tạo để khởi tạo widget khi chuyển tab
+  final List<Widget Function()> _screens = [
+    () => const HomeScreen(),
+    () => const NearShopScreen(),
+    () => const MyOrderScreen(),
+    () => const ProfileScreen(),
+  ];
 
+  // Hàm thay đổi trang
+  void _changePage(int? index) {
     setState(() {
       _currentIndex = index ?? 0;
     });
@@ -38,15 +46,7 @@ class _MainScreenState extends State<MainScreen> {
           currentIndex: _currentIndex,
           onTap: _changePage,
         ),
-        body: IndexedStack(
-          index: _currentIndex,
-          children: const [
-            HomeScreen(),
-            NearShopScreen(),
-            MyOrderScreen(),
-            ProfileScreen(),
-          ],
-        ),
+        body: _screens[_currentIndex](), // Khởi tạo widget mới từ hàm tạo
       ),
     );
   }
