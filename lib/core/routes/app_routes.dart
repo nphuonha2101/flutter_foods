@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_foods/data/models/food.dart';
 import 'package:flutter_foods/presentation/screens/cart_screen.dart';
 import 'package:flutter_foods/presentation/screens/address_details_screen.dart';
+import 'package:flutter_foods/presentation/screens/change_password_profile_screen.dart';
 import 'package:flutter_foods/presentation/screens/choose_address_screen.dart';
 import 'package:flutter_foods/presentation/screens/food_detail_screen.dart';
 import 'package:flutter_foods/presentation/screens/forgot_password_screen.dart';
@@ -32,7 +33,6 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const LoginScreen());
       case register:
         return MaterialPageRoute(builder: (_) => const RegisterScreen());
-
       case chooseAddress:
         return MaterialPageRoute(builder: (_) => const ChooseAddressScreen());
       case addressDetail:
@@ -71,8 +71,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => ForgotPasswordScreen());
       case changePassword:
         return MaterialPageRoute(builder: (_) => const ChangePasswordScreen());
-      // case changePasswordProfile:
-      //   return MaterialPageRoute(builder: (_) => ChangePasswordProfileScreen());
+      case changePasswordProfile:
+        return MaterialPageRoute(builder: (_) => ChangePasswordProfileScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

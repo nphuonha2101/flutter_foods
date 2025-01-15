@@ -1,6 +1,7 @@
 import 'package:flutter_foods/providers/address_provider.dart';
 import 'package:flutter_foods/providers/cart_provider.dart';
 import 'package:flutter_foods/providers/category_provider.dart';
+import 'package:flutter_foods/providers/food_review_provider.dart';
 import 'package:flutter_foods/providers/food_slider_provider.dart';
 import 'package:flutter_foods/providers/foods_provider.dart';
 import 'package:flutter_foods/providers/location_provider.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_foods/repositories/address_repository.dart';
 import 'package:flutter_foods/repositories/auth_repository.dart';
 import 'package:flutter_foods/repositories/category_repository.dart';
 import 'package:flutter_foods/repositories/food_repository.dart';
+import 'package:flutter_foods/repositories/food_review_repository.dart';
 import 'package:flutter_foods/repositories/food_slider_repository.dart';
 import 'package:flutter_foods/repositories/order_repository.dart';
 import 'package:flutter_foods/repositories/user_repository.dart';
@@ -17,6 +19,7 @@ import 'package:flutter_foods/services/Food_service.dart';
 import 'package:flutter_foods/services/address_service.dart';
 import 'package:flutter_foods/services/auth_service.dart';
 import 'package:flutter_foods/services/category_service.dart';
+import 'package:flutter_foods/services/food_review_service.dart';
 import 'package:flutter_foods/services/food_slider_service.dart';
 import 'package:flutter_foods/services/order_service.dart';
 import 'package:flutter_foods/services/user_service.dart';
@@ -35,6 +38,7 @@ class AppProviders {
     Provider<OrderRepository>(create: (_) => OrderRepository()),
     Provider<AddressRepository>(create: (_) => AddressRepository()),
     Provider<FoodSliderRepository>(create: (_) => FoodSliderRepository()),
+    Provider<FoodReviewRepository>(create: (_) => FoodReviewRepository()),
     // ProxyProvider to provide the Repository classes to the Service classes
     ProxyProvider<UserRepository, UserService>(
       update: (_, userRepository, __) => UserService(userRepository),
@@ -55,6 +59,10 @@ class AppProviders {
     ProxyProvider<FoodSliderRepository, FoodSliderService>(
       update: (_, foodSliderRepository, __) =>
           FoodSliderService(foodSliderRepository),
+    ),
+    ProxyProvider<FoodReviewRepository, FoodReviewService>(
+      update: (_, foodReviewRepository, __) =>
+          FoodReviewService(foodReviewRepository),
     ),
     // ChangeNotifierProvider to provide methods that will be used in the UI
     // when the state changes it will notify the UI to rebuild
@@ -82,6 +90,8 @@ class AppProviders {
     ChangeNotifierProvider(create: (_) => CartProvider()),
     ChangeNotifierProvider(create: (_) => LocationProvider()),
 
+    ChangeNotifierProvider(
+        create: (context) => FoodReviewProvider(context.read<FoodReviewService>())),
     // Add other providers here
   ];
 }

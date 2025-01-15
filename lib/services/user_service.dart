@@ -27,6 +27,14 @@ class UserService {
     }
   }
 
+  Future<User> fetchById(int id) async {
+    try {
+      return _userRepository.fetchById(id);
+    } catch (e) {
+      throw Exception('Failed to load user. Error: $e');
+    }
+  }
+
   Future<bool> updateUser(
       String email, String name, String phone, XFile? avatar) async {
     try {

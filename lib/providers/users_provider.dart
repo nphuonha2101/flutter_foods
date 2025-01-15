@@ -51,6 +51,23 @@ class UsersProvider with ChangeNotifier {
     return null;
   }
 
+  Future<User?> fetchById(int id) async {
+    _isLoading = true;
+    _hasError = false;
+    notifyListeners();
+
+    try {
+      return await _userService.fetchById(id);
+    } catch (e) {
+      _hasError = true;
+      _errorMessage = e.toString();
+    }
+
+    _isLoading = false;
+    notifyListeners();
+    return null;
+  }
+
   Future<void> create(UserDto dto) async {
     _isLoading = true;
     _hasError = false;
