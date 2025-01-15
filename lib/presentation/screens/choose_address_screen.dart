@@ -38,7 +38,12 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
         userId = authCredential.id;
 
         List<Address> fetchedAddresses = await addressProvider.fetchAllByUserId(userId.toString());
-
+         Address? defaultAddress = fetchedAddresses.firstWhere(
+        (address) => address.isDefault == true,
+      );
+      if (defaultAddress != null) {
+        prefs.setString("defaultAddress", jsonEncode(defaultAddress.toJson()));
+      }
         setState(() {
           addresses = fetchedAddresses;
         });
