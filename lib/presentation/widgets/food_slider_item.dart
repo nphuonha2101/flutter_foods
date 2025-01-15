@@ -1,20 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/core/constants/api.dart';
 import 'package:flutter_foods/data/models/food.dart';
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 
 class FoodSliderItem extends StatelessWidget {
   final Food food;
   const FoodSliderItem({super.key, required this.food});
 
-  // const FoodSliderItem({super.key});
-
-  _onTap() {
-    // Navigator.of(context).pushNamed('/food-detail', arguments: food);
-  }
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: _onTap,
       child: Stack(
         children: [
           Container(
@@ -25,8 +23,12 @@ class FoodSliderItem extends StatelessWidget {
               color: Theme.of(context).colorScheme.surfaceContainerHighest,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Image.asset(
-              'assets/images/food_delivery.png',
+            child: Image.network(
+              ApiConstants.baseUrl +
+                  ":" +
+                  ApiConstants.port.toString() +
+                  '/storage/' +
+                  food.imageUrl!,
               fit: BoxFit.cover,
             ),
           ),
@@ -51,7 +53,7 @@ class FoodSliderItem extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'Tên của bánh',
+                      food.name!,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
