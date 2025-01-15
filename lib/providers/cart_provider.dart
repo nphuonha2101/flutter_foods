@@ -7,34 +7,37 @@ class CartProvider extends ChangeNotifier {
   List<CartItem> get cartItems => _cartItems;
 
   // Thêm món ăn vào giỏ hàng
-  void addToCart(FoodCartItem foodItem) {
-    bool itemExistsInCart = false;
-    FoodCartItem newItem = FoodCartItem.copy(foodItem);
-    newItem.isChecked = false;
-    for (var cartItem in _cartItems) {
-      if (cartItem.items.isNotEmpty &&
-          cartItem.items.first.food.shopId == foodItem.food.shopId) {
-        for (var existingItem in cartItem.items) {
-          if (existingItem.food.id == foodItem.food.id) {
-            existingItem.quantity++;
-            itemExistsInCart = true;
-            break;
-          }
-        }
-        if (!itemExistsInCart) {
-          cartItem.items.add(newItem);
+void addToCart(FoodCartItem foodItem, int quantity) {
+  bool itemExistsInCart = false;
+  FoodCartItem newItem = FoodCartItem.copy(foodItem);
+  newItem.isChecked = false;
+  newItem.quantity = quantity; 
+
+  for (var cartItem in _cartItems) {
+    if (cartItem.items.isNotEmpty &&
+        cartItem.items.first.food.shopId == foodItem.food.shopId) {
+      for (var existingItem in cartItem.items) {
+        if (existingItem.food.id == foodItem.food.id) {
+          existingItem.quantity += quantity; 
           itemExistsInCart = true;
+          break;
         }
-        break;
       }
+      if (!itemExistsInCart) {
+        cartItem.items.add(newItem);
+        itemExistsInCart = true;
+      }
+      break;
     }
-
-    if (!itemExistsInCart) {
-      _cartItems.add(CartItem(items: [newItem], isChecked: false, shopName: newItem.food.shopName));
-    }
-
-    notifyListeners();
   }
+
+  if (!itemExistsInCart) {
+    _cartItems.add(CartItem(items: [newItem], isChecked: false, shopName: newItem.food.shopName));
+  }
+
+  notifyListeners();
+}
+
 
 void toggleFoodSelection(FoodCartItem foodItem) {
     if (foodItem.isChecked) {
@@ -84,7 +87,16 @@ void toggleFoodSelection(FoodCartItem foodItem) {
     }
     notifyListeners();
   }
-
+  bool isCheck(){
+    for (var cartItem in _cartItems) {
+      for (var food in cartItem.items) {
+        if (food.isChecked) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
   // Tăng số lượng món ăn
   void increaseQuantity(FoodCartItem item) {
     for (var cartItem in _cartItems) {
@@ -102,6 +114,8 @@ void toggleFoodSelection(FoodCartItem foodItem) {
       if (cartItem.items.contains(item)) {
         if (item.quantity > 1) {
           item.quantity--;
+        }else{
+          cartItem.items.remove(item);
         }
         break;
       }
@@ -111,12 +125,7 @@ void toggleFoodSelection(FoodCartItem foodItem) {
 
   // Xóa cửa hàng khỏi giỏ hàng
   void removeItemShop(CartItem itemsShop) {
-    _cartItems.remove(itemsShop);
-    notifyListeners();
-  }
-  // Xóa món ăn khỏi giỏ hàng
-  void removeItem(CartItem cartItem) {
-    _cartItems.remove(cartItem);
+    _cartItems.removeWhere((cartItem) => cartItem.shopName == itemsShop.shopName);
     notifyListeners();
   }
 

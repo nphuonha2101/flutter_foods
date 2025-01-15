@@ -44,7 +44,7 @@ Future<M> create(D dto) async {
       body: jsonEncode(dto.toJson()),
     );
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return createModel().fromJson(json.decode(response.body)) as M;
     } else {
       throw Exception('Failed to create ${M.toString().toLowerCase()}. Status code: ${response.statusCode}');

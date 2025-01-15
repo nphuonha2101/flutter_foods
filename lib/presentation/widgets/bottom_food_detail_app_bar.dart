@@ -122,16 +122,16 @@ class _BottomFoodDetailAppBarWidgetState
                   onPressed: () {
                     setState(() {
                       Provider.of<CartProvider>(context, listen: false)
-                          .addToCart(widget.cartItem);
+                          .addToCart(widget.cartItem ,_quantity);
                     });
 
                     // Show SnackBar
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: const Text('Item added to cart!'),
+                        content: const Text('Đã thêm vào giỏ!'),
                         duration: const Duration(seconds: 2),
                         action: SnackBarAction(
-                          label: 'View Cart',
+                          label: 'Xem giỏ hàng',
                           onPressed: () {
                             Navigator.pushNamed(context, AppRoutes.cart);
                           },
@@ -145,7 +145,7 @@ class _BottomFoodDetailAppBarWidgetState
                   child: ElevatedButton(
               
                     onPressed: () {
-                      Provider.of<CartProvider>(context, listen: false).addToCart(widget.cartItem);
+                      Provider.of<CartProvider>(context, listen: false).addToCart(widget.cartItem,_quantity);
                       Navigator.pushNamed(context, AppRoutes.cart);
                     },
                     style: ElevatedButton.styleFrom(
