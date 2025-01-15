@@ -6,10 +6,11 @@ import 'package:flutter_foods/data/dtos/user_dto.dart';
 import 'package:flutter_foods/data/models/user.dart';
 import 'package:flutter_foods/repositories/abstract_api_repositories.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 
 class UserRepository with AbstractApiRepositories<User, UserDto> {
-final String apiUrl = ApiConstants.apiUrl.toString();
-  
+  final String apiUrl = ApiConstants.apiUrl.toString();
+
   @override
   User createModel() {
     return User(
@@ -38,28 +39,43 @@ final String apiUrl = ApiConstants.apiUrl.toString();
     }
   }
 
-Future<bool> updateUser(String email, String name, String phone, String avatar) async {
-  try {
-    var uri = Uri.parse('$baseApiUrl/user/update');
-    var request = http.MultipartRequest('POST', uri);
+  Future<bool> updateUser(
+      String email, String name, String phone, XFile? avatar) async {
+    try {
+      // Create multipart request
+      final request = http.MultipartRequest(
+        'POST',
+        Uri.parse('$baseApiUrl/user/update'),
+      );
 
-    request.headers.addAll({
-      'Content-Type': 'multipart/form-data',
-    });
-    request.fields['email'] = email;
-    request.fields['name'] = name;
-    request.fields['phone'] = phone;
-    request.fields['avatar'] = avatar;
-    var response = await request.send();
+      // Add headers
+      request.headers.addAll({
+        'Accept': 'application/json',
+      });
 
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      throw Exception('Update user failed: ${response.statusCode}');
+      // Add text fields
+      request.fields['email'] = email;
+      request.fields['name'] = name;
+      request.fields['phone'] = phone;
+
+      // Add avatar file if exists
+      if (avatar != null) {
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'avatar',
+            avatar.path,
+            filename: avatar.name,
+          ),
+        );
+      }
+
+      // Send request
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode == 200;
+    } catch (e) {
+      return false;
     }
-  } catch (e) {
-    print('Error updating user: $e');
-    return false;
   }
-}
 }

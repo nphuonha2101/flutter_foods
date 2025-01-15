@@ -37,43 +37,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<AuthCredential?> getCredentialFromSharedPreferences() async {
-  try {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? credentialJson = prefs.getString('credential');
-    if (credentialJson != null) {
-      Map<String, dynamic> credentialMap = jsonDecode(credentialJson);
-      return AuthCredential.fromJson(credentialMap);
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? credentialJson = prefs.getString('credential');
+      if (credentialJson != null) {
+        Map<String, dynamic> credentialMap = jsonDecode(credentialJson);
+        return AuthCredential.fromJson(credentialMap);
+      }
+      return null; // Không tìm thấy thông tin
+    } catch (e) {
+      print('Error getting credential: $e');
+      return null;
     }
-    return null; // Không tìm thấy thông tin
-  } catch (e) {
-    print('Error getting credential: $e');
-    return null;
   }
-}
 
-Future<void> _loadUserFromCredential() async {
-  credential = await getCredentialFromSharedPreferences();
-  if (credential != null) {
-    setState(() {
-      user = User(
-        id: credential!.id,
-        name: credential!.username,
-        email: credential!.userEmail,
-        phone: credential!.userPhone,
-        address: credential!.userAddress,
-        avatarUrl: credential!.avatar,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-      );
-      
-      _nameController.text = credential!.username;
-      _emailController.text = credential!.userEmail;
-      _phoneController.text = credential!.userPhone;
-      _addressController.text = "Chọn địa chỉ";
-      _passwordController.text = "Ấn để đổi mật khẩu";
-    });
+  Future<void> _loadUserFromCredential() async {
+    credential = await getCredentialFromSharedPreferences();
+    if (credential != null) {
+      setState(() {
+        user = User(
+          id: credential!.id,
+          name: credential!.username,
+          email: credential!.userEmail,
+          phone: credential!.userPhone,
+          address: credential!.userAddress,
+          avatarUrl: credential!.avatar,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        );
+
+        _nameController.text = credential!.username;
+        _emailController.text = credential!.userEmail;
+        _phoneController.text = credential!.userPhone;
+        _addressController.text = "Chọn địa chỉ";
+        _passwordController.text = "Ấn để đổi mật khẩu";
+      });
+    }
   }
-}
 
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -83,109 +83,101 @@ Future<void> _loadUserFromCredential() async {
         user!.avatarUrl = _image!.path;
       }
     });
-  
-    Provider.of<UsersProvider>(context, listen: false).updateUser(
-      user!.email,
-      user!.name,
-      user!.phone,
-      user!.avatarUrl,
-    );
+
+    Provider.of<UsersProvider>(context, listen: false)
+        .updateUser(user!.email, user!.name, user!.phone, null);
 
     print(user!.avatarUrl);
     print(user!.name);
     print(user!.phone);
   }
 
-  void _toggleEditMode(String field, TextEditingController controller, void Function(String) onSave) async {
-  if (field == 'address') {
-    await Navigator.pushNamed(context, '/choose-address'); 
-  } else if (field == 'password') {
-    await Navigator.pushNamed(context, '/change-password-profile');
-  } else {
-    if (_editingField == field) {
-      onSave(controller.text); // Lưu thay đổi
-
-      setState(() {
-        _editingField = ''; // Tắt chế độ chỉnh sửa
-      });
-
-      await Provider.of<UsersProvider>(context, listen: false).updateUser(
-        user!.email,
-        user!.name,
-        user!.phone,
-        user!.avatarUrl,
-      );
-
-      print(user!.avatarUrl);
-      print(user!.name);
-      print(user!.phone);
+  void _toggleEditMode(String field, TextEditingController controller,
+      void Function(String) onSave) async {
+    if (field == 'address') {
+      await Navigator.pushNamed(context, '/choose-address');
+    } else if (field == 'password') {
+      await Navigator.pushNamed(context, '/change-password-profile');
     } else {
-      setState(() {
-        _editingField = field; // Bật chế độ chỉnh sửa
-      });
+      if (_editingField == field) {
+        onSave(controller.text); // Lưu thay đổi
+
+        setState(() {
+          _editingField = ''; // Tắt chế độ chỉnh sửa
+        });
+
+        await Provider.of<UsersProvider>(context, listen: false)
+            .updateUser(user!.email, user!.name, user!.phone, _image);
+
+        print(user!.avatarUrl);
+        print(user!.name);
+        print(user!.phone);
+      } else {
+        setState(() {
+          _editingField = field; // Bật chế độ chỉnh sửa
+        });
+      }
     }
   }
-}
 
-
-
-
-Widget _buildEditableRow({
-  required String label,
-  required String field,
-  required TextEditingController controller,
-  required void Function(String) onSave,
-}) {
-  return Container(
-    decoration: BoxDecoration(
-      color: Theme.of(context).colorScheme.onPrimary,
-      borderRadius: BorderRadius.circular(8.0),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.2),
-          spreadRadius: 2,
-          blurRadius: 5,
-          offset: const Offset(0, 3),
-        ),
-      ],
-    ),
-    margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-        ),
-        Expanded(
-          child: TextField(
-            controller: controller,
-            textAlign: TextAlign.right,
-            enabled: _editingField == field && field != 'address' && field != 'password' && field != 'email',
-            decoration: const InputDecoration(
-              border: InputBorder.none,
-            ),
-            style: const TextStyle(fontSize: 16),
+  Widget _buildEditableRow({
+    required String label,
+    required String field,
+    required TextEditingController controller,
+    required void Function(String) onSave,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.onPrimary,
+        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: const Offset(0, 3),
           ),
-        ),
-        if (field != 'email')
-          IconButton(
-            icon: Icon(
-              (field == 'address' || field == 'password') 
-                  ? Icons.arrow_forward 
-                  : (_editingField == field ? Icons.check : Icons.edit),
-              color: (field == 'address' || field == 'password') 
-                  ? Colors.blue 
-                  : (_editingField == field ? Colors.green : Colors.blue),
-            ),
-            onPressed: () => _toggleEditMode(field, controller, onSave),
+        ],
+      ),
+      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
-      ],
-    ),
-  );
-}
-
+          Expanded(
+            child: TextField(
+              controller: controller,
+              textAlign: TextAlign.right,
+              enabled: _editingField == field &&
+                  field != 'address' &&
+                  field != 'password' &&
+                  field != 'email',
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+              ),
+              style: const TextStyle(fontSize: 16),
+            ),
+          ),
+          if (field != 'email')
+            IconButton(
+              icon: Icon(
+                (field == 'address' || field == 'password')
+                    ? Icons.arrow_forward
+                    : (_editingField == field ? Icons.check : Icons.edit),
+                color: (field == 'address' || field == 'password')
+                    ? Colors.blue
+                    : (_editingField == field ? Colors.green : Colors.blue),
+              ),
+              onPressed: () => _toggleEditMode(field, controller, onSave),
+            ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +223,8 @@ Widget _buildEditableRow({
                   const SizedBox(height: 10),
                   Text(
                     user!.name,
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
