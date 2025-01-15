@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_foods/core/routes/app_routes.dart';
 import 'package:flutter_foods/data/models/cart_item.dart';
+import 'package:flutter_foods/data/models/food_cart_item.dart';
 import 'package:flutter_foods/providers/cart_provider.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:provider/provider.dart';
 
 class BottomFoodDetailAppBarWidget extends StatefulWidget
     implements PreferredSizeWidget {
-  final CartItem cartItem;  
+  final FoodCartItem cartItem;  
   const BottomFoodDetailAppBarWidget({super.key, required this.cartItem});
 
   @override
@@ -116,12 +117,27 @@ class _BottomFoodDetailAppBarWidgetState
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton.outlined(
+               IconButton.outlined(
                   icon: const Icon(TablerIcons.shopping_cart_plus),
-                   onPressed: () {
+                  onPressed: () {
                     setState(() {
-                      Provider.of<CartProvider>(context, listen: false).addToCart(widget.cartItem);
+                      Provider.of<CartProvider>(context, listen: false)
+                          .addToCart(widget.cartItem ,_quantity);
                     });
+
+                    // Show SnackBar
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: const Text('Đã thêm vào giỏ!'),
+                        duration: const Duration(seconds: 2),
+                        action: SnackBarAction(
+                          label: 'Xem giỏ hàng',
+                          onPressed: () {
+                            Navigator.pushNamed(context, AppRoutes.cart);
+                          },
+                        ),
+                      ),
+                    );
                   },
                 ),
                 const SizedBox(width: 20),
@@ -129,7 +145,7 @@ class _BottomFoodDetailAppBarWidgetState
                   child: ElevatedButton(
               
                     onPressed: () {
-                      Provider.of<CartProvider>(context, listen: false).addToCart(widget.cartItem);
+                      Provider.of<CartProvider>(context, listen: false).addToCart(widget.cartItem,_quantity);
                       Navigator.pushNamed(context, AppRoutes.cart);
                     },
                     style: ElevatedButton.styleFrom(

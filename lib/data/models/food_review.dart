@@ -6,7 +6,7 @@ class FoodReview implements IModel {
   final int id;
   final int foodId;
   final int userId;
-  final String review;
+  final String content;
   final int rating;
   final String title;
 
@@ -14,7 +14,7 @@ class FoodReview implements IModel {
     required this.id,
     required this.foodId,
     required this.userId,
-    required this.review,
+    required this.content,
     required this.rating,
     required this.title,
   });
@@ -25,7 +25,7 @@ class FoodReview implements IModel {
       id: json['id'],
       foodId: json['food_id'],
       userId: json['user_id'],
-      review: json['review'],
+      content: json['content'],
       rating: json['rating'],
       title: json['title'],
     );
@@ -36,7 +36,7 @@ class FoodReview implements IModel {
     return FoodReviewDto(
       foodId: foodId,
       userId: userId,
-      review: review,
+      content: content,
       rating: rating,
       title: title,
     );

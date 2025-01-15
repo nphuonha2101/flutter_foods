@@ -3,14 +3,14 @@ import 'package:flutter_foods/data/dtos/i_dto.dart';
 class FoodReviewDto implements IDto {
   final int foodId;
   final int userId;
-  final String review;
+  final String content;
   final int rating;
   final String title;
 
   FoodReviewDto({
     required this.foodId,
     required this.userId,
-    required this.review,
+    required this.content,
     required this.rating,
     required this.title,
   });
@@ -20,7 +20,7 @@ class FoodReviewDto implements IDto {
     return {
       'food_id': foodId,
       'user_id': userId,
-      'review': review,
+      'content': content,
       'rating': rating,
       'title': title,
     };
@@ -30,7 +30,7 @@ class FoodReviewDto implements IDto {
     return FoodReviewDto(
       foodId: json['food_id'],
       userId: json['user_id'],
-      review: json['review'],
+      content: json['content'],
       rating: json['rating'],
       title: json['title'],
     );

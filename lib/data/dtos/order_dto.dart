@@ -8,6 +8,7 @@ class OrderDto implements IDto {
   final String note;
   final String paymentMethod;
   final List<OrderItemDto> items;
+  final String token;
 
   OrderDto({
     required this.shopId,
@@ -15,7 +16,8 @@ class OrderDto implements IDto {
     required this.addressId,
     required this.note,
     required this.paymentMethod,
-    required this.items,
+    required this.items, 
+    required this.token,
   });
 
   @override
@@ -27,6 +29,7 @@ class OrderDto implements IDto {
       'note': note,
       'payment_method': paymentMethod,
       'items': items.map((e) => e.toJson()).toList(),
+      "token": token,
     };
   }
 }

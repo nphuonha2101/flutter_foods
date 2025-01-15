@@ -17,6 +17,7 @@ class OrderRepository with AbstractApiRepositories<Order, OrderDto> {
       note: '',
       paymentMethod: '',
       items: [],
+      token: ''
     );
   }
 
@@ -59,4 +60,23 @@ class OrderRepository with AbstractApiRepositories<Order, OrderDto> {
       throw Exception('Failed to update order status');
     }
   }
+  Future<Order> store(OrderDto dto) async {
+  try {
+    final response = await http.post(
+      Uri.parse('$baseUrl:$port/api/$version/$endpoint/store'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(dto.toJson()),
+    );
+
+    if (response.statusCode == 200) {
+      return createModel().fromJson(json.decode(response.body)) as Order;
+    } else {
+      throw Exception('Failed to create . Status code: ${response.statusCode}');
+    }
+  } catch (e) {
+    throw Exception('Error while creating: $e');
+  }
+}
 }

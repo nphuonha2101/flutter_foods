@@ -1,19 +1,17 @@
-import 'package:flutter_foods/data/models/food.dart';
 
+import 'package:flutter_foods/data/models/food_cart_item.dart';
 class CartItem {
-  final Food food;
-  int quantity =1;
-  bool isChecked; 
-
+  String shopName;
+  List<FoodCartItem> items;
+  bool isChecked;
   CartItem({
-    required this.food,
-    required this.quantity,
+    required this.items,
     this.isChecked = false, 
+    required this.shopName,
   });
-  double get totalPrice => food.price * quantity;
-CartItem.copy(CartItem other)
-      : food = other.food,
-        quantity = other.quantity,
-        isChecked = other.isChecked;
+  double get totalPrice {
+    return items.fold(0.0, (sum, item) => sum + item.food.price * item.quantity);
+  }
 
 }
+  

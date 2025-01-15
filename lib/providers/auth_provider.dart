@@ -116,4 +116,16 @@ class AuthProvider extends ChangeNotifier {
       return false;
     }
   }
+Future<String?> getToken() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? credential = prefs.getString('credential');
+  
+  if (credential != null) {
+    Map<String, dynamic> credentialMap = json.decode(credential);
+    return credentialMap['token'];
+  }
+  
+  return null;
+}
+
 }

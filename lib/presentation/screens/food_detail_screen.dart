@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_foods/data/models/cart_item.dart';
+import 'package:flutter_foods/data/models/food_cart_item.dart';
 import 'package:flutter_foods/data/models/food.dart';
 import 'package:flutter_foods/presentation/widgets/bottom_food_detail_app_bar.dart';
 import 'package:flutter_foods/presentation/widgets/user_review.dart';
@@ -74,6 +74,8 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
             FilledButton(
               child: const Text('Gửi'),
               onPressed: () {
+
+
                 // Handle submit action
                 print('Rating: $_rating');
                 print('Title: ${_titleController.text}');
@@ -91,7 +93,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomFoodDetailAppBarWidget(
-         cartItem: CartItem (food: widget.food, quantity: 1)
+         cartItem: FoodCartItem (food: widget.food, quantity: 1)
       ),
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -255,7 +257,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                 Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.all(16.0),
-                    itemCount: 10,
+                    itemCount: 1,
                     itemBuilder: (context, index) {
                       return const UserReviewWidget();
                     },

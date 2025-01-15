@@ -28,7 +28,7 @@ class OrderService {
 
   Future<Order> create(OrderDto order) async {
     try {
-      return _orderRepository.create(order);
+      return _orderRepository.store(order);
     } catch (e) {
       throw Exception('Failed to create order. Error: $e');
     }

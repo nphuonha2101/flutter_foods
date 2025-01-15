@@ -54,4 +54,29 @@ class Address implements IModel {
       userId: userId,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'phone': phone,
+      'address': address,
+      'longitude': longitude,
+      'latitude': latitude,
+      'default': isDefault ? 1 : 0,
+      'user_id': userId,
+    };
+  }
+    factory Address.fromJsonStatic(Map<String, dynamic> json) {
+    return Address(
+      id: json['id'],
+      name: json['name'],
+      phone: json['phone'],
+      address: json['address'],
+      longitude: json['longitude'] ?? "",
+      latitude: json['latitude'] ?? "",
+      isDefault: json['default'] == 1, 
+      userId: json['user_id'],
+    );
+  }
 }

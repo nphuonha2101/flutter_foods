@@ -19,7 +19,6 @@ class CategoryRepository
 
   @override
   Future<List<FoodCategory>> fetchAll() async {
-    print('$baseUrl:$port/api/$version/categories');
     final response =
         await http.get(Uri.parse('$baseUrl:$port/api/$version/categories'));
     if (response.statusCode == 200) {

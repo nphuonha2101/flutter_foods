@@ -46,14 +46,13 @@ class OrderProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
-  Future<void> create(OrderDto order) async {
-    try {
-      await _orderService.create(order);
-    } catch (e) {
-      throw Exception('Failed to create order. Error: $e');
-    }
+Future<void> create(OrderDto order) async {
+  try {
+    await _orderService.create(order);
+  } catch (e) {
   }
+}
+
 
   Future<void> update(OrderDto order, num id) async {
     try {

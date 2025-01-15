@@ -14,6 +14,7 @@ class Order implements IModel {
   final int status;
   final String paymentMethod;
   final List<OrderItem> items;
+  final String token;
 
   Order({
     required this.id,
@@ -24,6 +25,7 @@ class Order implements IModel {
     this.status = 0,
     required this.paymentMethod,
     required this.items,
+    required this.token,
   });
 
   @override
@@ -40,6 +42,7 @@ class Order implements IModel {
       items: (json['order_items'] as List)
           .map((item) => OrderItem.fromJsonStatic(item) as OrderItem)
           .toList(),
+      token: json['token'] ?? '',
     );
   }
 
@@ -52,6 +55,7 @@ class Order implements IModel {
       note: note,
       paymentMethod: paymentMethod,
       items: items.map((e) => e.toDto() as OrderItemDto).toList(),
+      token: token,
     );
   }
 }

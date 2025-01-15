@@ -34,6 +34,23 @@ class UsersProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<User?> fetchByEmail(String email) async {
+    _isLoading = true;
+    _hasError = false;
+    notifyListeners();
+
+    try {
+     return await _userService.fetchByEmail(email);
+    } catch (e) {
+      _hasError = true;
+      _errorMessage = e.toString();
+    }
+
+    _isLoading = false;
+    notifyListeners();
+    return null;
+  }
+
   Future<void> create(UserDto dto) async {
     _isLoading = true;
     _hasError = false;
@@ -48,6 +65,23 @@ class UsersProvider with ChangeNotifier {
 
     _isLoading = false;
     notifyListeners();
+  }
+
+  Future<bool?> updateUser(String email, String name, String phone, String avatar) async {
+    _isLoading = true;
+    _hasError = false;
+    notifyListeners();
+
+    try {
+      return await _userService.updateUser(email, name, phone, avatar);
+    } catch (e) {
+      _hasError = true;
+      _errorMessage = e.toString();
+    }
+
+    _isLoading = false;
+    notifyListeners();
+    return null;
   }
 
   Future<void> update(UserDto dto, num id) async {
