@@ -1,3 +1,4 @@
+import 'package:flutter_foods/core/log/app_logger.dart';
 import 'package:flutter_foods/data/dtos/i_dto.dart';
 import 'package:flutter_foods/data/dtos/order_dto.dart';
 import 'package:flutter_foods/data/dtos/order_item_dto.dart';
@@ -7,7 +8,7 @@ import 'package:flutter_foods/data/models/order_item.dart';
 class Order implements IModel {
   final int id;
   final int shopId;
-  final double totalPrice;
+  final int totalPrice;
   final int addressId;
   final String note;
   final int status;
@@ -27,16 +28,17 @@ class Order implements IModel {
 
   @override
   IModel fromJson(Map<String, dynamic> json) {
+    AppLogger.debug('Order.fromJson: $json');
     return Order(
-      id: json['id'],
-      shopId: json['shop_id'],
-      totalPrice: json['total_price'],
-      addressId: json['address_id'],
-      note: json['note'],
-      status: json['status'],
-      paymentMethod: json['payment_method'],
+      id: json['id'] as int,
+      shopId: json['shop_id'] as int,
+      totalPrice: (json['total_price'] as num).toInt(),
+      addressId: json['address_id'] as int,
+      note: json['note'] as String? ?? '',
+      status: json['status'] as int,
+      paymentMethod: json['payment_method'] as String,
       items: (json['order_items'] as List)
-          .map((e) => OrderItem.fromJsonStatic(e) as OrderItem)
+          .map((item) => OrderItem.fromJsonStatic(item) as OrderItem)
           .toList(),
     );
   }

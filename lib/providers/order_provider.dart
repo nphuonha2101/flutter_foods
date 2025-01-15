@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/core/log/app_logger.dart';
 import 'package:flutter_foods/data/dtos/order_dto.dart';
 import 'package:flutter_foods/data/models/order.dart';
 import 'package:flutter_foods/services/order_service.dart';
@@ -37,6 +38,7 @@ class OrderProvider with ChangeNotifier {
 
     try {
       _orders = await _orderService.fetchByStatus(status);
+      AppLogger.debug('OrderProvider: $orders');
     } catch (e) {
       _hasError = true;
     } finally {
@@ -74,6 +76,14 @@ class OrderProvider with ChangeNotifier {
       await _orderService.delete(id);
     } catch (e) {
       throw Exception('Failed to delete order. Error: $e');
+    }
+  }
+
+  Future<void> cancelOrder(int id) async {
+    try {
+      await _orderService.updateStatus(id, 3);
+    } catch (e) {
+      throw Exception('Failed to cancel order. Error: $e');
     }
   }
 

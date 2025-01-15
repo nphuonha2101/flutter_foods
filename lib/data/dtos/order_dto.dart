@@ -3,7 +3,7 @@ import 'package:flutter_foods/data/dtos/order_item_dto.dart';
 
 class OrderDto implements IDto {
   final int shopId;
-  final double totalPrice;
+  final int totalPrice;
   final int addressId;
   final String note;
   final String paymentMethod;

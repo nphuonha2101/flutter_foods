@@ -1,3 +1,5 @@
+import 'package:flutter_foods/core/constants/api.dart';
+import 'package:flutter_foods/core/constants/app.dart';
 import 'package:flutter_foods/data/dtos/food_dto.dart';
 import 'package:flutter_foods/data/dtos/i_dto.dart';
 import 'package:flutter_foods/data/models/i_model.dart';
@@ -12,8 +14,8 @@ class Food implements IModel {
   final int reviewCount;
   final int shopId;
   final String? imageUrl;
-  final String shopName;  
-  final double? distance; 
+  final String shopName;
+  final double? distance;
 
   Food({
     required this.id,
@@ -25,8 +27,8 @@ class Food implements IModel {
     required this.reviewCount,
     required this.imageUrl,
     required this.shopId,
-    required this.shopName, 
-    required this.distance,  
+    required this.shopName,
+    required this.distance,
   });
 
   @override
@@ -37,17 +39,41 @@ class Food implements IModel {
   @override
   IModel fromJson(Map<String, dynamic> json) {
     return Food(
-      id: json['id'],
+      id: json['id'] as int? ?? 0,
       name: json['name'] as String?,
       category: json['category'] as String?,
-      price: (json['price'] as num).toDouble(),
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
       description: json['description'] as String?,
-      rating: (json['rating'] as num).toDouble(),
-      reviewCount: json['review_count'] ?? 0, 
-      imageUrl: json['image'] as String?,
-      shopId: json['shop_id'] as int,
-      shopName: json['shop_name'] , 
-      distance: json['distance'] != null ? (json['distance'] as num).toDouble() : null,  
+      rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
+      reviewCount: json['review_count'] as int? ?? 0,
+      imageUrl: json['image'] != null
+          ? "${ApiConstants.baseUrl}:${ApiConstants.port}/storage/${json['image']}"
+          : null,
+      shopId: json['shop_id'] as int? ?? 0,
+      shopName: json['shop_name'] as String? ?? '',
+      distance: json['distance'] != null
+          ? (json['distance'] as num).toDouble()
+          : null,
+    );
+  }
+
+  static IModel fromJsonStatic(Map<String, dynamic> json) {
+    return Food(
+      id: json['id'] as int? ?? 0,
+      name: json['name'] as String?,
+      category: json['category'] as String?,
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
+      description: json['description'] as String?,
+      rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
+      reviewCount: json['review_count'] as int? ?? 0,
+      imageUrl: json['image'] != null
+          ? "${ApiConstants.baseUrl}:${ApiConstants.port}/storage/${json['image']}"
+          : null,
+      shopId: json['shop_id'] as int? ?? 0,
+      shopName: json['shop_name'] as String? ?? '',
+      distance: json['distance'] != null
+          ? (json['distance'] as num).toDouble()
+          : null,
     );
   }
 

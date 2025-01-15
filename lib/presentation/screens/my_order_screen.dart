@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/core/log/app_logger.dart';
 import 'package:flutter_foods/presentation/widgets/order_list.dart';
 import 'package:flutter_foods/providers/order_provider.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -22,49 +23,43 @@ class _MyOrderScreenState extends State<MyOrderScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
-    _tabController.addListener(_onTabChange);
+    _tabController.addListener(() {
+      _onTabChange();
+    });
   }
 
   void _onTabChange() {
-    if (_tabController.indexIsChanging) {
-      _fetchOrders(_statuses[_tabController.index]);
-    }
+    if (!_tabController.indexIsChanging) return;
+    _fetchOrders(_statuses[_tabController.index]);
   }
 
   void _fetchOrders(int status) {
-    Provider.of<OrderProvider>(context, listen: false).fetchByStatus(status);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
+    final orderProvider = Provider.of<OrderProvider>(context, listen: false);
+    orderProvider.fetchByStatus(status);
   }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: _statuses.length, // Số lượng tab
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Đơn hàng của tôi'),
-          bottom: const TabBar(
-            isScrollable: true,
-            tabs: [
-              Tab(icon: Icon(TablerIcons.microwave), text: "Đang chuẩn bị"),
-              Tab(
-                  icon: Icon(TablerIcons.truck_delivery),
-                  text: "Đang vận chuyển"),
-              Tab(icon: Icon(TablerIcons.soup), text: "Đã giao"),
-              Tab(icon: Icon(TablerIcons.x), text: "Đã hủy"),
-            ],
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Đơn hàng của tôi'),
+        bottom: TabBar(
+          // Bỏ const ở đây
+          controller: _tabController, // Thêm controller vào đây
+          isScrollable: true,
+          tabs: const [
+            Tab(icon: Icon(TablerIcons.microwave), text: "Đang chuẩn bị"),
+            Tab(
+                icon: Icon(TablerIcons.truck_delivery),
+                text: "Đang vận chuyển"),
+            Tab(icon: Icon(TablerIcons.soup), text: "Đã giao"),
+            Tab(icon: Icon(TablerIcons.x), text: "Đã hủy"),
+          ],
         ),
-        body: TabBarView(
-          controller: _tabController,
-          children:
-              _statuses.map((status) => OrderList(status: status)).toList(),
-        ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: _statuses.map((status) => OrderList(status: status)).toList(),
       ),
     );
   }
