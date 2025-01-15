@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/core/routes/app_routes.dart';
 import 'package:flutter_foods/data/models/cart_item.dart';
+import 'package:flutter_foods/data/models/food_cart_item.dart';
 import 'package:flutter_foods/presentation/widgets/food_cart_card.dart';
 import 'package:flutter_foods/providers/cart_provider.dart';
 import 'package:provider/provider.dart';
@@ -21,78 +23,122 @@ class _CartScreenState extends State<CartScreen> {
     cart = Provider.of<CartProvider>(context);
   }
 
-  double getCartTotal() {
-    return cart.cartItems.fold(0.0, (total, item) => total + item.totalPrice);
+  // Toggle select all items in the cart
+  void _toggleSelectAll(bool? value) {
+    setState(() {
+      selectAll = value ?? false;
+      for (var item in cart.cartItems) {
+        item.isChecked = selectAll; 
+        for (var foodItem in item.items) {
+          foodItem.isChecked = selectAll; 
+        }
+      }
+    });
+    cart.toggleSelectAll(selectAll); 
   }
 
-void _toggleSelectAll(bool? value) {
+  void onFoodItemChecked(FoodCartItem foodItem, CartItem shopItem) {
+     setState(() {
+     foodItem.isChecked = !foodItem.isChecked;
+    if (foodItem.isChecked) {
+      shopItem.isChecked = true;
+    } 
+  });
+    cart.toggleFoodSelection(foodItem ); 
+  }
+
+  // Toggle selection for a specific shop
+  void onShopItemChecked(CartItem cartItem) {
     setState(() {
-      selectAll = value!;
-      for (var item in cart.cartItems) {
-        item.isChecked = selectAll;
+      bool newCheckState = !cartItem.isChecked;
+      cartItem.isChecked = newCheckState;
+      for (var foodItem in cartItem.items) {
+        foodItem.isChecked = newCheckState;
       }
-    cart.toggleSelectAll(value);
     });
+    cart.toggleShopSelection(cartItem); 
   }
-   void onItemChecked(CartItem cartItem) {
-    setState(() {
-      cartItem.isChecked = !cartItem.isChecked;
-    });
-       cart.toggleSelection(cartItem);
-  }
+
   @override
   Widget build(BuildContext context) {
+    final groupedItems = cart.cartItems;
+
     return Scaffold(
       appBar: AppBar(
-        title: Row(children: [
-          const Text('Giỏ hàng '),
-          Text('(${cart.cartItems.length})', style: const TextStyle(fontSize: 18)),
-        ]),
+        title: Row(
+          children: [
+            const Text('Giỏ hàng '),
+            Text(
+              '(${cart.cartItems.length})',
+              style: const TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.amber[700]),
-
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: Column(
         children: [
-          // Cart Items List
-          Expanded(
-            child: ListView(
-              children: cart.cartItems.map((item) {
-                return FoodCartCard(
-                  cartItem: item,
-                  onChecked: (CartItem item) {
-                    onItemChecked(item);
-                  },
-                  onIncrease: (CartItem item) {
-                    setState(() {
-                      cart.increaseQuantity(item);
-                    });
-                  },
-                  onDecrease: (CartItem item) {
-                    setState(() {
-                      if (item.quantity > 1) {
-                          cart.decreaseQuantity(item);
-                      }
-                    });
-                  },
-                  onDelete:(CartItem item) {
-                    setState(() {
-                      if (item.quantity >= 1) {
-                          cart.removeItem(item);
-                      }
-                    });
-                  } ,
-
-                );
-              }).toList(),
+          // Select All Checkbox
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              children: [
+                Checkbox(
+                  value: selectAll,
+                  onChanged: _toggleSelectAll,
+                ),
+                const Text(
+                  'Chọn tất cả',
+                  style: TextStyle(fontSize: 14),
+                ),
+              ],
             ),
           ),
 
-          // footer
+          // List of Cart Items
+          Expanded(
+            child: ListView.builder(
+              itemCount: groupedItems.length,
+              itemBuilder: (context, index) {
+                final shopItems = groupedItems[index];
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    FoodCartCard(
+                      cartItem: CartItem(
+                        items: shopItems.items,
+                        shopName: shopItems.shopName,
+                      ),
+                      isCheckedShop: shopItems.isChecked,
+                      onShopChecked: () => onShopItemChecked(shopItems),
+                      onFoodItemChecked: (FoodCartItem foodItem) => onFoodItemChecked(foodItem, shopItems),
+                      onIncrease: (FoodCartItem item) {
+                        setState(() {
+                          cart.increaseQuantity(item);
+                        });
+                      },
+                      onDecrease: (FoodCartItem item) {
+                        setState(() {
+                          cart.decreaseQuantity(item);
+                        });
+                      },
+                      onDeleteShop: (CartItem item) {
+                        setState(() {
+                          cart.removeItemShop(item);
+                        });
+                      },
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+
+          // Footer
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
@@ -105,82 +151,43 @@ void _toggleSelectAll(bool? value) {
                 ),
               ],
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Dòng 1: Chọn Voucher
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Chọn voucher:',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      'Tổng tiền:',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    TextButton(
-                      onPressed: () {
-                        // Handle voucher selection
-
-                      },
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Chọn hoặc nhập mã voucher',
-                            style: TextStyle(fontSize: 14, color: Colors.grey),
-                          ),
-                          Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 14),
-                        ],
+                    Text(
+                      '\đ${cart.getTotalPrice().toStringAsFixed(2)}',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green[700],
                       ),
                     ),
                   ],
                 ),
-
-                // Dòng 2: Checkbox chọn tất cả
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Checkbox(
-                          value: selectAll,
-                          onChanged: _toggleSelectAll,
-                        ),
-                        const Text('Tất cả', style: TextStyle(fontSize: 14)),
-
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Tổng tiền:',
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          'đ${getCartTotal().toStringAsFixed(0)}',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green[700],
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      width: 150,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          print('Selected item: ${cart.selectedItems.length}'); 
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green, // Button color
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        child: const Text('Mua hàng'),
+                SizedBox(
+                  width: 150,
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.pushNamed(context, AppRoutes.checkout),
+                    child: const Text('Mua hàng'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      textStyle: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ],
+                  ),
                 ),
               ],
             ),

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_foods/core/constants/payment_method.dart';
 import 'package:flutter_foods/data/models/address.dart';
 import 'package:flutter_foods/data/models/cart_item.dart';
-import 'package:flutter_foods/data/models/shop.dart';
+import 'package:flutter_foods/data/models/order_item.dart';
 import 'package:flutter_foods/data/models/user.dart';
-import 'package:flutter_foods/data/models/food.dart';
 import 'package:flutter_foods/presentation/widgets/order_screen_bottom_app_bar.dart';
+import 'package:flutter_foods/providers/cart_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_foods/data/models/food_cart_item.dart';
 
 class OrderScreen extends StatefulWidget {
   const OrderScreen({super.key});
@@ -17,54 +19,9 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen> {
   int _paymentMethod = -1;
   String note = '';
+  late Map<int, List<OrderItem>> itemsByIdShops;
+  int id_address = 1;
 
-  final List<CartItem> items = [
-    CartItem(
-      food: Food(
-        id: 1,
-        name: 'Bún chả',
-        price: 50000,
-        imageUrl: 'https://bing.com/th?id=OSK.6a5f75c9e4f2cbbbe916a6aa19763a35',
-        category: 'Món chính',
-          description: 'Bún chả',
-        rating: 4.5,
-        reviewCount: 100,
-        shopId: 1,
-         shopName: "aa",
-        distance: 2.2,
-      ),
-      quantity: 2,
-    ),
-    CartItem(
-      food: Food(
-        id: 2,
-        name: 'Bún riêu',
-        price: 40000,
-        imageUrl: 'https://bing.com/th?id=OSK.6a5f75c9e4f2cbbbe916a6aa19763a35',
-        description: 'Bún riêu',
-        category: 'Món chính',
-        rating: 4.5,
-        reviewCount: 100,
-        shopId: 1,
-         shopName: "aa",
-        distance: 2.2,
-      ),
-      quantity: 1,
-    ),
-  ];
-  late Shop shop = Shop(
-      id: 1,
-      name: 'Quán ăn ngon',
-      address: '123 Đường ABC, Quận XYZ, TP.HCM',
-      phone: '0987654321',
-      email: 'a@gmail.com',
-      website: 'abc.com',
-      longtiude: '10,23494',
-      logo:
-          'https://th.bing.com/th/id/OIP.w8GMRtBU7GOWXzf6ebKGJwHaHa?rs=1&pid=ImgDetMain',
-      description: 'Giới thiệu',
-      bankName: 'BIDV',
-      bankNumber: '123456789');
   final User user = User(
     id: 1,
     name: 'Nguyễn Văn A',
@@ -86,9 +43,32 @@ class _OrderScreenState extends State<OrderScreen> {
     userId: 1,
   );
 
-  double calculateTotalPrices() {
-    return items.fold<double>(
-        0, (previousValue, element) => previousValue + element.totalPrice);
+  @override
+  void initState() {
+    super.initState();
+
+    List<OrderItem> orderItems = [];
+    List<int> id_shops = [];
+    itemsByIdShops = {}; // Map<int, List<OrderItem>>
+
+    List<CartItem> cartItems = Provider.of<CartProvider>(context, listen: false).getCartItems();
+    for (CartItem cartItem in cartItems){
+       for (FoodCartItem foodsShopItem in cartItem.items){
+            OrderItem orderItem = OrderItem(
+                  foodId: foodsShopItem.food.id,
+                  quantity: foodsShopItem.quantity,
+                  price: foodsShopItem.food.price,
+                  id: 0,
+            );
+            if (!id_shops.contains(foodsShopItem.food.shopId)) {
+              id_shops.add(foodsShopItem.food.shopId);
+            }
+            if (itemsByIdShops[foodsShopItem.food.shopId] == null) {
+                itemsByIdShops[foodsShopItem.food.shopId] = [];
+            }
+            itemsByIdShops[foodsShopItem.food.shopId]!.add(orderItem);
+         }
+    }
   }
 
   void handleOrder() {
@@ -100,8 +80,6 @@ class _OrderScreenState extends State<OrderScreen> {
       );
       return;
     }
-
-    // Handle order
   }
 
   @override
@@ -111,13 +89,20 @@ class _OrderScreenState extends State<OrderScreen> {
         title: const Text('Đơn hàng'),
       ),
       bottomNavigationBar:
-          OrderScreenBottomAppBar(totalPrices: calculateTotalPrices()),
+          OrderScreenBottomAppBar(
+          totalPrices: context.watch<CartProvider>().getTotalPrice(),
+          paymentMethod: _paymentMethod,
+          itemsByIdShops: itemsByIdShops,
+          note: note,
+          idAddress: id_address,
+          ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Address Section
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -162,6 +147,8 @@ class _OrderScreenState extends State<OrderScreen> {
                   ),
                 ),
               ),
+              
+              // Order Items Section
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -188,33 +175,45 @@ class _OrderScreenState extends State<OrderScreen> {
                       ),
                       const SizedBox(height: 10),
                       Flexible(
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: items.length,
-                          itemBuilder: (context, index) {
-                            final item = items[index];
-                            return ListTile(
-                              leading: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.network(
-                                  item.food.imageUrl as String,
-                                  width: 70,
-                                  height: 70,
-                                  fit: BoxFit.cover,
+                        child: Column(
+                          children: itemsByIdShops.keys.map((shopId) {
+                            final orderItems = itemsByIdShops[shopId]!;
+                            final totalPrice = orderItems.fold(
+                                0.0, (sum, item) => sum + (item.price * item.quantity));
+
+                            return Card(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'Shop $shopId',
+                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    ...orderItems.map((orderItem) {
+                                      return ListTile(
+                                        leading: Icon(Icons.food_bank), 
+                                        title: Text('Món: ${orderItem.foodId}'),
+                                        subtitle: Text('Số lượng: ${orderItem.quantity}'),
+                                        trailing: Text('Giá: ${orderItem.price * orderItem.quantity}'),
+                                      );
+                                    }).toList(),
+                                    const SizedBox(height: 10),
+                                    Text('Tổng cộng: $totalPrice'),
+                                  ],
                                 ),
                               ),
-                              title: Text(item.food.name as String),
-                              subtitle: Text('Số lượng: ${item.quantity}'),
-                              trailing: Text('Tổng cộng: ${item.totalPrice}'),
                             );
-                          },
+                          }).toList(),
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
+              
+              // Note Section
               const SizedBox(height: 16),
               Card(
                 child: Padding(
@@ -252,9 +251,12 @@ class _OrderScreenState extends State<OrderScreen> {
                   ),
                 ),
               ),
+              
+              // Payment Method Section
               const SizedBox(height: 16),
               Card(
-                child: Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
                       Container(
