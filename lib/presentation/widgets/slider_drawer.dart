@@ -90,7 +90,6 @@ class SliderDrawerWidget extends StatelessWidget {
                     leading: const Icon(TablerIcons.shopping_cart),
                     title: const Text('Giỏ hàng'),
                     onTap: () {
-                      Navigator.pop(context);
                       Navigator.pushNamed(context, '/cart');
                     },
                   ),
