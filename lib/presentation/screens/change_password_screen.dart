@@ -37,7 +37,7 @@ class _ChangePasswordState extends State<ChangePasswordScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 32),
+          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
           child: Column(
             children: [
               Align(
@@ -95,7 +95,7 @@ class _ChangePasswordState extends State<ChangePasswordScreen> {
                         );
                       }),
                     ),
-                    const SizedBox(height: 22),
+                    const SizedBox(height: 12),
                     TextField(
                       controller: passwordController,
                       obscureText: true,
@@ -106,7 +106,7 @@ class _ChangePasswordState extends State<ChangePasswordScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 22),
+                    const SizedBox(height: 12),
                     SizedBox(
                       width: double.infinity,
                       child: FilledButton(
