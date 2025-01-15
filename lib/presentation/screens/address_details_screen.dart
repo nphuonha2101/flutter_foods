@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_foods/core/routes/app_routes.dart';
 import 'package:flutter_foods/data/dtos/address_dto.dart';
+import 'package:flutter_foods/presentation/screens/choose_address_screen.dart';
 import 'package:flutter_foods/presentation/screens/handle_address_screen.dart';
 import 'package:flutter_foods/providers/address_provider.dart';
 import 'package:provider/provider.dart';
@@ -133,31 +133,96 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
             ),
             const SizedBox(height: 16.0),
             Center(
-              child: ElevatedButton(
-                onPressed: () async {
-                  final addressProvider =
-                      Provider.of<AddressProvider>(context, listen: false);
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      final addressProvider =
+                          Provider.of<AddressProvider>(context, listen: false);
 
-                  final addressData = AddressDto(
-                    name: nameController.text,
-                    phone: phoneController.text,
-                    address: addressController.text,
-                    longitude: longitude.toString().isEmpty ? "0" : longitude.toString(),
-                    latitude: latitude.toString().isEmpty ? "0" : latitude.toString(),
-                    isDefault: isDefault ? 1 : 0,
-                    userId: userId,
-                  );
+                      final addressData = AddressDto(
+                        name: nameController.text,
+                        phone: phoneController.text,
+                        address: addressController.text,
+                        longitude: longitude.toString().isEmpty
+                            ? "0"
+                            : longitude.toString(),
+                        latitude: latitude.toString().isEmpty
+                            ? "0"
+                            : latitude.toString(),
+                        isDefault: isDefault ? 1 : 0,
+                        userId: userId,
+                      );
 
-                  if (widget.type == "add") {
-                    await addressProvider.create(addressData);
-                  } else {
-                    // print(addressData.toJson());
-                    await addressProvider.update(addressData, id);
-                  }
+                      if (widget.type == "add") {
+                        await addressProvider.create(addressData);
+                      } else {
+                        await addressProvider.update(addressData, id);
+                      }
 
-                  Navigator.pushNamed(context, AppRoutes.chooseAddress);
-                },
-                child: const Text("Lưu"),
+                      Navigator.pop(context, "success");
+                      Navigator.pop(context, "success");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ChooseAddressScreen(),
+                        ),
+                      );
+                    },
+                    child: const Text("Lưu"),
+                  ),
+                  const SizedBox(width: 16.0),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (widget.type != "add") {
+                        final confirm = await showDialog<bool>(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text("Xác nhận"),
+                              content: const Text(
+                                  "Bạn có chắc chắn muốn xóa địa chỉ này không?"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(false);
+                                  },
+                                  child: const Text("Hủy"),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(true);
+                                  },
+                                  child: const Text("Xóa"),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+
+                        if (confirm == true) {
+                          final addressProvider = Provider.of<AddressProvider>(
+                              context,
+                              listen: false);
+                          await addressProvider.delete(id);
+                          Navigator.pop(context, "deleted");
+                          Navigator.pop(context, "deleted");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ChooseAddressScreen(),
+                            ),
+                          );
+                        }
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                    ),
+                    child: const Text("Xóa"),
+                  ),
+                ],
               ),
             ),
           ],
