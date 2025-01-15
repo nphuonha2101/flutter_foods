@@ -16,6 +16,7 @@ class OrderRepository with AbstractApiRepositories<Order, OrderDto> {
       note: '',
       paymentMethod: '',
       items: [],
+      token: ''
     );
   }
 

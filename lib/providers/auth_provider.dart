@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_foods/data/models/auth_credential.dart';
 import 'package:flutter_foods/services/auth_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider extends ChangeNotifier {
   final AuthService _authService;
@@ -103,4 +106,16 @@ Future<Map<String, dynamic>> sendOtp(String email) async {
       return false;
     }
   }
+Future<String?> getToken() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? credential = prefs.getString('credential');
+  
+  if (credential != null) {
+    Map<String, dynamic> credentialMap = json.decode(credential);
+    return credentialMap['token'];
+  }
+  
+  return null;
+}
+
 }

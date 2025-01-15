@@ -34,23 +34,26 @@ mixin AbstractApiRepositories<M extends IModel, D extends IDto> {
     }
   }
 
-  Future<M> create(D dto) async {
-    return http
-        .post(
+Future<M> create(D dto) async {
+  try {
+    final response = await http.post(
       Uri.parse('$baseUrl:$port/api/$version/$endpoint'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(dto.toJson()),
-    )
-        .then((response) {
-      if (response.statusCode == 201) {
-        return createModel().fromJson(json.decode(response.body)) as M;
-      } else {
-        throw Exception('Failed to create ${M.toString().toLowerCase()}');
-      }
-    });
+    );
+
+    if (response.statusCode == 201) {
+      return createModel().fromJson(json.decode(response.body)) as M;
+    } else {
+      throw Exception('Failed to create ${M.toString().toLowerCase()}. Status code: ${response.statusCode}');
+    }
+  } catch (e) {
+    throw Exception('Error while creating ${M.toString().toLowerCase()}: $e');
   }
+}
+
 
   Future<M> update(D dto, num id) async {
     return http
