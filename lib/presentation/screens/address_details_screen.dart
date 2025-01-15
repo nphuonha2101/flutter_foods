@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/core/routes/app_routes.dart';
 import 'package:flutter_foods/data/dtos/address_dto.dart';
 import 'package:flutter_foods/presentation/screens/handle_address_screen.dart';
 import 'package:flutter_foods/providers/address_provider.dart';
@@ -154,7 +155,7 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
                     await addressProvider.update(addressData, id);
                   }
 
-                  Navigator.pop(context, "success");
+                  Navigator.pushNamed(context, AppRoutes.chooseAddress);
                 },
                 child: const Text("Lưu"),
               ),

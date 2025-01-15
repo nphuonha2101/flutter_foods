@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/core/constants/payment_method.dart';
+import 'package:flutter_foods/core/routes/app_routes.dart';
 import 'package:flutter_foods/data/dtos/order_dto.dart';
 import 'package:flutter_foods/data/dtos/order_item_dto.dart';
 import 'package:flutter_foods/data/models/auth_credential.dart';
 import 'package:flutter_foods/data/models/order_item.dart';
 import 'package:flutter_foods/providers/auth_provider.dart';
+import 'package:flutter_foods/providers/cart_provider.dart';
 import 'package:flutter_foods/providers/order_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -46,24 +49,19 @@ class OrderScreenBottomAppBar extends StatelessWidget {
       totalPrice: totalPrices,
       addressId: idAddress,
       note: note,
-      paymentMethod: paymentMethod == 0 ? "tiền mặt" : "VNPAY",
+      paymentMethod: paymentMethod == PaymentMethod.COD ? "tiền mặt" : "VNPAY",
       items: orderItemDtos,
       token: token!,
     ));
   });
-
-  try {
     for (var order in items) {
-      print(order.toJson());
       await Provider.of<OrderProvider>(context, listen: false).create(order);
     }
     ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Đặt hàng thành công!')));
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Đặt hàng thất bại!'+e.toString())));
-  }
-}
+     SnackBar(content: Text('Đặt hàng thành công!')));
+     Provider.of<CartProvider>(context, listen: false).clearCart();
+     Navigator.pushNamed(context, AppRoutes.home);
+    }
 
 
   @override
