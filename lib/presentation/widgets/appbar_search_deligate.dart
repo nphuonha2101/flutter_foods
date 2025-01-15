@@ -7,9 +7,11 @@ import 'package:flutter_foods/providers/foods_provider.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppbarSearchDeligate extends SearchDelegate {
   late Color textColor;
+  late List<String> recentKeywords =[];
  String? selectedCategory;
   @override
   ThemeData appBarTheme(BuildContext context) {
@@ -110,8 +112,11 @@ class AppbarSearchDeligate extends SearchDelegate {
     if(query.isEmpty && selectedCategory == null) {
       return 
         Center(
-          child: Text('Search result for "$query"')
+          child: Text('Tìm kiếm kết quả: "$query"')
         );
+    }
+     if (query.isNotEmpty) {
+      saveRecentKeywords();
     }
     if(selectedCategory != null) {
       return _buildSearchByCategory(context);
@@ -126,10 +131,16 @@ class AppbarSearchDeligate extends SearchDelegate {
         ? _buildInitialSuggestions(context)
         : _buildSearchResults(context);
   }
+  Future<void> getRecentKeywords() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    recentKeywords = prefs.getStringList("RECENT_KEYWORDS") ?? [];
+    if (recentKeywords.isEmpty) {
+      await prefs.setStringList("RECENT_KEYWORDS", []);
+    }
+  }
 
   Widget _buildInitialSuggestions(BuildContext context) {
-    final recentSearches = ['haha', 'hihi', 'huhu'];
-
+    getRecentKeywords();
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -152,12 +163,12 @@ class AppbarSearchDeligate extends SearchDelegate {
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: recentSearches.length > 5 ? 5 : recentSearches.length,
+                  itemCount: recentKeywords.length > 5 ? 5 : recentKeywords.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      title: Text(recentSearches[index]),
+                      title: Text(recentKeywords[index]),
                       onTap: () {
-                        query = recentSearches[index];
+                        query = recentKeywords[index];
                         showResults(context);
                       },
                     );
@@ -195,7 +206,7 @@ class AppbarSearchDeligate extends SearchDelegate {
                     }
 
                     if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(child: Text('No food categories found.'));
+                      return const Center(child: Text('Không tìm thấy loại sản phẩm!'));
                     }
 
                     List<FoodCategory> foodCategories = snapshot.data!;
@@ -262,6 +273,17 @@ class AppbarSearchDeligate extends SearchDelegate {
     );
   }
 
+  Future<void> saveRecentKeywords () async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    recentKeywords = prefs.getStringList("RECENT_KEYWORDS") ?? [];
+    if(recentKeywords.length >= 5) {
+      recentKeywords.removeLast();
+    }
+    if (!recentKeywords.contains(query)) {
+      recentKeywords.insert(0, query);
+      await prefs.setStringList("RECENT_KEYWORDS", recentKeywords);
+    }
+  }
  Widget _buildSearchResults(BuildContext context) {
   final future = Provider.of<FoodsProvider>(context, listen: false).search(query);
 
@@ -271,9 +293,12 @@ class AppbarSearchDeligate extends SearchDelegate {
     (context, food) {
       return GestureDetector(
         onTap: () {
+          // save recent keywords
+          saveRecentKeywords();
+          // navigate to food detail
           Navigator.of(context).pushNamed(
             AppRoutes.foodDetail,
-            arguments: {'food': food},
+            arguments: food,
           );
         },
         child: Card(
@@ -383,7 +408,7 @@ Widget buildFutureResults<T>(BuildContext context, Future<List<T>> future, Widge
           },
         );
       } else {
-        return const Center(child: Text('No results found.'));
+        return const Center(child: Text('Không tìm thấy sản phẩm.'));
       }
     },
   );

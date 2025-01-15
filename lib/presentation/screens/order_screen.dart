@@ -31,9 +31,33 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   void initState() {
     super.initState();
+    _loadCartItem();
     _loadAddress();
   }
+void _loadCartItem() {
+     // Initialize collections
+      List<int> id_shops = [];
+      itemsByIdShops = {};
+          cartItems = Provider.of<CartProvider>(context, listen: false).getCartItems();
+    for (CartItem cartItem in cartItems) {
+      for (FoodCartItem foodsShopItem in cartItem.items) {
+        OrderItem orderItem = OrderItem(
+          foodId: foodsShopItem.food.id,
+          quantity: foodsShopItem.quantity,
+          price: foodsShopItem.food.price,
+          id: 0,
+        );
+        if (!id_shops.contains(foodsShopItem.food.shopId)) {
+          id_shops.add(foodsShopItem.food.shopId);
+        }
+        if (itemsByIdShops[foodsShopItem.food.shopId] == null) {
+          itemsByIdShops[foodsShopItem.food.shopId] = [];
+        }
+        itemsByIdShops[foodsShopItem.food.shopId]!.add(orderItem);
+      }
+    }
 
+  }
   Future<void> _loadAddress() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -47,11 +71,6 @@ class _OrderScreenState extends State<OrderScreen> {
           id_address = primaryAddress?.id ?? 0; // Safe access
         });
       }
-
-      // Initialize collections
-      List<int> id_shops = [];
-      itemsByIdShops = {};
-
       // Continue with rest of initialization
       if (primaryAddress == null) {
         ScaffoldMessenger.of(context).showSnackBar(

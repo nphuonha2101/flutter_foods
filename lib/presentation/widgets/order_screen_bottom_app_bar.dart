@@ -67,8 +67,9 @@ class OrderScreenBottomAppBar extends StatelessWidget {
     }
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text('Đặt hàng thành công!')));
-    Provider.of<CartProvider>(context, listen: false).clearCart();
     Navigator.pushNamed(context, AppRoutes.home);
+    Provider.of<CartProvider>(context, listen: false).clearCart();
+    
   }
 
   @override

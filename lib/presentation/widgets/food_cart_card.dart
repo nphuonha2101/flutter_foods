@@ -33,8 +33,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
   @override
   void initState() {
     super.initState();
-    // Initialize the shop checkbox based on the items' checkbox state
-    isCheckedShop = widget.cartItem.items.every((item) => item.isChecked);
+    isCheckedShop = widget.cartItem.items.any((item) => item.isChecked);
   }
 
   @override
