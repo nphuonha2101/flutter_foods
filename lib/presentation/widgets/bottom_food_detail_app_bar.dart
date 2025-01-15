@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/core/routes/app_routes.dart';
+import 'package:flutter_foods/data/models/cart_item.dart';
+import 'package:flutter_foods/data/models/food_cart_item.dart';
+import 'package:flutter_foods/providers/cart_provider.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:provider/provider.dart';
 
 class BottomFoodDetailAppBarWidget extends StatefulWidget
     implements PreferredSizeWidget {
-  const BottomFoodDetailAppBarWidget({super.key});
+  final FoodCartItem cartItem;  
+  const BottomFoodDetailAppBarWidget({super.key, required this.cartItem});
 
   @override
   State<StatefulWidget> createState() => _BottomFoodDetailAppBarWidgetState();
@@ -15,11 +21,12 @@ class BottomFoodDetailAppBarWidget extends StatefulWidget
 class _BottomFoodDetailAppBarWidgetState
     extends State<BottomFoodDetailAppBarWidget> {
   bool _isFavorite = false;
-  num _quantity = 0;
+  int _quantity = 1;
 
   void _incrementQuantity() {
     setState(() {
       _quantity++;
+       widget.cartItem.quantity = _quantity;
     });
   }
 
@@ -27,6 +34,7 @@ class _BottomFoodDetailAppBarWidgetState
     setState(() {
       if (_quantity > 0) {
         _quantity--;
+         widget.cartItem.quantity = _quantity;
       }
     });
   }
@@ -109,14 +117,37 @@ class _BottomFoodDetailAppBarWidgetState
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton.outlined(
+               IconButton.outlined(
                   icon: const Icon(TablerIcons.shopping_cart_plus),
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      Provider.of<CartProvider>(context, listen: false)
+                          .addToCart(widget.cartItem ,_quantity);
+                    });
+
+                    // Show SnackBar
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: const Text('Đã thêm vào giỏ!'),
+                        duration: const Duration(seconds: 2),
+                        action: SnackBarAction(
+                          label: 'Xem giỏ hàng',
+                          onPressed: () {
+                            Navigator.pushNamed(context, AppRoutes.cart);
+                          },
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(width: 20),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {},
+              
+                    onPressed: () {
+                      Provider.of<CartProvider>(context, listen: false).addToCart(widget.cartItem,_quantity);
+                      Navigator.pushNamed(context, AppRoutes.cart);
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       shape: RoundedRectangleBorder(

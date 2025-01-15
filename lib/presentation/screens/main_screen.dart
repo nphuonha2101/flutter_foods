@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_foods/presentation/screens/home_screen.dart';
+import 'package:flutter_foods/presentation/screens/near_shop_screen.dart';
+import 'package:flutter_foods/presentation/screens/profile_screen.dart';
 import 'package:flutter_foods/presentation/screens/my_order_screen.dart';
 import 'package:flutter_foods/presentation/widgets/appbar_normal.dart';
 import 'package:flutter_foods/presentation/widgets/bottom_nav_bar.dart'
@@ -17,6 +19,15 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
+  // Danh sách các hàm tạo để khởi tạo widget khi chuyển tab
+  final List<Widget Function()> _screens = [
+    () => const HomeScreen(),
+    () => const NearShopScreen(),
+    () => const MyOrderScreen(),
+    () => const ProfileScreen(),
+  ];
+
+  // Hàm thay đổi trang
   void _changePage(int? index) {
     setState(() {
       _currentIndex = index ?? 0;
@@ -35,14 +46,7 @@ class _MainScreenState extends State<MainScreen> {
           currentIndex: _currentIndex,
           onTap: _changePage,
         ),
-        body: IndexedStack(
-          index: _currentIndex,
-          children: const [
-            HomeScreen(),
-            MyOrderScreen(),
-            Center(child: Text("Desserts Tab")),
-          ],
-        ),
+        body: _screens[_currentIndex](), // Khởi tạo widget mới từ hàm tạo
       ),
     );
   }

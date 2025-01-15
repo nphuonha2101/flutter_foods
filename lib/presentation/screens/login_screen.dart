@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/core/routes/app_routes.dart';
 import 'package:flutter_foods/providers/auth_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,8 +14,7 @@ class LoginScreen extends StatefulWidget {
   }
 }
 
-class _LoginScreenState extends State<LoginScreen>
-    with SingleTickerProviderStateMixin {
+class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStateMixin {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final FocusNode usernameFocusNode = FocusNode();
@@ -47,10 +48,31 @@ class _LoginScreenState extends State<LoginScreen>
     usernameFocusNode.dispose();
     super.dispose();
   }
-
+Future<void> _login(BuildContext context, AuthProvider authProvider) async {
+    try {
+      await authProvider.login(
+        usernameController.text,
+        passwordController.text,                                                    
+      );
+       await authProvider.initialize();
+      if (authProvider.isAuthenticated) {
+        Navigator.pushReplacementNamed(context, AppRoutes.home);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Thông tin đăng nhập sai, vui lòng kiểm tra lại tài khoản và mật khẩu.")),
+        );
+      }
+    } catch (e) {
+      print("Login failed: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login failed: $e')),
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    final AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    // Access AuthProvider via Provider.of
+    final authProvider = Provider.of<AuthProvider>(context);
 
     return Scaffold(
       body: SizedBox(
@@ -127,6 +149,7 @@ class _LoginScreenState extends State<LoginScreen>
                           const SizedBox(height: 20),
                           TextField(
                             controller: passwordController,
+                            obscureText: true,
                             decoration: const InputDecoration(
                               labelText: 'Mật khẩu',
                               filled: true,
@@ -138,10 +161,8 @@ class _LoginScreenState extends State<LoginScreen>
                             width: double.infinity,
                             child: FilledButton(
                               onPressed: () {
-                                authProvider.login(
-                                  usernameController.text,
-                                  passwordController.text,
-                                );
+                                // Perform login logic
+                                _login(context, authProvider);
                               },
                               child: const Text('Đăng nhập'),
                             ),

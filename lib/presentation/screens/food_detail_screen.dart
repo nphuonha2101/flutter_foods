@@ -1,123 +1,195 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/data/models/food_cart_item.dart';
+import 'package:flutter_foods/data/models/food.dart';
 import 'package:flutter_foods/presentation/widgets/bottom_food_detail_app_bar.dart';
 import 'package:flutter_foods/presentation/widgets/user_review.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class FoodDetailScreen extends StatefulWidget {
-  const FoodDetailScreen({super.key});
+  final Food food;
+
+  const FoodDetailScreen({super.key, required this.food});
 
   @override
-  _FoodDetailScreenState createState() => _FoodDetailScreenState();
+  State<FoodDetailScreen> createState() => _FoodDetailScreenState();
 }
 
 class _FoodDetailScreenState extends State<FoodDetailScreen> {
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _contentController = TextEditingController();
+  double _rating = 0.0;
+
+  void _showCommentDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            "Viết đánh giá",
+            style: TextStyle(fontSize: 16),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RatingBar.builder(
+                initialRating: 0,
+                minRating: 1,
+                direction: Axis.horizontal,
+                allowHalfRating: true,
+                itemCount: 5,
+                itemBuilder: (context, _) => const Icon(
+                  Icons.star,
+                  color: Colors.amber,
+                ),
+                onRatingUpdate: (rating) {
+                  setState(() {
+                    _rating = rating;
+                  });
+                },
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: _titleController,
+                decoration: const InputDecoration(
+                    hintText: "Tiêu đề đánh giá", filled: true),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: _contentController,
+                decoration:
+                    const InputDecoration(hintText: "Nội dung", filled: true),
+                maxLines: 3,
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Hủy'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FilledButton(
+              child: const Text('Gửi'),
+              onPressed: () {
+                // Handle submit action
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: const BottomFoodDetailAppBarWidget(),
-      body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget>[
-            SliverAppBar(
-              backgroundColor: Theme.of(context).colorScheme.surface,
-              expandedHeight: MediaQuery.of(context).size.height * 4 / 10,
-              floating: false,
-              pinned: true,
-              snap: false,
-              flexibleSpace: FlexibleSpaceBar(
-                collapseMode: CollapseMode.pin,
-                background: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SizedBox(height: kToolbarHeight + 20),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            top: 0, bottom: 10, left: 50, right: 50),
-                        child: Image.asset(
-                          'assets/images/food_delivery.png',
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                        ),
+      bottomNavigationBar: BottomFoodDetailAppBarWidget(
+          cartItem: FoodCartItem(food: widget.food, quantity: 1)),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            expandedHeight: MediaQuery.of(context).size.height * 4 / 10,
+            floating: false,
+            pinned: true,
+            snap: false,
+            flexibleSpace: FlexibleSpaceBar(
+              collapseMode: CollapseMode.pin,
+              background: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: kToolbarHeight + 20),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          top: 0, bottom: 10, left: 50, right: 50),
+                      child: Image.network(
+                        widget.food.imageUrl as String,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          ];
-        },
-        body: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
           ),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceContainerLow,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Food Name',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontFamily: GoogleFonts.ibmPlexSans().fontFamily,
-                              fontSize: 20,
-                            ),
-                          ),
-                          Chip(
-                            label: const Text('Category'),
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primaryContainer,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        children: [
-                          Icon(
-                            TablerIcons.star_filled,
-                            color: Colors.amber[700],
-                          ),
-                          const SizedBox(width: 10),
-                          Text(
-                            '4.5',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              color: Colors.amber[700],
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          const Text(
-                            '(200 đánh giá)',
-                            style: TextStyle(
-                              fontSize: 18,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 30),
-                      Row(
+          SliverToBoxAdapter(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surfaceContainerLow,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 10),
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '30.000 vnđ',
+                              '${widget.food.name as String}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontFamily:
+                                    GoogleFonts.ibmPlexSans().fontFamily,
+                                fontSize: 20,
+                              ),
+                            ),
+                            Chip(
+                              label: Text('${widget.food.shopName as String}'),
+                              backgroundColor: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Icon(
+                              TablerIcons.star_filled,
+                              color: Colors.amber[700],
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              '${widget.food.rating}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.amber[700],
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              '(${widget.food.reviewCount} đánh giá)',
+                              style: const TextStyle(
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 30),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '${widget.food.price} vnđ',
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -127,64 +199,80 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
-                          ]),
-                      const SizedBox(height: 40),
-                      Row(
-                        children: [
-                          Text(
-                            'Mô tả',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontFamily: GoogleFonts.ibmPlexSans().fontFamily,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              'Mô tả món ăn',
+                          ],
+                        ),
+                        const SizedBox(height: 40),
+                        Row(
+                          children: [
+                            Text(
+                              'Mô tả',
                               style: TextStyle(
-                                fontFamily: GoogleFonts.inter().fontFamily,
-                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                fontFamily:
+                                    GoogleFonts.ibmPlexSans().fontFamily,
+                                fontSize: 18,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        children: [
-                          Text(
-                            'Đánh giá',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontFamily: GoogleFonts.ibmPlexSans().fontFamily,
-                              fontSize: 18,
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Mô tả món ăn',
+                                style: TextStyle(
+                                  fontFamily: GoogleFonts.inter().fontFamily,
+                                  fontSize: 16,
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Đánh giá',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontFamily:
+                                    GoogleFonts.ibmPlexSans().fontFamily,
+                                fontSize: 18,
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: _showCommentDialog,
+                              child: const Text("Đánh giá ngay"),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: ListView.builder(
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
                     padding: const EdgeInsets.all(16.0),
-                    itemCount: 10,
+                    itemCount: 1,
                     itemBuilder: (context, index) {
                       return const UserReviewWidget();
                     },
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _contentController.dispose();
+    super.dispose();
   }
 }

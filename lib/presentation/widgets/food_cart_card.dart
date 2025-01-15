@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_foods/data/models/CartItem.dart';
+import 'package:flutter_foods/data/models/cart_item.dart';
+import 'package:flutter_foods/data/models/food_cart_item.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 class FoodCartCard extends StatefulWidget {
-  final List<CartItem> cartItems; // List of items from the same shop
-  final ValueChanged<CartItem> onIncrease;
-  final ValueChanged<CartItem> onDecrease;
+  final CartItem cartItem; // List of items from the same shop
+  final bool isCheckedShop;
+  final ValueChanged<FoodCartItem> onIncrease;
+  final ValueChanged<FoodCartItem> onDecrease;
+  final ValueChanged<CartItem> onDeleteShop;
+  final VoidCallback onShopChecked;
+  final ValueChanged<FoodCartItem> onFoodItemChecked; 
 
   const FoodCartCard({
     Key? key,
-    required this.cartItems,
+    required this.cartItem,
+    required this.isCheckedShop,
     required this.onIncrease,
     required this.onDecrease,
+    required this.onDeleteShop,
+    required this.onShopChecked,
+    required this.onFoodItemChecked,
   }) : super(key: key);
 
   @override
@@ -19,12 +28,17 @@ class FoodCartCard extends StatefulWidget {
 }
 
 class _FoodCartCardState extends State<FoodCartCard> {
-  bool isCheckedShop = false;
-  bool isEditing = false; // Add a state variable to track editing mode
+  late bool isCheckedShop;
+
+  @override
+  void initState() {
+    super.initState();
+    isCheckedShop = widget.cartItem.items.any((item) => item.isChecked);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final shopName = widget.cartItems.first.food.category;
+    final shopName = widget.cartItem.shopName;
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -43,10 +57,10 @@ class _FoodCartCardState extends State<FoodCartCard> {
                 Row(
                   children: [
                     Checkbox(
-                      value: isCheckedShop,
+                      value: widget.isCheckedShop, // nhận giá trị từ bên ngoài
                       onChanged: (bool? value) {
                         setState(() {
-                          isCheckedShop = value!;
+                          widget.onShopChecked(); // gọi hàm khi checkbox cửa hàng thay đổi
                         });
                       },
                     ),
@@ -64,13 +78,9 @@ class _FoodCartCardState extends State<FoodCartCard> {
                   ],
                 ),
                 GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isEditing = !isEditing; // Toggle editing mode
-                    });
-                  },
+                  onTap: () => widget.onDeleteShop(widget.cartItem),
                   child: Text(
-                    isEditing ? "Xong" : "Sửa", // Change text based on editing state
+                    "Xóa",
                     style: const TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                 ),
@@ -80,7 +90,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
 
             // List of items for this shop
             Column(
-              children: widget.cartItems.map((cartItem) {
+              children: widget.cartItem.items.map((cartItem) {
                 bool isCheckedFood = cartItem.isChecked;
                 final food = cartItem.food;
                 final quantity = cartItem.quantity;
@@ -95,7 +105,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
                             value: isCheckedFood,
                             onChanged: (bool? value) {
                               setState(() {
-                                cartItem.isChecked = value!;
+                                widget.onFoodItemChecked(cartItem); 
                               });
                             },
                           ),
@@ -106,8 +116,8 @@ class _FoodCartCardState extends State<FoodCartCard> {
                             width: 120,
                             height: 120,
                             color: Colors.grey[300],
-                            child: Image.asset(
-                              food.imageUrl,
+                            child: Image.network(
+                              food.imageUrl as String,
                               height: 120,
                               width: 120,
                               fit: BoxFit.cover,
@@ -120,7 +130,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                food.name,
+                                food.name as String,
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
@@ -128,9 +138,9 @@ class _FoodCartCardState extends State<FoodCartCard> {
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
-                               const SizedBox(height: 4),
+                              const SizedBox(height: 4),
                               Text(
-                                food.category,
+                                food.shopName,
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.grey[600],
@@ -158,7 +168,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
                                   maxLines: 1,
                                 ),
                               ),
-                               const SizedBox(height: 4),
+                              const SizedBox(height: 4),
                               Text(
                                 '\đ${food.price.toStringAsFixed(2)}',
                                 style: const TextStyle(
@@ -178,15 +188,13 @@ class _FoodCartCardState extends State<FoodCartCard> {
                       children: [
                         Row(
                           children: [
-                             Material(
+                            Material(
                               color: Theme.of(context).colorScheme.surfaceContainerLow,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(100)),
+                              borderRadius: const BorderRadius.all(Radius.circular(100)),
                               child: IconButton(
                                 padding: const EdgeInsets.all(2),
-                                icon: const Icon(TablerIcons.minus,
-                                    color: Colors.redAccent),
-                              onPressed: () => widget.onDecrease(cartItem),
+                                icon: const Icon(TablerIcons.minus, color: Colors.redAccent),
+                                onPressed: () => widget.onDecrease(cartItem),
                               ),
                             ),
                             Text(
@@ -195,20 +203,18 @@ class _FoodCartCardState extends State<FoodCartCard> {
                             ),
                             Material(
                               color: Theme.of(context).colorScheme.surfaceContainerLow,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(100)),
+                              borderRadius: const BorderRadius.all(Radius.circular(100)),
                               child: IconButton(
                                 padding: const EdgeInsets.all(2),
                                 icon: const Icon(TablerIcons.plus, color: Colors.green),
                                 onPressed: () => widget.onIncrease(cartItem),
-
                               ),
                             ),
                           ],
                         ),
                         // Display total price for the item
                         Text(
-                          'Total: \$${(food.price * quantity).toStringAsFixed(2)}',
+                          'Thành tiền: ₫${(food.price * quantity).toStringAsFixed(2)}',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -217,112 +223,27 @@ class _FoodCartCardState extends State<FoodCartCard> {
                         ),
                       ],
                     ),
-                    if (isEditing) 
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              print("Sản phẩm tương tự clicked");
-                            },
-                             style: ElevatedButton.styleFrom(
-                              iconColor: Colors.red, 
-                              
-                              backgroundColor:Theme.of(context).colorScheme.surfaceTint
-                            ),
-                            child: const Text("Sản phẩm tương tự", style: TextStyle(color: Colors.white),),
-                          ),
-                          ElevatedButton(
-                            
-                            onPressed: () {
-                              print("Xóa sản phẩm clicked");
-                              // Add your delete logic here
-                            },
-                            style: ElevatedButton.styleFrom(
-                              iconColor: Colors.red, 
-                            ),
-                            child: Text("Xóa sản phẩm",
-                            style: TextStyle(color:Theme.of(context).colorScheme.surfaceTint)),
-                          ),
-                        ],
-                      ),
                     const SizedBox(height: 8),
                   ],
                 );
               }).toList(),
             ),
-            const Divider(),
-            // Total price for this shop
-            Column(
-              // mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                // Text(
-                //   'Total: \$${widget.cartItems.fold(0.0, (sum, item) => sum + (item.food.price * item.quantity))}',
-                //   style: TextStyle(
-                //     fontSize: 16,
-                //     fontWeight: FontWeight.bold,
-                //     color: Colors.green[700],
-                //   ),
-                // ),
-                Row(
-                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                 children: [
-                    Row(children: [
-                         IconButton(
-                      icon:  Icon(Icons.card_giftcard,color: Colors.amber[900] ,),
-                      onPressed: () {
-                        // Handle the button press action here
-                      },
-                    ),
-                    const Text(
-                      "Thêm shop voucher", 
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey
-                      ),
-                    ),
-                    ],),
-                     IconButton(
-                        alignment: Alignment.centerRight,
-                      icon: const Icon(Icons.arrow_forward_ios, size: 14,),
-                      onPressed: () {
-                        // Handle shipping action here
-                      },
-                     )
-                  ],
-                ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween, 
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.local_shipping, color: Colors.green),
-                        onPressed: () {
-                        },
-                      ),
-                      Flexible(
-                        flex: 1,
-                        
-                        child: Text(
-                          "Giảm ₫300.000 phí vận chuyển đơn tối thiểu ₫0; Giảm ₫500.000 phí vận chuyển đơn tối thiểu ₫500.000", 
-                          style: TextStyle(
-                            fontSize: 12, 
-                            color: Theme.of(context).colorScheme.onSurface, 
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis, 
-                          softWrap: true, 
-                        ),
-                      ),
-                      IconButton(
-                        alignment: Alignment.centerRight,
-                        icon: const Icon(Icons.arrow_forward_ios, size: 14),
-                        onPressed: () {
-                        },
-                      ),
-                    ],
-                  ),
-              ],
-            ),
+            // const Divider(),
+            // // Total price for this shop
+            // Column(
+            //   children: [
+            //     Text(
+
+            //       'Total: \$${widget.cartItem.totalPrice}',
+            //       style: TextStyle(
+            //         fontSize: 16,
+            //         fontWeight: FontWeight.bold,
+            //         color: Colors.green[700],
+            //       ),
+            //     ),
+            //   ],
+            // ),
+
           ],
         ),
       ),
