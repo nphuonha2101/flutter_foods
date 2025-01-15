@@ -106,7 +106,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
                             value: isCheckedFood,
                             onChanged: (bool? value) {
                               setState(() {
-                                widget.onFoodItemChecked(cartItem); // gọi hàm khi checkbox món ăn thay đổi
+                                widget.onFoodItemChecked(cartItem); 
                               });
                             },
                           ),
@@ -215,7 +215,7 @@ class _FoodCartCardState extends State<FoodCartCard> {
                         ),
                         // Display total price for the item
                         Text(
-                          'Total: \$${(food.price * quantity).toStringAsFixed(2)}',
+                          'Thành tiền: ₫${(food.price * quantity).toStringAsFixed(2)}',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -229,21 +229,21 @@ class _FoodCartCardState extends State<FoodCartCard> {
                 );
               }).toList(),
             ),
-            const Divider(),
-            // Total price for this shop
-            Column(
-              children: [
-                Text(
+            // const Divider(),
+            // // Total price for this shop
+            // Column(
+            //   children: [
+            //     Text(
 
-                  'Total: \$${widget.cartItem.totalPrice}',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green[700],
-                  ),
-                ),
-              ],
-            ),
+            //       'Total: \$${widget.cartItem.totalPrice}',
+            //       style: TextStyle(
+            //         fontSize: 16,
+            //         fontWeight: FontWeight.bold,
+            //         color: Colors.green[700],
+            //       ),
+            //     ),
+            //   ],
+            // ),
 
           ],
         ),
