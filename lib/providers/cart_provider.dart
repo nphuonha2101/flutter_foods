@@ -87,7 +87,16 @@ void toggleFoodSelection(FoodCartItem foodItem) {
     }
     notifyListeners();
   }
-
+  bool isCheck(){
+    for (var cartItem in _cartItems) {
+      for (var food in cartItem.items) {
+        if (food.isChecked) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
   // Tăng số lượng món ăn
   void increaseQuantity(FoodCartItem item) {
     for (var cartItem in _cartItems) {

@@ -27,6 +27,14 @@ class OrderScreenBottomAppBar extends StatelessWidget {
   final String note;
 
   void _placeOrder(BuildContext context) async {
+     if (paymentMethod == -1) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Vui lòng chọn phương thức thanh toán'),
+      ),
+    );
+    return;  
+  }
   List<OrderDto> items = [];
   String? token;
     token = await Provider.of<AuthProvider>(context, listen: false).getToken();

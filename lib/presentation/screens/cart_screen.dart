@@ -174,21 +174,32 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  width: 150,
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.pushNamed(context, AppRoutes.checkout),
-                    child: const Text('Mua hàng'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      textStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+               SizedBox(
+                width: 150,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (cart.cartItems.length > 0 && cart.isCheck()) {
+                      Navigator.pushNamed(context, AppRoutes.checkout);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Giỏ hàng của bạn đang trống'),
+                        ),
+                      );
+                    }
+                  },
+                  child: const Text('Mua hàng'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    textStyle: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
+              ),
+
               ],
             ),
           ),
