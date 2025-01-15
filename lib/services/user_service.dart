@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_foods/data/dtos/user_dto.dart';
-import 'package:flutter_foods/data/dtos/user_update_dto.dart';
+// import 'package:flutter_foods/data/dtos/user_update_dto.dart';
 import 'package:flutter_foods/data/models/user.dart';
 import 'package:flutter_foods/repositories/user_repository.dart';
 
@@ -26,9 +26,10 @@ class UserService {
     }
   }
 
-  Future<bool> updateUser(String email, String name, String phone, String avatar ) async {
+  Future<bool> updateUser(
+      String email, String name, String phone, String avatar) async {
     try {
-      return _userRepository.updateUser( email,  name,  phone,  avatar);
+      return _userRepository.updateUser(email, name, phone, avatar);
     } catch (e) {
       throw Exception('Failed to update user. Error: $e');
     }

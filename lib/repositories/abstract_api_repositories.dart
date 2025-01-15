@@ -13,17 +13,17 @@ mixin AbstractApiRepositories<M extends IModel, D extends IDto> {
   String get baseApiUrl => '$baseUrl:$port/api/$version/$endpoint';
 
   Future<List<M>> fetchAll() async {
-  final response = await http.get(Uri.parse(baseApiUrl));
-  
-  if (response.statusCode == 200) {
-    final Map<String, dynamic> body = json.decode(response.body);
-    
-    final List<dynamic> items = body['data'];
-    return items.map((item) => createModel().fromJson(item) as M).toList();
-  } else {
-    throw _handleError('fetch all', response.statusCode);
+    final response = await http.get(Uri.parse(baseApiUrl));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> body = json.decode(response.body);
+
+      final List<dynamic> items = body['data'];
+      return items.map((item) => createModel().fromJson(item) as M).toList();
+    } else {
+      throw _handleError('fetch all', response.statusCode);
+    }
   }
-}
 
   Future<M> fetch(num id) async {
     final response = await http.get(Uri.parse('$baseApiUrl/$id'));
@@ -34,26 +34,26 @@ mixin AbstractApiRepositories<M extends IModel, D extends IDto> {
     }
   }
 
-Future<M> create(D dto) async {
-  try {
-    final response = await http.post(
-      Uri.parse('$baseUrl:$port/api/$version/$endpoint'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(dto.toJson()),
-    );
+  Future<M> create(D dto) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl:$port/api/$version/$endpoint'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(dto.toJson()),
+      );
 
-    if (response.statusCode == 200) {
-      return createModel().fromJson(json.decode(response.body)) as M;
-    } else {
-      throw Exception('Failed to create ${M.toString().toLowerCase()}. Status code: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        return createModel().fromJson(json.decode(response.body)) as M;
+      } else {
+        throw Exception(
+            'Failed to create ${M.toString().toLowerCase()}. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error while creating ${M.toString().toLowerCase()}: $e');
     }
-  } catch (e) {
-    throw Exception('Error while creating ${M.toString().toLowerCase()}: $e');
   }
-}
-
 
   Future<M> update(D dto, num id) async {
     return http

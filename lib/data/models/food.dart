@@ -9,7 +9,7 @@ class Food implements IModel {
   final String? name;
   final String? category;
   final String? description;
-  final double price;
+  final int price;
   final double rating;
   final int reviewCount;
   final int shopId;
@@ -42,7 +42,7 @@ class Food implements IModel {
       id: json['id'] as int? ?? 0,
       name: json['name'] as String?,
       category: json['category'] as String?,
-      price: (json['price'] as num?)?.toDouble() ?? 0.0,
+      price: (json['price'] as num?)?.toInt() ?? 0,
       description: json['description'] as String?,
       rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
       reviewCount: json['review_count'] as int? ?? 0,
@@ -62,7 +62,7 @@ class Food implements IModel {
       id: json['id'] as int? ?? 0,
       name: json['name'] as String?,
       category: json['category'] as String?,
-      price: (json['price'] as num?)?.toDouble() ?? 0.0,
+      price: (json['price'] as num?)?.toInt() ?? 0,
       description: json['description'] as String?,
       rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
       reviewCount: json['review_count'] as int? ?? 0,

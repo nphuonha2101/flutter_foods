@@ -3,7 +3,7 @@ import 'package:flutter_foods/data/dtos/i_dto.dart';
 class FoodDto implements IDto {
   String? name;
   String? category;
-  double price;
+  int price;
   final int shopId;
   final String? imageUrl;
 

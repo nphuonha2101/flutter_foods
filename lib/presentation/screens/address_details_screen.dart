@@ -104,8 +104,8 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
                         pickedData is Map<String, dynamic>) {
                       setState(() {
                         addressController.text = pickedData["address"];
-                        latitude = pickedData["latitude"];
-                        longitude = pickedData["longitude"];
+                        latitude = pickedData["latitude"].toString();
+                        longitude = pickedData["longitude"].toString();
                       });
                     }
                   },

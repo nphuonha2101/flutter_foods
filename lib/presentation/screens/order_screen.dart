@@ -18,10 +18,11 @@ class OrderScreen extends StatefulWidget {
   @override
   State<OrderScreen> createState() => _OrderScreenState();
 }
+
 class _OrderScreenState extends State<OrderScreen> {
   int _paymentMethod = -1;
   String note = 'null';
-  late Map<int, List<OrderItem>> itemsByIdShops;
+  late Map<int, List<OrderItem>> itemsByIdShops = {};
   int id_address = 1;
   late List<CartItem> cartItems = [];
   late SharedPreferences prefs;
@@ -30,39 +31,45 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   void initState() {
     super.initState();
-    initSharedPreferences();
+    _loadAddress();
   }
 
-  // Async method to initialize SharedPreferences
-  Future<void> initSharedPreferences() async {
-    prefs = await SharedPreferences.getInstance();
-    String? primaryAddressJson = prefs.getString('defaultAddress');
-    if (primaryAddressJson != null) {
-      setState(() {
-        primaryAddress = Address.fromJsonStatic(jsonDecode(primaryAddressJson)) as Address?;
+  Future<void> _loadAddress() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final primaryAddressJson = prefs.getString('defaultAddress');
 
-      });
-    }
-    id_address = primaryAddress!.id;
-    List<int> id_shops = [];
-    itemsByIdShops = {};
+      if (primaryAddressJson != null) {
+        setState(() {
+          primaryAddress =
+              Address.fromJsonStatic(jsonDecode(primaryAddressJson))
+                  as Address?;
+          id_address = primaryAddress?.id ?? 0; // Safe access
+        });
+      }
 
-    cartItems = Provider.of<CartProvider>(context, listen: false).getCartItems();
-    for (CartItem cartItem in cartItems) {
-      for (FoodCartItem foodsShopItem in cartItem.items) {
-        OrderItem orderItem = OrderItem(
-          foodId: foodsShopItem.food.id,
-          quantity: foodsShopItem.quantity,
-          price: foodsShopItem.food.price,
-          id: 0,
+      // Initialize collections
+      List<int> id_shops = [];
+      itemsByIdShops = {};
+
+      // Continue with rest of initialization
+      if (primaryAddress == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Vui lòng chọn địa chỉ giao hàng'),
+            backgroundColor: Colors.orange,
+          ),
         );
-        if (!id_shops.contains(foodsShopItem.food.shopId)) {
-          id_shops.add(foodsShopItem.food.shopId);
-        }
-        if (itemsByIdShops[foodsShopItem.food.shopId] == null) {
-          itemsByIdShops[foodsShopItem.food.shopId] = [];
-        }
-        itemsByIdShops[foodsShopItem.food.shopId]!.add(orderItem);
+        return;
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Không thể tải địa chỉ'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
       }
     }
   }
@@ -148,8 +155,10 @@ class _OrderScreenState extends State<OrderScreen> {
             buildSectionTitle("Danh sách đơn"),
             const SizedBox(height: 10),
             ListView.builder(
-              shrinkWrap: true, // Set shrinkWrap to true to prevent ListView from taking too much space
-              physics: NeverScrollableScrollPhysics(), // Disable scrolling for this ListView since SingleChildScrollView handles scrolling
+              shrinkWrap:
+                  true, // Set shrinkWrap to true to prevent ListView from taking too much space
+              physics:
+                  NeverScrollableScrollPhysics(), // Disable scrolling for this ListView since SingleChildScrollView handles scrolling
               itemCount: cartItems.length,
               itemBuilder: (context, index) {
                 final cartItem = cartItems[index];
@@ -257,7 +266,10 @@ class _OrderScreenState extends State<OrderScreen> {
       ),
       child: Padding(
         padding: const EdgeInsets.only(
-          left: 15.0, top: 8.0, bottom: 8.0, right: 15.0,
+          left: 15.0,
+          top: 8.0,
+          bottom: 8.0,
+          right: 15.0,
         ),
         child: Text(
           title,

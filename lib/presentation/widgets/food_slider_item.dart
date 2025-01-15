@@ -1,14 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_foods/core/constants/api.dart';
-import 'package:flutter_foods/data/models/food.dart';
-import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
+import 'package:flutter_foods/data/models/food_slider.dart';
 
 class FoodSliderItem extends StatelessWidget {
-  final Food food;
-  const FoodSliderItem({super.key, required this.food});
+  final FoodSlider foodSlider;
+  const FoodSliderItem({super.key, required this.foodSlider});
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +20,7 @@ class FoodSliderItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
             child: Image.network(
-              ApiConstants.baseUrl +
-                  ":" +
-                  ApiConstants.port.toString() +
-                  '/storage/' +
-                  food.imageUrl!,
+              foodSlider.imageUrl ?? ApiConstants.defaultImage,
               fit: BoxFit.cover,
             ),
           ),
@@ -53,7 +45,7 @@ class FoodSliderItem extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      food.name!,
+                      foodSlider.title,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
