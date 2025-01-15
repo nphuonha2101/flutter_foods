@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/data/models/food_review.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 class UserReviewWidget extends StatelessWidget {
-  // final UserReview userReview;
-  // const UserReviewWidget({super.key, required this.userReview});
-
-  const UserReviewWidget({super.key});
+  final FoodReview review;
+  
+  const UserReviewWidget({super.key, required this.review});
 
   @override
   Widget build(BuildContext context) {
@@ -35,21 +35,21 @@ class UserReviewWidget extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 10),
-                      const Column(
+                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Nguyễn Văn A',
+                            review.title,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text(
-                            '11-10-2024',
-                            style: TextStyle(
-                              fontSize: 12,
-                            ),
-                          ),
+                          // Text(
+                          //   review.title,
+                          //   style: TextStyle(
+                          //     fontSize: 12,
+                          //   ),
+                          // ),
                         ],
                       ),
                     ],
@@ -67,8 +67,11 @@ class UserReviewWidget extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 10),
-              const Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec nisi ac nisi ultricies fermentum. Nulla facilisi. Nulla nec nisi ac nisi ultricies fermentum. Nulla facilisi.',
+               Text(
+                review.content,
+                style: TextStyle(
+                  fontSize: 14,
+                ),
               ),
             ],
           ),

@@ -85,7 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
 
     Provider.of<UsersProvider>(context, listen: false)
-        .updateUser(user!.email, user!.name, user!.phone, null);
+        .updateUser(user!.email, user!.name, user!.phone, _image);
 
     print(user!.avatarUrl);
     print(user!.name);
