@@ -100,10 +100,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await Navigator.pushNamed(context, '/change-password-profile');
     } else {
       if (_editingField == field) {
-        onSave(controller.text); // Lưu thay đổi
+        onSave(controller.text); 
 
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        String? credentialJson = prefs.getString('credential');
+        AuthCredential authCredential =
+            AuthCredential.fromJson(jsonDecode(credentialJson!));
+
+            authCredential.username = user!.name;
+            authCredential.userPhone = user!.phone;
+            authCredential.avatar = user!.avatarUrl;
+
+        prefs.setString("credential", jsonEncode(authCredential.toJson()));
         setState(() {
-          _editingField = ''; // Tắt chế độ chỉnh sửa
+          _editingField = ''; 
         });
 
         await Provider.of<UsersProvider>(context, listen: false)
@@ -114,7 +124,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         print(user!.phone);
       } else {
         setState(() {
-          _editingField = field; // Bật chế độ chỉnh sửa
+          _editingField = field; 
         });
       }
     }
