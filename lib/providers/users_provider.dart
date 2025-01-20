@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_foods/data/dtos/user_dto.dart';
 import 'package:flutter_foods/data/models/user.dart';
 import 'package:flutter_foods/services/user_service.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UsersProvider with ChangeNotifier {
   final UserService _userService;
@@ -24,7 +25,6 @@ class UsersProvider with ChangeNotifier {
 
     try {
       _users = await _userService.fetchAll();
-    
     } catch (e) {
       _hasError = true;
       _errorMessage = e.toString();
@@ -40,7 +40,24 @@ class UsersProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-     return await _userService.fetchByEmail(email);
+      return await _userService.fetchByEmail(email);
+    } catch (e) {
+      _hasError = true;
+      _errorMessage = e.toString();
+    }
+
+    _isLoading = false;
+    notifyListeners();
+    return null;
+  }
+
+  Future<User?> fetchById(int id) async {
+    _isLoading = true;
+    _hasError = false;
+    notifyListeners();
+
+    try {
+      return await _userService.fetchById(id);
     } catch (e) {
       _hasError = true;
       _errorMessage = e.toString();
@@ -67,7 +84,8 @@ class UsersProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool?> updateUser(String email, String name, String phone, String avatar) async {
+  Future<bool?> updateUser(
+      String email, String name, String phone, XFile? avatar) async {
     _isLoading = true;
     _hasError = false;
     notifyListeners();

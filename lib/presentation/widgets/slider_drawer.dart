@@ -71,10 +71,12 @@ class _SliderDrawerWidgetState extends State<SliderDrawerWidget> {
                                 Text(
                                   authCredential?.username ?? 'John Doe',
                                   style: const TextStyle(fontSize: 20),
+                                  softWrap: true,
                                 ),
                                 Text(
                                   authCredential?.userEmail ?? 'test@gmail.com',
                                   style: const TextStyle(fontSize: 14),
+                                  softWrap: true,
                                 ),
                               ],
                             ),
@@ -118,22 +120,22 @@ class _SliderDrawerWidgetState extends State<SliderDrawerWidget> {
                     },
                   ),
                 if (token.isNotEmpty)
-                ListTile(
-                  leading: const Icon(TablerIcons.shopping_cart),
-                  title: const Text('Giỏ hàng'),
-                  onTap: () {
-                    Navigator.pushNamed(context, '/cart');
-                  },
-                ),
+                  ListTile(
+                    leading: const Icon(TablerIcons.shopping_cart),
+                    title: const Text('Giỏ hàng'),
+                    onTap: () {
+                      Navigator.pushNamed(context, '/cart');
+                    },
+                  ),
                 if (token.isNotEmpty)
-                ListTile(
-                  leading: const Icon(TablerIcons.credit_card),
-                  title: const Text('Đặt hàng'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, '/checkout');
-                  },
-                ),
+                  ListTile(
+                    leading: const Icon(TablerIcons.credit_card),
+                    title: const Text('Đặt hàng'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/checkout');
+                    },
+                  ),
               ]);
             },
           );

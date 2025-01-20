@@ -1,11 +1,22 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_foods/core/log/app_logger.dart';
+import 'package:flutter_foods/data/dtos/food_review_dto.dart';
+import 'package:flutter_foods/data/models/auth_credential.dart';
 import 'package:flutter_foods/data/models/food_cart_item.dart';
 import 'package:flutter_foods/data/models/food.dart';
+import 'package:flutter_foods/data/models/food_review.dart';
+import 'package:flutter_foods/data/models/user.dart';
 import 'package:flutter_foods/presentation/widgets/bottom_food_detail_app_bar.dart';
 import 'package:flutter_foods/presentation/widgets/user_review.dart';
+import 'package:flutter_foods/providers/food_review_provider.dart';
+import 'package:flutter_foods/providers/users_provider.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FoodDetailScreen extends StatefulWidget {
   final Food food;
@@ -17,9 +28,34 @@ class FoodDetailScreen extends StatefulWidget {
 }
 
 class _FoodDetailScreenState extends State<FoodDetailScreen> {
+  late List<FoodReview> reviews = [];
+
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
   double _rating = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _fetchFoodReviews();
+    });
+  }
+
+  Future<void> _fetchFoodReviews() async {
+    final provider = Provider.of<FoodReviewProvider>(context, listen: false);
+
+    try {
+      List<FoodReview> foodReviews = await provider.fetchByFoodId(widget.food.id);
+      setState(() {
+        reviews = foodReviews;
+      });
+    } catch (e) {
+      // Handle error if needed
+      print('Error fetching food reviews: $e');
+    }
+  }
 
   void _showCommentDialog() {
     showDialog(
@@ -73,8 +109,23 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
             ),
             FilledButton(
               child: const Text('Gửi'),
-              onPressed: () {
+              onPressed: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+        String? credentialJson = prefs.getString('credential');
+        AuthCredential authCredential =
+            AuthCredential.fromJson(jsonDecode(credentialJson!));
                 // Handle submit action
+                final provider = Provider.of<FoodReviewProvider>(context, listen: false);
+                final review = FoodReviewDto(
+                  foodId: widget.food.id,
+                  userId: authCredential.id,
+                  title: _titleController.text,
+                  content: _contentController.text,
+                  rating: _rating.toInt()
+                );
+                await provider.createReview(review);
+
+                 await _fetchFoodReviews();
                 Navigator.of(context).pop();
               },
             ),
@@ -251,13 +302,20 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                       ],
                     ),
                   ),
-                  ListView.builder(
+                  reviews.isEmpty
+                ? const Center(
+                    child: Text(
+                      'Món ăn chưa có đánh giá',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                  )
+                : ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     padding: const EdgeInsets.all(16.0),
-                    itemCount: 1,
+                    itemCount: reviews.length,
                     itemBuilder: (context, index) {
-                      return const UserReviewWidget();
+                      return UserReviewWidget(review: reviews[index]); // Truyền review vào widget
                     },
                   ),
                 ],

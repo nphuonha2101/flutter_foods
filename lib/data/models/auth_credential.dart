@@ -1,11 +1,11 @@
 class AuthCredential {
   final String token;
   final int id;
-  late final String username;
+  late String username;
   final String userEmail;
-  late final String userPhone;
+  late String userPhone;
   final String userAddress;
-  late final String avatar;
+  late String avatar;
 
   AuthCredential({
     required this.token,
