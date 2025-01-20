@@ -11,8 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AppbarSearchDeligate extends SearchDelegate {
   late Color textColor;
-  late List<String> recentKeywords =[];
- String? selectedCategory;
+  late List<String> recentKeywords = [];
+  String? selectedCategory;
   @override
   ThemeData appBarTheme(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
@@ -108,20 +108,16 @@ class AppbarSearchDeligate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-   
-    if(query.isEmpty && selectedCategory == null) {
-      return 
-        Center(
-          child: Text('Tìm kiếm kết quả: "$query"')
-        );
+    if (query.isEmpty && selectedCategory == null) {
+      return Center(child: Text('Tìm kiếm kết quả: "$query"'));
     }
-     if (query.isNotEmpty) {
+    if (query.isNotEmpty) {
       saveRecentKeywords();
     }
-    if(selectedCategory != null) {
+    if (selectedCategory != null) {
       return _buildSearchByCategory(context);
-    }else {
-     return _buildSearchResults(context);
+    } else {
+      return _buildSearchResults(context);
     }
   }
 
@@ -131,6 +127,7 @@ class AppbarSearchDeligate extends SearchDelegate {
         ? _buildInitialSuggestions(context)
         : _buildSearchResults(context);
   }
+
   Future<void> getRecentKeywords() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     recentKeywords = prefs.getStringList("RECENT_KEYWORDS") ?? [];
@@ -163,7 +160,8 @@ class AppbarSearchDeligate extends SearchDelegate {
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: recentKeywords.length > 5 ? 5 : recentKeywords.length,
+                  itemCount:
+                      recentKeywords.length > 5 ? 5 : recentKeywords.length,
                   itemBuilder: (context, index) {
                     return ListTile(
                       title: Text(recentKeywords[index]),
@@ -177,7 +175,6 @@ class AppbarSearchDeligate extends SearchDelegate {
               ],
             ),
           ),
-
           Container(
             margin: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -195,7 +192,8 @@ class AppbarSearchDeligate extends SearchDelegate {
                   ),
                 ),
                 FutureBuilder<List<FoodCategory>>(
-                  future: Provider.of<CategoryProvider>(context, listen: false).fetchAll(),
+                  future: Provider.of<CategoryProvider>(context, listen: false)
+                      .fetchAll(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
@@ -206,7 +204,8 @@ class AppbarSearchDeligate extends SearchDelegate {
                     }
 
                     if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(child: Text('Không tìm thấy loại sản phẩm!'));
+                      return const Center(
+                          child: Text('Không tìm thấy loại sản phẩm!'));
                     }
 
                     List<FoodCategory> foodCategories = snapshot.data!;
@@ -219,22 +218,28 @@ class AppbarSearchDeligate extends SearchDelegate {
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
-                              selectedCategory =foodCategories[index].id.toString() ;
+                              selectedCategory =
+                                  foodCategories[index].id.toString();
                               showResults(context);
                             },
                             child: Container(
                               padding: const EdgeInsets.all(8.0),
                               width: 150,
-                              margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
                               child: Card(
                                 color: Theme.of(context).colorScheme.surface,
                                 elevation: 0,
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.only(
-                                          top: 10, left: 8, right: 8, bottom: 0),
+                                          top: 10,
+                                          left: 8,
+                                          right: 8,
+                                          bottom: 0),
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(5),
                                         child: Image.network(
@@ -273,10 +278,10 @@ class AppbarSearchDeligate extends SearchDelegate {
     );
   }
 
-  Future<void> saveRecentKeywords () async {
+  Future<void> saveRecentKeywords() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     recentKeywords = prefs.getStringList("RECENT_KEYWORDS") ?? [];
-    if(recentKeywords.length >= 5) {
+    if (recentKeywords.length >= 5) {
       recentKeywords.removeLast();
     }
     if (!recentKeywords.contains(query)) {
@@ -284,60 +289,64 @@ class AppbarSearchDeligate extends SearchDelegate {
       await prefs.setStringList("RECENT_KEYWORDS", recentKeywords);
     }
   }
- Widget _buildSearchResults(BuildContext context) {
-  final future = Provider.of<FoodsProvider>(context, listen: false).search(query);
 
-  return buildFutureResults<Food>(
-    context,
-    future,
-    (context, food) {
-      return GestureDetector(
-        onTap: () {
-          // save recent keywords
-          saveRecentKeywords();
-          // navigate to food detail
-          Navigator.of(context).pushNamed(
-            AppRoutes.foodDetail,
-            arguments: food,
-          );
-        },
-        child: Card(
-          color: Theme.of(context).colorScheme.surface,
-          elevation: 4,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(6.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    food.imageUrl as String,
-                    height: 120,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
+  Widget _buildSearchResults(BuildContext context) {
+    final future =
+        Provider.of<FoodsProvider>(context, listen: false).search(query);
+
+    return buildFutureResults<Food>(
+      context,
+      future,
+      (context, food) {
+        return GestureDetector(
+          onTap: () {
+            // save recent keywords
+            saveRecentKeywords();
+            // navigate to food detail
+            Navigator.pushNamed(
+              context,
+              AppRoutes.foodDetail,
+              arguments: food,
+            );
+          },
+          child: Card(
+            color: Theme.of(context).colorScheme.surface,
+            elevation: 4,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.network(
+                      food.imageUrl as String,
+                      height: 120,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Text(
-                  food.name as String,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Text(
+                    food.name as String,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      );
-    },
-  );
-}
-Widget _buildSearchByCategory(BuildContext context){
-  
-  final future = Provider.of<FoodsProvider>(context, listen: false)
-  .fetchAllByCategoryId(selectedCategory!);
+        );
+      },
+    );
+  }
+
+  Widget _buildSearchByCategory(BuildContext context) {
+    final future = Provider.of<FoodsProvider>(context, listen: false)
+        .fetchAllByCategoryId(selectedCategory!);
 
     return buildFutureResults<Food>(
       context,
@@ -372,7 +381,8 @@ Widget _buildSearchByCategory(BuildContext context){
                   padding: const EdgeInsets.all(4.0),
                   child: Text(
                     food.name as String,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -382,10 +392,11 @@ Widget _buildSearchByCategory(BuildContext context){
         );
       },
     );
+  }
 }
 
-}
-Widget buildFutureResults<T>(BuildContext context, Future<List<T>> future, Widget Function(BuildContext, T) itemBuilder) {
+Widget buildFutureResults<T>(BuildContext context, Future<List<T>> future,
+    Widget Function(BuildContext, T) itemBuilder) {
   return FutureBuilder<List<T>>(
     future: future,
     builder: (context, snapshot) {
